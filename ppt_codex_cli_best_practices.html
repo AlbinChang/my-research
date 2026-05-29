@@ -1,0 +1,1969 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+Codex CLI 最佳实践深度调研报告</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#F0F4F8;overflow:hidden;user-select:none}#app{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;position:relative}.slide{position:absolute;width:100%;height:100%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0.95);transition:opacity .4s,transform .4s;pointer-events:none}.slide.active{opacity:1;transform:scale(1);pointer-events:auto}.slide svg{max-width:96vw;max-height:96vh;filter:drop-shadow(0 4px 24px rgba(0,0,0,.25));border-radius:8px}.nav-bar{position:fixed;bottom:24px;right:32px;display:flex;gap:10px;z-index:100;opacity:0;transition:opacity .3s}.nav-bar.visible,.nav-bar:hover{opacity:1}.nav-bar button{width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,.92);color:#1E3A5F;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:all .2s}.nav-bar button:hover{background:#2563EB;color:#fff;box-shadow:0 4px 16px rgba(37,99,235,.4);transform:translateY(-1px)}.nav-bar button:active{transform:scale(.95)}.page-indicator{font-size:13px;color:#64748B;display:flex;align-items:center;padding:0 6px;font-weight:600;letter-spacing:.5px}.progress-dots{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:99}.progress-dots .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .3s;cursor:pointer}.progress-dots .dot.active{background:#2563EB;width:24px;border-radius:4px}</style>
+</head>
+<body>
+<div id="app">
+<!-- ==================== PAGE 1: COVER ==================== -->
+<div class="slide active" id="slide-1">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="960" y2="540">
+      <stop offset="0%" stop-color="#EBF4FF"/>
+      <stop offset="40%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F0F7FF"/>
+    </linearGradient>
+    <linearGradient id="accent1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#FCD34D"/>
+    </linearGradient>
+    <filter id="glow">
+<feGaussianBlur stdDeviation="3" result="g"/>
+<feMerge>
+<feMergeNode in="g"/>
+<feMergeNode in="SourceGraphic"/>
+</feMerge>
+</filter>
+    <filter id="tshadow" x="-8%" y="-8%" width="116%" height="120%">
+<feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="#1E3A5F" flood-opacity="0.10"/>
+</filter>
+  </defs>
+  <rect width="960" height="540" fill="url(#bg1)"/>
+  <!-- Decorative circles -->
+  <circle cx="730" cy="240" r="220" fill="rgba(37,99,235,.035)"/>
+  <circle cx="170" cy="350" r="160" fill="rgba(37,99,235,.025)"/>
+  <circle cx="720" cy="410" r="120" fill="rgba(37,99,235,.018)"/>
+  <!-- Decorative lines -->
+  <line x1="0" y1="290" x2="420" y2="290" stroke="rgba(37,99,235,.07)" stroke-width="1"/>
+  <line x1="540" y1="190" x2="960" y2="190" stroke="rgba(37,99,235,.07)" stroke-width="1"/>
+  <!-- Large Terminal Window -->
+  <rect x="290" y="50" width="380" height="200" rx="14" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.5" filter="url(#tshadow)"/>
+  <rect x="290" y="50" width="380" height="34" rx="14" fill="#EFF6FF"/>
+  <rect x="290" y="70" width="380" height="14" fill="#EFF6FF"/>
+  <circle cx="312" cy="67" r="6" fill="#EF4444"/>
+  <circle cx="334" cy="67" r="6" fill="#F59E0B"/>
+  <circle cx="356" cy="67" r="6" fill="#10B981"/>
+  <text x="480" y="70" text-anchor="middle" fill="#64748B" font-size="12" font-family="monospace">
+codex --terminal</text>
+  <text x="310" y="108" fill="#10B981" font-size="14" font-family="monospace" font-weight="600">
+$ codex</text>
+  <text x="310" y="132" fill="#334155" font-size="13" font-family="monospace">
+Analyzing repository structure…</text>
+  <text x="310" y="154" fill="#64748B" font-size="13" font-family="monospace">
+Reading AGENTS.md · .codex/config.json</text>
+  <text x="310" y="176" fill="#64748B" font-size="13" font-family="monospace">
+Building execution plan ████████░░</text>
+  <text x="310" y="204" fill="#F59E0B" font-size="13" font-family="monospace" font-weight="600">
+Ready. Awaiting your approval ✓</text>
+  <rect x="370" y="198" width="8" height="2" fill="#2563EB" opacity="0.8"/>
+  <!-- Main title -->
+  <text x="480" y="335" text-anchor="middle" fill="#0F172A" font-size="44" font-weight="800" letter-spacing="3">
+Codex CLI 最佳实践</text>
+  <rect x="330" y="354" width="300" height="4" rx="2" fill="url(#accent1)"/>
+  <text x="480" y="386" text-anchor="middle" fill="#334155" font-size="22" font-weight="500" letter-spacing="4">
+深度调研报告</text>
+  <!-- Subtitle info -->
+  <text x="480" y="428" text-anchor="middle" fill="#64748B" font-size="14">
+调研周期：2026年5月22日 — 29日 ｜ 等效约 10,000 字</text>
+  <!-- Bottom bar -->
+  <rect x="0" y="500" width="960" height="40" fill="rgba(37,99,235,.06)"/>
+  <text x="40" y="525" fill="#64748B" font-size="12">
+数据来源：OpenAI 官方文档 · Reddit r/codex · Medium · Google 搜索</text>
+  <text x="920" y="525" text-anchor="end" fill="#64748B" font-size="12">
+1 / 16</text>
+</svg>
+</div>
+<!-- ==================== PAGE 2: TABLE OF CONTENTS ==================== -->
+<div class="slide" id="slide-2">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr2" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <!-- Header -->
+  <rect x="0" y="0" width="960" height="68" fill="url(#hdr2)"/>
+  <text x="48" y="44" fill="#FFFFFF" font-size="24" font-weight="700">
+📋 报告章节概览</text>
+  <text x="900" y="44" text-anchor="end" fill="rgba(255,255,255,.6)" font-size="12">
+Codex CLI 最佳实践深度调研报告</text>
+  <!-- Chapter cards grid: 4 columns x ~4 rows -->
+  <!-- Row 1 -->
+  <a href="javascript:void(0)">
+<rect x="36" y="88" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+</a>
+  <rect x="44" y="97" width="24" height="24" rx="6" fill="#2563EB"/>
+  <text x="56" y="114" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+1</text>
+  <text x="80" y="106" fill="#1E293B" font-size="13" font-weight="600">
+引言：Codex CLI 是什么</text>
+  <text x="80" y="124" fill="#64748B" font-size="12">
+定位 · 核心能力 · CLI vs App</text>
+  <rect x="258" y="88" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="266" y="97" width="24" height="24" rx="6" fill="#3B82F6"/>
+  <text x="278" y="114" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+2</text>
+  <text x="302" y="106" fill="#1E293B" font-size="13" font-weight="600">
+核心概念与架构理解</text>
+  <text x="302" y="124" fill="#64748B" font-size="12">
+术语 · 工作模式 · 架构循环</text>
+  <rect x="480" y="88" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="488" y="97" width="24" height="24" rx="6" fill="#10B981"/>
+  <text x="500" y="114" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+3</text>
+  <text x="524" y="106" fill="#1E293B" font-size="13" font-weight="600">
+AGENTS.md 配置基石</text>
+  <text x="524" y="124" fill="#64748B" font-size="12">
+结构 · 加载机制 · 常见错误</text>
+  <rect x="702" y="88" width="222" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="710" y="97" width="24" height="24" rx="6" fill="#8B5CF6"/>
+  <text x="722" y="114" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+4</text>
+  <text x="746" y="106" fill="#1E293B" font-size="13" font-weight="600">
+模型选择策略</text>
+  <text x="746" y="124" fill="#64748B" font-size="12">
+GPT-5.x 系列 · 成本意识</text>
+  <!-- Row 2 -->
+  <rect x="36" y="148" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="44" y="157" width="24" height="24" rx="6" fill="#F59E0B"/>
+  <text x="56" y="174" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+5</text>
+  <text x="80" y="166" fill="#1E293B" font-size="13" font-weight="600">
+Skills 与 Plugins</text>
+  <text x="80" y="184" fill="#64748B" font-size="12">
+扩展机制 · 热门 Skills · 对比</text>
+  <rect x="258" y="148" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="266" y="157" width="24" height="24" rx="6" fill="#EF4444"/>
+  <text x="278" y="174" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+6</text>
+  <text x="302" y="166" fill="#1E293B" font-size="13" font-weight="600">
+日常工作流最佳实践</text>
+  <text x="302" y="184" fill="#64748B" font-size="12">
+黄金法则 · 计划模式 · /clear</text>
+  <rect x="480" y="148" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="488" y="157" width="24" height="24" rx="6" fill="#EC4899"/>
+  <text x="500" y="174" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+7</text>
+  <text x="524" y="166" fill="#1E293B" font-size="13" font-weight="600">
+安全与审批策略</text>
+  <text x="524" y="184" fill="#64748B" font-size="12">
+Codex Security · 审批分级</text>
+  <rect x="702" y="148" width="222" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="710" y="157" width="24" height="24" rx="6" fill="#06B6D4"/>
+  <text x="722" y="174" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+8</text>
+  <text x="746" y="166" fill="#1E293B" font-size="13" font-weight="600">
+自动化与调度</text>
+  <text x="746" y="184" fill="#64748B" font-size="12">
+重复任务 · CI/CD 集成</text>
+  <!-- Row 3 -->
+  <rect x="36" y="208" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="44" y="217" width="24" height="24" rx="6" fill="#6366F1"/>
+  <text x="56" y="234" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+9</text>
+  <text x="80" y="226" fill="#1E293B" font-size="13" font-weight="600">
+上下文窗口管理</text>
+  <text x="80" y="244" fill="#64748B" font-size="12">
+策略 · 过载信号 · Spec-Driven</text>
+  <rect x="258" y="208" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="266" y="217" width="24" height="24" rx="6" fill="#14B8A6"/>
+  <text x="278" y="234" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+10</text>
+  <text x="302" y="226" fill="#1E293B" font-size="13" font-weight="600">
+团队协作最佳实践</text>
+  <text x="302" y="244" fill="#64748B" font-size="12">
+统一配置 · Skills 分发</text>
+  <rect x="480" y="208" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="488" y="217" width="24" height="24" rx="6" fill="#F97316"/>
+  <text x="500" y="234" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+11</text>
+  <text x="524" y="226" fill="#1E293B" font-size="13" font-weight="600">
+反模式与常见错误</text>
+  <text x="524" y="244" fill="#64748B" font-size="12">
+10 大反模式 · 社区抱怨</text>
+  <rect x="702" y="208" width="222" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="710" y="217" width="24" height="24" rx="6" fill="#0EA5E9"/>
+  <text x="722" y="234" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+12</text>
+  <text x="746" y="226" fill="#1E293B" font-size="13" font-weight="600">
+与竞品对比</text>
+  <text x="746" y="244" fill="#64748B" font-size="12">
+Codex vs Claude Code vs Gemini</text>
+  <!-- Row 4 -->
+  <rect x="36" y="268" width="210" height="48" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="44" y="277" width="24" height="24" rx="6" fill="#D946EF"/>
+  <text x="56" y="294" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+13</text>
+  <text x="80" y="286" fill="#1E293B" font-size="13" font-weight="600">
+总结与行动建议</text>
+  <text x="80" y="304" fill="#64748B" font-size="12">
+优先级 · 入门路径 · 进阶路线</text>
+  <!-- Supplement section -->
+  <rect x="258" y="268" width="666" height="48" rx="8" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="274" y="296" fill="#64748B" font-size="13" font-weight="600">
+📎 补充章节：实战案例 (认证重构 / CI修复 / 全栈搭建) · Skills 深入教程 · 社区动态 · 跨平台兼容性 · 快速命令参考</text>
+  <!-- Key insight box -->
+  <rect x="36" y="336" width="888" height="62" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="480" y="360" text-anchor="middle" fill="#1E40AF" font-size="14" font-weight="700">
+💡 核心哲学</text>
+  <text x="480" y="382" text-anchor="middle" fill="#3B82F6" font-size="13">
+花 20 分钟写好 AGENTS.md · 每次执行前先看计划 · 任务之间 /clear · 重复的事情让它自动化 → Codex 从工具昇华为编程伙伴</text>
+  <!-- Bottom stats bar -->
+  <rect x="0" y="420" width="960" height="1" fill="#E2E8F0"/>
+  <rect x="36" y="440" width="200" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="136" y="465" text-anchor="middle" fill="#2563EB" font-size="28" font-weight="800">
+13</text>
+  <text x="136" y="488" text-anchor="middle" fill="#64748B" font-size="12">
+核心章节</text>
+  <rect x="256" y="440" width="200" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="356" y="465" text-anchor="middle" fill="#10B981" font-size="28" font-weight="800">
+~10K</text>
+  <text x="356" y="488" text-anchor="middle" fill="#64748B" font-size="12">
+等效总字数</text>
+  <rect x="476" y="440" width="200" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="576" y="465" text-anchor="middle" fill="#F59E0B" font-size="28" font-weight="800">
+50+</text>
+  <text x="576" y="488" text-anchor="middle" fill="#64748B" font-size="12">
+社区帖子参考</text>
+  <rect x="696" y="440" width="228" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="810" y="465" text-anchor="middle" fill="#8B5CF6" font-size="28" font-weight="800">
+7天</text>
+  <text x="810" y="488" text-anchor="middle" fill="#64748B" font-size="12">
+调研周期 (5/22-5/29)</text>
+  <text x="920" y="530" text-anchor="end" fill="#64748B" font-size="12">
+2 / 16</text>
+</svg>
+</div>
+<!-- ==================== PAGE 3: WHAT IS CODEX CLI ==================== -->
+<div class="slide" id="slide-3">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr3" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="62" fill="url(#hdr3)"/>
+  <text x="48" y="40" fill="#FFFFFF" font-size="22" font-weight="700">
+一、引言：Codex CLI 是什么</text>
+  <text x="900" y="40" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+3 / 16</text>
+  <!-- Left: Positioning -->
+  <rect x="36" y="82" width="420" height="210" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="108" fill="#1E293B" font-size="16" font-weight="700">
+🎯 定位再认识</text>
+  <text x="60" y="132" fill="#3B82F6" font-size="12" font-weight="600">
+终端优先的 AI 编程代理 (Terminal-First Coding Agent)</text>
+  <text x="60" y="156" fill="#475569" font-size="12">
+• 2025年4月首次发布，TypeScript 项目</text>
+  <text x="60" y="176" fill="#475569" font-size="12">
+• 通过 Shell 执行命令并将结果回传</text>
+  <text x="60" y="196" fill="#475569" font-size="12">
+• 目前已进入 GA 阶段</text>
+  <text x="60" y="216" fill="#475569" font-size="12">
+• 与 Claude Code、Gemini CLI 并列三大终端 AI 编程工具</text>
+  <line x1="60" y1="236" x2="432" y2="236" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="60" y="248" width="180" height="32" rx="6" fill="#EFF6FF"/>
+  <text x="150" y="268" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+从工具到代理的范式转变</text>
+  <!-- Center: CLI vs App comparison -->
+  <rect x="480" y="82" width="444" height="254" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="504" y="108" fill="#1E293B" font-size="16" font-weight="700">
+📊 Codex CLI vs Codex App</text>
+  <!-- Table header -->
+  <rect x="504" y="120" width="130" height="28" rx="4" fill="#EFF6FF"/>
+  <text x="569" y="139" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="700">
+维度</text>
+  <rect x="640" y="120" width="130" height="28" rx="4" fill="#DBEAFE"/>
+  <text x="705" y="139" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="700">
+Codex CLI</text>
+  <rect x="776" y="120" width="130" height="28" rx="4" fill="#F3F4F6"/>
+  <text x="841" y="139" text-anchor="middle" fill="#64748B" font-size="12" font-weight="700">
+Codex App</text>
+  <text x="569" y="167" text-anchor="middle" fill="#64748B" font-size="12">
+运行环境</text>
+  <text x="705" y="167" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="600">
+终端</text>
+  <text x="841" y="167" text-anchor="middle" fill="#1E293B" font-size="12">
+桌面 / IDE</text>
+  <text x="569" y="189" text-anchor="middle" fill="#64748B" font-size="12">
+目标用户</text>
+  <text x="705" y="189" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="600">
+命令行开发者</text>
+  <text x="841" y="189" text-anchor="middle" fill="#1E293B" font-size="12">
+GUI 开发者</text>
+  <text x="569" y="211" text-anchor="middle" fill="#64748B" font-size="12">
+灵活性</text>
+  <text x="705" y="211" text-anchor="middle" fill="#10B981" font-size="12" font-weight="600">
+高 · 可脚本化</text>
+  <text x="841" y="211" text-anchor="middle" fill="#1E293B" font-size="12">
+中 · 交互式</text>
+  <text x="569" y="233" text-anchor="middle" fill="#64748B" font-size="12">
+核心能力</text>
+  <text x="705" y="233" text-anchor="middle" fill="#1E293B" font-size="12">
+共享相同 AI 模型和后端</text>
+  <text x="841" y="233" text-anchor="middle" fill="#1E293B" font-size="12"/>
+  <text x="569" y="255" text-anchor="middle" fill="#64748B" font-size="12">
+适用场景</text>
+  <text x="705" y="255" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="600">
+CI/CD · 批量 · 远程</text>
+  <text x="841" y="255" text-anchor="middle" fill="#1E293B" font-size="12">
+日常编码</text>
+  <text x="569" y="277" text-anchor="middle" fill="#64748B" font-size="12">
+社区偏好</text>
+  <text x="705" y="277" text-anchor="middle" fill="#F59E0B" font-size="12" font-weight="700">
+⭐⭐⭐⭐ 高级用户最爱</text>
+  <text x="841" y="277" text-anchor="middle" fill="#1E293B" font-size="12">
+入门更友好</text>
+  <rect x="504" y="296" width="402" height="36" rx="6" fill="#FFFBEB"/>
+  <text x="705" y="318" text-anchor="middle" fill="#D97706" font-size="12">
+Reddit 社区讨论 (61 👍 | 71 💬) 显示：CLI 版在高级用户中更受欢迎</text>
+  <!-- Bottom: 5 Core Capabilities -->
+  <text x="48" y="322" fill="#1E293B" font-size="15" font-weight="700">
+⚡ 五大核心能力</text>
+  <rect x="36" y="338" width="168" height="82" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <circle cx="70" cy="360" r="14" fill="#EFF6FF"/>
+  <text x="70" y="365" text-anchor="middle" fill="#2563EB" font-size="14">
+📖</text>
+  <text x="94" y="358" fill="#1E293B" font-size="12" font-weight="600">
+读取整个代码库</text>
+  <text x="94" y="376" fill="#64748B" font-size="12">
+理解项目结构和上下文</text>
+  <text x="94" y="394" fill="#64748B" font-size="12">
+自动识别技术栈与依赖</text>
+  <rect x="220" y="338" width="168" height="82" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <circle cx="254" cy="360" r="14" fill="#EFF6FF"/>
+  <text x="254" y="365" text-anchor="middle" fill="#2563EB" font-size="14">
+✏️</text>
+  <text x="278" y="358" fill="#1E293B" font-size="12" font-weight="600">
+跨多文件编辑重构</text>
+  <text x="278" y="376" fill="#64748B" font-size="12">
+一次任务修改多个文件</text>
+  <text x="278" y="394" fill="#64748B" font-size="12">
+保持代码风格一致性</text>
+  <rect x="404" y="338" width="168" height="82" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <circle cx="438" cy="360" r="14" fill="#EFF6FF"/>
+  <text x="438" y="365" text-anchor="middle" fill="#2563EB" font-size="14">
+⚙️</text>
+  <text x="462" y="358" fill="#1E293B" font-size="12" font-weight="600">
+执行终端命令</text>
+  <text x="462" y="376" fill="#64748B" font-size="12">
+构建、测试、部署自动化</text>
+  <text x="462" y="394" fill="#64748B" font-size="12">
+直接操作 Shell 环境</text>
+  <rect x="588" y="338" width="168" height="82" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <circle cx="622" cy="360" r="14" fill="#EFF6FF"/>
+  <text x="622" y="365" text-anchor="middle" fill="#2563EB" font-size="14">
+🔍</text>
+  <text x="646" y="358" fill="#1E293B" font-size="12" font-weight="600">
+主动探索</text>
+  <text x="646" y="376" fill="#64748B" font-size="12">
+不需要逐步手把手指导</text>
+  <text x="646" y="394" fill="#64748B" font-size="12">
+自主规划和发现路径</text>
+  <rect x="772" y="338" width="152" height="82" rx="8" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <circle cx="806" cy="360" r="14" fill="#EFF6FF"/>
+  <text x="806" y="365" text-anchor="middle" fill="#2563EB" font-size="14">
+🔌</text>
+  <text x="830" y="358" fill="#1E293B" font-size="12" font-weight="600">
+外部工具集成</text>
+  <text x="830" y="376" fill="#64748B" font-size="12">
+Skills/Plugins + MCP</text>
+  <text x="830" y="394" fill="#64748B" font-size="12">
+覆盖 1000+ 工具</text>
+  <!-- Bottom insight -->
+  <rect x="36" y="436" width="888" height="32" rx="8" fill="#EFF6FF"/>
+  <text x="480" y="457" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+🔑 关键认知：Codex CLI 不仅仅是"在终端里用 AI 写代码"——它是一个代理 (Agent)，你描述目标，它自主探索、规划、实现。</text>
+  <!-- Footer -->
+  <rect x="0" y="488" width="960" height="52" fill="#FFFFFF"/>
+  <text x="48" y="518" fill="#64748B" font-size="12">
+调研数据来源：OpenAI 官方文档 · Reddit r/codex (搜索 "Codex CLI best practices") · OpenAI 开发者社区 (20.4k views) · Medium 技术博客 · Google 搜索</text>
+</svg>
+</div>
+<!-- ==================== PAGE 4: CORE CONCEPTS & ARCHITECTURE ==================== -->
+<div class="slide" id="slide-4">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr4" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+<path d="M0,0 L8,3 L0,6 Z" fill="#2563EB"/>
+</marker>
+    <marker id="arrowLoop" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+<path d="M0,0 L8,3 L0,6 Z" fill="#F59E0B"/>
+</marker>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="58" fill="url(#hdr4)"/>
+  <text x="48" y="38" fill="#FFFFFF" font-size="21" font-weight="700">
+二、核心概念与架构理解</text>
+  <text x="900" y="38" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+4 / 16</text>
+  <!-- Architecture Flow Diagram -->
+  <rect x="36" y="74" width="888" height="220" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="98" fill="#1E293B" font-size="14" font-weight="700">
+🔄 工作流程架构循环</text>
+  <!-- Left balance: agent definition -->
+  <rect x="40" y="108" width="22" height="80" rx="6" fill="#DBEAFE" opacity="0.7"/>
+  <text x="51" y="152" text-anchor="middle" fill="#2563EB" font-size="9" font-weight="700" transform="rotate(-90, 51, 152)">Agent Loop</text>
+  <!-- Flow nodes -->
+  <!-- User -->
+  <rect x="70" y="118" width="90" height="46" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="115" y="138" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+👤 用户输入</text>
+  <text x="115" y="154" text-anchor="middle" fill="#64748B" font-size="12">
+描述目标</text>
+  <line x1="160" y1="141" x2="192" y2="141" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- Codex Analyze -->
+  <rect x="198" y="118" width="100" height="46" rx="10" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="248" y="138" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+📊 Codex 分析</text>
+  <text x="248" y="154" text-anchor="middle" fill="#64748B" font-size="12">
+读取代码库</text>
+  <line x1="298" y1="141" x2="330" y2="141" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- Plan -->
+  <rect x="336" y="118" width="100" height="46" rx="10" fill="#EF4444" opacity="0.1" stroke="#EF4444" stroke-width="1.5"/>
+  <text x="386" y="138" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="600">
+📋 生成计划</text>
+  <text x="386" y="154" text-anchor="middle" fill="#64748B" font-size="12">
+列出变更</text>
+  <line x1="436" y1="141" x2="468" y2="141" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- Approve -->
+  <rect x="474" y="118" width="100" height="46" rx="10" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="524" y="138" text-anchor="middle" fill="#D97706" font-size="12" font-weight="600">
+✅ 用户批准</text>
+  <text x="524" y="154" text-anchor="middle" fill="#64748B" font-size="12">
+审查关键步骤</text>
+  <line x1="574" y1="141" x2="606" y2="141" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- Execute -->
+  <rect x="612" y="118" width="100" height="46" rx="10" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="662" y="138" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+⚡ 执行</text>
+  <text x="662" y="154" text-anchor="middle" fill="#64748B" font-size="12">
+读写文件·运行命令</text>
+  <line x1="712" y1="141" x2="744" y2="141" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <!-- Check -->
+  <rect x="750" y="118" width="100" height="46" rx="10" fill="#EDE9FE" stroke="#C4B5FD" stroke-width="1.5"/>
+  <text x="800" y="138" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="600">
+🔎 检查结果</text>
+  <text x="800" y="154" text-anchor="middle" fill="#64748B" font-size="12">
+测试是否通过</text>
+  <!-- Feedback loop -->
+  <path d="M800,164 Q800,188 662,188 Q524,188 524,188 Q386,188 248,188 Q115,188 115,164" fill="none" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrowLoop)"/>
+  <rect x="400" y="182" width="100" height="18" rx="4" fill="#FFFBEB"/>
+  <text x="450" y="195" text-anchor="middle" fill="#D97706" font-size="12" font-weight="600">
+反馈修正 继续迭代</text>
+  <!-- Key insight -->
+  <rect x="100" y="210" width="760" height="30" rx="6" fill="#EFF6FF"/>
+  <text x="480" y="230" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+Codex 不是一次性输出 → 而是持续迭代，直到任务完成或上下文耗尽</text>
+  <!-- Work modes -->
+  <text x="48" y="320" fill="#1E293B" font-size="14" font-weight="700">
+🎮 四种工作模式</text>
+  <rect x="36" y="336" width="210" height="100" rx="10" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <rect x="36" y="336" width="210" height="30" rx="10" fill="#EFF6FF"/>
+  <text x="141" y="356" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="700">
+💬 交互模式</text>
+  <text x="54" y="382" fill="#475569" font-size="12">
+启动 codex 后的默认模式</text>
+  <text x="54" y="400" fill="#475569" font-size="12">
+逐步分析、规划和执行</text>
+  <text x="54" y="418" fill="#64748B" font-size="12">
+终端里的聊天界面</text>
+  <rect x="262" y="336" width="210" height="100" rx="10" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1"/>
+  <rect x="262" y="336" width="210" height="30" rx="10" fill="#FFFBEB"/>
+  <text x="367" y="356" text-anchor="middle" fill="#D97706" font-size="12" font-weight="700">
+📋 计划模式</text>
+  <text x="280" y="382" fill="#475569" font-size="12">
+先描述计划，经批准再执行</text>
+  <text x="280" y="400" fill="#475569" font-size="12">
+防止 AI 乱改代码的关键防线</text>
+  <text x="280" y="418" fill="#64748B" font-size="12">
+社区共识：始终先批准计划</text>
+  <rect x="488" y="336" width="210" height="100" rx="10" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="1"/>
+  <rect x="488" y="336" width="210" height="30" rx="10" fill="#ECFDF5"/>
+  <text x="593" y="356" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+🤖 自动化模式</text>
+  <text x="506" y="382" fill="#475569" font-size="12">
+定时任务，无需人工干预</text>
+  <text x="506" y="400" fill="#475569" font-size="12">
+结果进入审查队列</text>
+  <text x="506" y="418" fill="#64748B" font-size="12">
+设置一次，永远受益</text>
+  <rect x="714" y="336" width="210" height="100" rx="10" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1"/>
+  <rect x="714" y="336" width="210" height="30" rx="10" fill="#F5F3FF"/>
+  <text x="819" y="356" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="700">
+🔧 非交互模式</text>
+  <text x="732" y="382" fill="#475569" font-size="12">
+适合 CI/CD 管道</text>
+  <text x="732" y="400" fill="#475569" font-size="12">
+命令行参数一次性传入</text>
+  <text x="732" y="418" fill="#64748B" font-size="12">
+批量自动化场景</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="518" fill="#64748B" font-size="12">
+🔑 关键术语：Agent(代理) · AGENTS.md(项目配置) · Skill(可复用指令集) · Plugin(可安装分发单元) · MCP(模型上下文协议) · /compact(压缩上下文) · Plan Mode(计划模式)</text>
+</svg>
+</div>
+<!-- ==================== PAGE 5: AGENTS.md ==================== -->
+<div class="slide" id="slide-5">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr5" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+    <radialGradient id="hub" cx="50%" cy="50%" r="50%">
+<stop offset="0%" stop-color="#2563EB"/>
+<stop offset="100%" stop-color="#1E40AF"/>
+</radialGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="56" fill="url(#hdr5)"/>
+  <text x="48" y="37" fill="#FFFFFF" font-size="21" font-weight="700">
+三、AGENTS.md — 一切配置的基石</text>
+  <text x="900" y="37" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+5 / 16</text>
+  <!-- Hub and Spoke Diagram -->
+  <rect x="36" y="70" width="550" height="290" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="94" fill="#1E293B" font-size="14" font-weight="700">
+⭐ 中心辐射模型</text>
+  <!-- Center hub -->
+  <circle cx="310" cy="215" r="52" fill="url(#hub)" filter="drop-shadow(0 4px 12px rgba(37,99,235,.35))"/>
+  <text x="310" y="208" text-anchor="middle" fill="#FFFFFF" font-size="16" font-weight="800">
+AGENTS</text>
+  <text x="310" y="226" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="800">
+.md</text>
+  <!-- Spokes -->
+  <line x1="310" y1="163" x2="310" y2="108" stroke="#93C5FD" stroke-width="1.5"/>
+  <rect x="244" y="88" width="132" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="310" y="111" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+技术栈</text>
+  <line x1="362" y1="195" x2="420" y2="160" stroke="#93C5FD" stroke-width="1.5"/>
+  <rect x="418" y="140" width="132" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="484" y="163" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+代码约定</text>
+  <line x1="362" y1="235" x2="420" y2="270" stroke="#93C5FD" stroke-width="1.5"/>
+  <rect x="418" y="252" width="132" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="484" y="275" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+权限定义</text>
+  <line x1="258" y1="195" x2="200" y2="160" stroke="#93C5FD" stroke-width="1.5"/>
+  <rect x="68" y="140" width="132" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="134" y="163" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+项目结构</text>
+  <line x1="258" y1="235" x2="200" y2="270" stroke="#93C5FD" stroke-width="1.5"/>
+  <rect x="68" y="252" width="132" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="134" y="275" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+测试策略</text>
+  <line x1="310" y1="267" x2="310" y2="310" stroke="#93C5FD" stroke-width="1.5"/>
+  <rect x="244" y="310" width="132" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="310" y="333" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+关键文件</text>
+  <!-- Right: Best Practices -->
+  <rect x="606" y="70" width="318" height="290" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="630" y="94" fill="#1E293B" font-size="14" font-weight="700">
+✅ 最佳实践</text>
+  <rect x="628" y="108" width="274" height="44" rx="6" fill="#ECFDF5"/>
+  <text x="640" y="126" fill="#047857" font-size="12" font-weight="600">
+✓ 每个项目独立 AGENTS.md</text>
+  <text x="640" y="142" fill="#64748B" font-size="12">
+不同项目不同技术栈，不能用通用配置</text>
+  <rect x="628" y="158" width="274" height="44" rx="6" fill="#EFF6FF"/>
+  <text x="640" y="176" fill="#1E40AF" font-size="12" font-weight="600">
+✓ 每轮对话都会加载</text>
+  <text x="640" y="192" fill="#64748B" font-size="12">
+是上下文根基 → 保持精简、最新、有针对性</text>
+  <rect x="628" y="208" width="274" height="44" rx="6" fill="#FFFBEB"/>
+  <text x="640" y="226" fill="#D97706" font-size="12" font-weight="600">
+✓ 明确区分操作权限</text>
+  <text x="640" y="242" fill="#64748B" font-size="12">
+哪些自主执行 vs 哪些需要审批</text>
+  <rect x="628" y="258" width="274" height="44" rx="6" fill="#FEF2F2"/>
+  <text x="640" y="276" fill="#DC2626" font-size="12" font-weight="600">
+✓ 随项目演进同步更新</text>
+  <text x="640" y="292" fill="#64748B" font-size="12">
+过时信息 → Codex 基于错误信息做决策</text>
+  <!-- Bottom: Common Mistakes -->
+  <text x="48" y="388" fill="#1E293B" font-size="14" font-weight="700">
+⚠️ 常见错误</text>
+  <rect x="36" y="402" width="285" height="72" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <text x="54" y="420" fill="#DC2626" font-size="12" font-weight="700">
+❌ 不写 AGENTS.md</text>
+  <text x="54" y="440" fill="#64748B" font-size="12">
+Codex 像"陌生人在仓库里乱逛"</text>
+  <text x="54" y="460" fill="#10B981" font-size="12" font-weight="600">
+→ 花 20 分钟写一份</text>
+  <rect x="337" y="402" width="285" height="72" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <text x="355" y="420" fill="#DC2626" font-size="12" font-weight="700">
+❌ 写得过于冗长</text>
+  <text x="355" y="440" fill="#64748B" font-size="12">
+浪费宝贵的上下文窗口空间</text>
+  <text x="355" y="460" fill="#10B981" font-size="12" font-weight="600">
+→ 精简到核心信息</text>
+  <rect x="638" y="402" width="286" height="72" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <text x="656" y="420" fill="#DC2626" font-size="12" font-weight="700">
+❌ 权限设置不当</text>
+  <text x="656" y="440" fill="#64748B" font-size="12">
+可能误删文件或执行危险操作</text>
+  <text x="656" y="460" fill="#10B981" font-size="12" font-weight="600">
+→ 明确区分</text>
+  <!-- Community quote -->
+  <rect x="36" y="488" width="888" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="480" y="500" text-anchor="middle" fill="#1E40AF" font-size="13" font-weight="600">
+💬 "Set up AGENTS.md before anything else. Skip this and</text>
+  <text x="480" y="516" text-anchor="middle" fill="#1E40AF" font-size="13" font-weight="600">
+Codex is just a smart stranger in your repo. Spend 20 minutes on it first and everything else works better."</text>
+  <text x="850" y="532" text-anchor="end" fill="#93C5FD" font-size="12">
+— Reddit 社区高赞评论 (47 👍)</text>
+</svg>
+</div>
+<!-- ==================== PAGE 6: MODEL SELECTION ==================== -->
+<div class="slide" id="slide-6">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr6" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="56" fill="url(#hdr6)"/>
+  <text x="48" y="37" fill="#FFFFFF" font-size="21" font-weight="700">
+四、模型选择策略</text>
+  <text x="900" y="37" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+6 / 16</text>
+  <!-- 4 Model Cards -->
+  <text x="48" y="82" fill="#1E293B" font-size="14" font-weight="700">
+🧠 可用模型一览</text>
+  <rect x="36" y="96" width="210" height="200" rx="12" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <rect x="36" y="96" width="210" height="40" rx="12" fill="#EFF6FF"/>
+  <text x="141" y="122" text-anchor="middle" fill="#1E40AF" font-size="14" font-weight="700">
+GPT-5.5</text>
+  <rect x="60" y="148" width="162" height="24" rx="4" fill="#DBEAFE"/>
+  <text x="141" y="164" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+默认模型</text>
+  <text x="54" y="192" fill="#475569" font-size="12">
+• 日常编码、多文件编辑</text>
+  <text x="54" y="212" fill="#475569" font-size="12">
+• 调试、重构任务</text>
+  <text x="54" y="232" fill="#475569" font-size="12">
+• 平衡的速度和质量</text>
+  <text x="54" y="252" fill="#475569" font-size="12">
+• 处理大多数任务</text>
+  <rect x="60" y="266" width="162" height="22" rx="4" fill="#ECFDF5"/>
+  <text x="141" y="281" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+⭐ 推荐首选</text>
+  <rect x="262" y="96" width="210" height="200" rx="12" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="262" y="96" width="210" height="40" rx="12" fill="#FFFBEB"/>
+  <text x="367" y="122" text-anchor="middle" fill="#D97706" font-size="13" font-weight="700">
+GPT-5.3-Spark</text>
+  <rect x="286" y="148" width="162" height="24" rx="4" fill="#FEF3C7"/>
+  <text x="367" y="164" text-anchor="middle" fill="#B45309" font-size="12" font-weight="600">
+快速轻量（需Pro）</text>
+  <text x="280" y="192" fill="#475569" font-size="12">
+• 快速轻量任务</text>
+  <text x="280" y="212" fill="#475569" font-size="12">
+• 简单检查、补全</text>
+  <text x="280" y="232" fill="#475569" font-size="12">
+• 更快但不够深入</text>
+  <text x="280" y="252" fill="#475569" font-size="12">
+• 需要 ChatGPT Pro</text>
+  <rect x="286" y="266" width="162" height="22" rx="4" fill="#EFF6FF"/>
+  <text x="367" y="281" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+⚡ 轻量加速</text>
+  <rect x="488" y="96" width="210" height="200" rx="12" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="1.5"/>
+  <rect x="488" y="96" width="210" height="40" rx="12" fill="#ECFDF5"/>
+  <text x="593" y="114" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+GPT-5.2-Codex</text>
+  <text x="593" y="130" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+(med/high)</text>
+  <rect x="512" y="148" width="162" height="24" rx="4" fill="#D1FAE5"/>
+  <text x="593" y="164" text-anchor="middle" fill="#065F46" font-size="12" font-weight="600">
+常规开发（社区推荐）</text>
+  <text x="506" y="192" fill="#475569" font-size="12">
+• 常规开发任务</text>
+  <text x="506" y="212" fill="#475569" font-size="12">
+• 社区推荐的稳定选择</text>
+  <text x="506" y="232" fill="#475569" font-size="12">
+• 性价比最佳</text>
+  <rect x="512" y="266" width="162" height="22" rx="4" fill="#ECFDF5"/>
+  <text x="593" y="281" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+💰 性价比之王</text>
+  <rect x="714" y="96" width="210" height="200" rx="12" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1.5"/>
+  <rect x="714" y="96" width="210" height="40" rx="12" fill="#F5F3FF"/>
+  <text x="819" y="114" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="700">
+GPT-5.2-Codex</text>
+  <text x="819" y="130" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="700">
+(xhigh reasoning)</text>
+  <rect x="738" y="148" width="162" height="24" rx="4" fill="#EDE9FE"/>
+  <text x="819" y="164" text-anchor="middle" fill="#6D28D9" font-size="12" font-weight="600">
+深度推理（高成本）</text>
+  <text x="732" y="192" fill="#475569" font-size="12">
+• 复杂重构、困难调试</text>
+  <text x="732" y="212" fill="#475569" font-size="12">
+• 更慢但推理更深</text>
+  <text x="732" y="232" fill="#475569" font-size="12">
+• 成本可能是普通数倍</text>
+  <rect x="738" y="266" width="162" height="22" rx="4" fill="#FEF2F2"/>
+  <text x="819" y="281" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="600">
+⚠️ 仅必要时用</text>
+  <!-- Switch models -->
+  <rect x="36" y="312" width="440" height="80" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="336" fill="#1E293B" font-size="13" font-weight="700">
+🔄 动态切换模型</text>
+  <rect x="60" y="348" width="185" height="32" rx="6" fill="#1E293B"/>
+  <text x="152" y="369" text-anchor="middle" fill="#10B981" font-size="13" font-family="monospace">
+/model gpt-5.5</text>
+  <text x="260" y="370" fill="#64748B" font-size="12">
+→ 切换到 GPT-5.5</text>
+  <rect x="60" y="348" width="185" height="32" rx="6" fill="#1E293B" opacity="0"/>
+  <rect x="388" y="348" width="74" height="32" rx="6" fill="#ECFDF5"/>
+  <text x="425" y="369" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+不丢上下文</text>
+  <!-- Cost awareness -->
+  <rect x="496" y="312" width="428" height="80" rx="10" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="520" y="336" fill="#D97706" font-size="13" font-weight="700">
+💰 成本意识</text>
+  <text x="520" y="358" fill="#92400E" font-size="12">
+日常开发 → GPT-5.2-Codex med/high (性价比最佳)</text>
+  <text x="520" y="376" fill="#92400E" font-size="12">
+简单任务 → Spark (快且便宜) ｜ 复杂难题 → xhigh reasoning (成本数倍)</text>
+  <!-- Bottom warning -->
+  <rect x="36" y="410" width="888" height="60" rx="10" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <text x="60" y="434" fill="#DC2626" font-size="13" font-weight="700">
+⚠️ 重要提醒</text>
+  <text x="60" y="456" fill="#991B1B" font-size="12">
+即使最强模型在超大代码库中也可能迷失方向 → 此时不应盲目升级模型，而应该优化上下文管理（详见第九章）</text>
+  <!-- Footer -->
+  <rect x="0" y="488" width="960" height="52" fill="#FFFFFF"/>
+  <text x="48" y="518" fill="#64748B" font-size="12">
+来源：OpenAI 社区官方建议 (vb, 版主) · Reddit 实战建议 (geekeek123) · CTO Reza Rezvani 经验分享</text>
+</svg>
+</div>
+<!-- ==================== PAGE 7: SKILLS & PLUGINS ==================== -->
+<div class="slide" id="slide-7">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr7" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#64748B"/></marker>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="54" fill="url(#hdr7)"/>
+  <text x="48" y="36" fill="#FFFFFF" font-size="21" font-weight="700">
+五、Skills 与 Plugins 生态</text>
+  <text x="900" y="36" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+7 / 16</text>
+  <!-- Top: 9 Skill Cards (3x3) -->
+  <text x="48" y="76" fill="#1E293B" font-size="13" font-weight="700">
+🔧 社区推荐的 9 大热门 Skills</text>
+  <rect x="36" y="88" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="44" y="96" width="28" height="28" rx="6" fill="#EF4444"/>
+  <text x="58" y="115" text-anchor="middle" fill="#FFF" font-size="14">
+🔧</text>
+  <text x="82" y="113" fill="#1E293B" font-size="12" font-weight="700">
+gh-fix-ci</text>
+  <text x="82" y="133" fill="#64748B" font-size="12">
+读取CI日志自动修复</text>
+  <text x="82" y="148" fill="#10B981" font-size="12" font-weight="600">
+替代最痛苦的部分</text>
+  <rect x="240" y="88" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="248" y="96" width="28" height="28" rx="6" fill="#F59E0B"/>
+  <text x="262" y="115" text-anchor="middle" fill="#FFF" font-size="14">
+💬</text>
+  <text x="286" y="113" fill="#1E293B" font-size="12" font-weight="700">
+gh-address-comments</text>
+  <text x="286" y="133" fill="#64748B" font-size="12">
+处理PR评审评论</text>
+  <text x="286" y="148" fill="#10B981" font-size="12" font-weight="600">
+评审密集团队倍增器</text>
+  <rect x="444" y="88" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="452" y="96" width="28" height="28" rx="6" fill="#10B981"/>
+  <text x="466" y="115" text-anchor="middle" fill="#FFF" font-size="14">
+📝</text>
+  <text x="490" y="113" fill="#1E293B" font-size="12" font-weight="700">
+changelog-generator</text>
+  <text x="490" y="133" fill="#64748B" font-size="12">
+自动生成Changelog</text>
+  <text x="490" y="148" fill="#10B981" font-size="12" font-weight="600">
+再也没手写过</text>
+  <rect x="648" y="88" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="656" y="96" width="28" height="28" rx="6" fill="#3B82F6"/>
+  <text x="670" y="115" text-anchor="middle" fill="#FFF" font-size="14">
+📋</text>
+  <text x="694" y="113" fill="#1E293B" font-size="12" font-weight="700">
+create-plan</text>
+  <text x="694" y="133" fill="#64748B" font-size="12">
+强制先做计划</text>
+  <text x="694" y="148" fill="#10B981" font-size="12" font-weight="600">
+非平凡任务效果显著</text>
+  <rect x="36" y="162" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="44" y="170" width="28" height="28" rx="6" fill="#8B5CF6"/>
+  <text x="58" y="189" text-anchor="middle" fill="#FFF" font-size="14">
+🧪</text>
+  <text x="82" y="187" fill="#1E293B" font-size="12" font-weight="700">
+webapp-testing</text>
+  <text x="82" y="207" fill="#64748B" font-size="12">
+浏览器流程测试</text>
+  <text x="82" y="222" fill="#10B981" font-size="12" font-weight="600">
+更早捕获UI问题</text>
+  <rect x="240" y="162" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="248" y="170" width="28" height="28" rx="6" fill="#EC4899"/>
+  <text x="262" y="189" text-anchor="middle" fill="#FFF" font-size="14">
+🐛</text>
+  <text x="286" y="187" fill="#1E293B" font-size="12" font-weight="700">
+sentry-triage</text>
+  <text x="286" y="207" fill="#64748B" font-size="12">
+Sentry堆栈→本地源码</text>
+  <text x="286" y="222" fill="#10B981" font-size="12" font-weight="600">
+不再手动复制粘贴</text>
+  <rect x="444" y="162" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="452" y="170" width="28" height="28" rx="6" fill="#0EA5E9"/>
+  <text x="466" y="189" text-anchor="middle" fill="#FFF" font-size="14">
+🎨</text>
+  <text x="490" y="187" fill="#1E293B" font-size="12" font-weight="700">
+frontend-skill</text>
+  <text x="490" y="207" fill="#64748B" font-size="12">
+擅长UI工作</text>
+  <text x="490" y="222" fill="#10B981" font-size="12" font-weight="600">
+前端开发者必备</text>
+  <rect x="648" y="162" width="192" height="72" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="656" y="170" width="28" height="28" rx="6" fill="#6366F1"/>
+  <text x="670" y="189" text-anchor="middle" fill="#FFF" font-size="14">
+🔌</text>
+  <text x="694" y="187" fill="#1E293B" font-size="12" font-weight="700">
+connect</text>
+  <text x="694" y="207" fill="#64748B" font-size="12">
+跨Slack/GitHub/Notion</text>
+  <text x="694" y="222" fill="#10B981" font-size="12" font-weight="600">
+1000+工具连接</text>
+  <rect x="240" y="236" width="192" height="40" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <rect x="248" y="242" width="28" height="28" rx="6" fill="#14B8A6"/>
+  <text x="262" y="261" text-anchor="middle" fill="#FFF" font-size="14">
+✨</text>
+  <text x="286" y="259" fill="#1E293B" font-size="12" font-weight="700">
+stop-slop</text>
+  <text x="396" y="259" fill="#64748B" font-size="12">
+清理AI写作痕迹</text>
+  <!-- Skills vs Plugins -->
+  <rect x="36" y="290" width="888" height="85" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="313" fill="#1E293B" font-size="13" font-weight="700">
+📦 Skills vs Plugins 概念区分</text>
+  <rect x="60" y="325" width="200" height="40" rx="6" fill="#EFF6FF"/>
+  <text x="160" y="345" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="700">
+Skill = 创作格式</text>
+  <text x="160" y="360" text-anchor="middle" fill="#64748B" font-size="12">
+.codex/skills/ 目录</text>
+  <line x1="264" y1="345" x2="280" y2="345" stroke="#64748B" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="274" y="335" text-anchor="middle" fill="#64748B" font-size="12">
+vs</text>
+  <rect x="284" y="325" width="200" height="40" rx="6" fill="#F5F3FF"/>
+  <text x="384" y="345" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="700">
+Plugin = 分发单元</text>
+  <text x="384" y="360" text-anchor="middle" fill="#64748B" font-size="12">
+包管理器安装</text>
+  <rect x="510" y="318" width="180" height="50" rx="6" fill="#FFFBEB"/>
+  <text x="600" y="340" text-anchor="middle" fill="#D97706" font-size="12" font-weight="700">
+个人开发 → Skills</text>
+  <text x="600" y="358" text-anchor="middle" fill="#92400E" font-size="12">
+写一次，永远一样运行</text>
+  <rect x="700" y="318" width="200" height="50" rx="6" fill="#ECFDF5"/>
+  <text x="800" y="340" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+团队规模 → Plugins</text>
+  <text x="800" y="358" text-anchor="middle" fill="#065F46" font-size="12">
+避免手动复制文件夹</text>
+  <!-- Bottom insight -->
+  <rect x="36" y="390" width="888" height="38" rx="8" fill="#EFF6FF"/>
+  <text x="480" y="414" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+💡 社区洞察：Most people only ever use skills and never package them. Fine for solo work, annoying at team scale.</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="518" fill="#64748B" font-size="12">
+安装流程：Clone 仓库 → 运行安装脚本 → 重启 Codex → $.skill-name 验证 ｜ 调用方式：显式 $.skill-name / 自动检测</text>
+</svg>
+</div>
+<!-- ==================== PAGE 8: DAILY WORKFLOW ==================== -->
+<div class="slide" id="slide-8">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr8" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+    <marker id="arr8" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+<path d="M0,0 L8,3 L0,6 Z" fill="#2563EB"/>
+</marker>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="54" fill="url(#hdr8)"/>
+  <text x="48" y="36" fill="#FFFFFF" font-size="21" font-weight="700">
+六、日常工作流最佳实践</text>
+  <text x="900" y="36" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+8 / 16</text>
+  <!-- Golden Rule -->
+  <rect x="36" y="70" width="280" height="120" rx="10" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="56" y="94" fill="#D97706" font-size="15" font-weight="800">
+🏆 黄金法则</text>
+  <text x="56" y="118" fill="#92400E" font-size="13" font-weight="700">
+一任务一线程</text>
+  <text x="56" y="138" fill="#92400E" font-size="12">
+One thread, one task.</text>
+  <text x="56" y="158" fill="#92400E" font-size="12">
+Scoped work = Clean results.</text>
+  <text x="56" y="178" fill="#B45309" font-size="12">
+上下文不污染 · 更专注 · 易回溯</text>
+  <!-- Plan first -->
+  <rect x="336" y="70" width="588" height="120" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="360" y="94" fill="#1E293B" font-size="14" font-weight="700">
+📋 "先计划，再执行"——最重要的习惯</text>
+  <!-- 6-step flow -->
+  <rect x="360" y="108" width="80" height="34" rx="6" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="400" y="129" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+1.描述需求</text>
+  <line x1="440" y1="125" x2="458" y2="125" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr8)"/>
+  <rect x="462" y="108" width="80" height="34" rx="6" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+  <text x="502" y="129" text-anchor="middle" fill="#1E40AF" font-size="12" font-weight="600">
+2.生成计划</text>
+  <line x1="542" y1="125" x2="560" y2="125" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr8)"/>
+  <rect x="564" y="108" width="80" height="34" rx="6" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1"/>
+  <text x="604" y="129" text-anchor="middle" fill="#D97706" font-size="12" font-weight="600">
+3.仔细阅读</text>
+  <line x1="644" y1="125" x2="662" y2="125" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr8)"/>
+  <rect x="666" y="108" width="80" height="34" rx="6" fill="#D1FAE5" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="706" y="129" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+4.批准执行</text>
+  <line x1="746" y1="125" x2="764" y2="125" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr8)"/>
+  <rect x="768" y="108" width="60" height="34" rx="6" fill="#EDE9FE" stroke="#C4B5FD" stroke-width="1"/>
+  <text x="798" y="129" text-anchor="middle" fill="#7C3AED" font-size="12" font-weight="600">
+5.观察</text>
+  <text x="798" y="156" text-anchor="middle" fill="#7C3AED" font-size="12">
+6.迭代</text>
+  <text x="360" y="180" fill="#64748B" font-size="12">
+在计划阶段多花 10 分钟审查 → 执行阶段可节省 2 小时</text>
+  <!-- /clear section -->
+  <rect x="36" y="208" width="440" height="145" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="234" fill="#1E293B" font-size="14" font-weight="700">
+🧹 /clear 命令使用时机</text>
+  <rect x="60" y="248" width="200" height="28" rx="6" fill="#ECFDF5"/>
+  <text x="160" y="267" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+✅ 必须使用</text>
+  <text x="60" y="296" fill="#475569" font-size="12">
+• 从一个任务切换到不相关的任务</text>
+  <text x="60" y="316" fill="#475569" font-size="12">
+• 上下文变长，Codex 开始"遗忘"</text>
+  <text x="60" y="336" fill="#475569" font-size="12">
+• Codex 行为开始不稳定</text>
+  <rect x="280" y="248" width="180" height="28" rx="6" fill="#FEF2F2"/>
+  <text x="370" y="267" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="600">
+❌ 不需要使用</text>
+  <text x="280" y="296" fill="#475569" font-size="12">
+• 同一个任务的自然延续</text>
+  <text x="280" y="316" fill="#475569" font-size="12">
+• 紧密关联的子任务</text>
+  <!-- Large refactor -->
+  <rect x="496" y="208" width="428" height="145" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="520" y="234" fill="#1E293B" font-size="14" font-weight="700">
+🏗️ 大型重构专项流程</text>
+  <text x="520" y="258" fill="#475569" font-size="12">
+1. 先做影响分析：列出所有受影响的文件</text>
+  <text x="520" y="278" fill="#475569" font-size="12">
+2. 分步规划：拆分为 3-5 个独立步骤</text>
+  <text x="520" y="298" fill="#475569" font-size="12">
+3. 逐步骤执行：每步完成，检查测试通过</text>
+  <text x="520" y="318" fill="#475569" font-size="12">
+4. 每步之间 /clear：防止上下文过载</text>
+  <text x="520" y="338" fill="#475569" font-size="12">
+5. 最终验证：运行全量测试套件</text>
+  <!-- Visual Tasks -->
+  <rect x="36" y="370" width="888" height="60" rx="10" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1"/>
+  <text x="60" y="394" fill="#7C3AED" font-size="13" font-weight="700">
+🖼️ 视觉相关任务（大多数人不知道的功能）</text>
+  <text x="60" y="416" fill="#6D28D9" font-size="12">
+附加参考图片 → Codex 按图片风格生成匹配 UI ｜ $imagegen → 在工作流中生成图片</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="516" fill="#64748B" font-size="12">
+社区共识："Always approve the plan before it runs" ｜ "Context from a previous task leaks into the next one and degrades output quietly"</text>
+</svg>
+</div>
+<!-- ==================== PAGE 9: SECURITY ==================== -->
+<div class="slide" id="slide-9">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr9" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="54" fill="url(#hdr9)"/>
+  <text x="48" y="36" fill="#FFFFFF" font-size="21" font-weight="700">
+七、安全与审批策略</text>
+  <text x="900" y="36" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+9 / 16</text>
+  <!-- Approval Hierarchy -->
+  <text x="48" y="78" fill="#1E293B" font-size="14" font-weight="700">
+🛡️ 审批分级：信任但验证</text>
+  <!-- Level 1 -->
+  <rect x="120" y="96" width="720" height="38" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1"/>
+  <rect x="120" y="96" width="140" height="38" rx="8" fill="#D1FAE5"/>
+  <text x="190" y="120" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+读取文件</text>
+  <text x="280" y="120" fill="#065F46" font-size="12">
+自由浏览代码库</text>
+  <text x="760" y="120" fill="#10B981" font-size="14" font-weight="700">
+无需审批 ✓</text>
+  <!-- Level 2 -->
+  <rect x="150" y="140" width="660" height="38" rx="8" fill="#F0FDF4" stroke="#A7F3D0" stroke-width="1"/>
+  <rect x="150" y="140" width="140" height="38" rx="8" fill="#DCFCE7"/>
+  <text x="220" y="164" text-anchor="middle" fill="#166534" font-size="12" font-weight="700">
+只读命令</text>
+  <text x="310" y="164" fill="#166534" font-size="12">
+git status · ls · npm list</text>
+  <text x="740" y="164" fill="#10B981" font-size="14" font-weight="700">
+无需审批 ✓</text>
+  <!-- Level 3 -->
+  <rect x="180" y="184" width="600" height="38" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1"/>
+  <rect x="180" y="184" width="140" height="38" rx="8" fill="#FEF3C7"/>
+  <text x="250" y="208" text-anchor="middle" fill="#B45309" font-size="12" font-weight="700">
+写入文件</text>
+  <text x="340" y="208" fill="#92400E" font-size="12">
+默认应审查每次文件修改</text>
+  <text x="710" y="208" fill="#F59E0B" font-size="14" font-weight="700">
+需要审批 ⚠</text>
+  <!-- Level 4 -->
+  <rect x="210" y="228" width="540" height="38" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1"/>
+  <rect x="210" y="228" width="140" height="38" rx="8" fill="#FFEDD5"/>
+  <text x="280" y="252" text-anchor="middle" fill="#C2410C" font-size="12" font-weight="700">
+构建/测试</text>
+  <text x="370" y="252" fill="#9A3412" font-size="12">
+确保不会触发意外副作用</text>
+  <text x="680" y="252" fill="#F97316" font-size="14" font-weight="700">
+需要审批 ⚠</text>
+  <!-- Level 5 -->
+  <rect x="240" y="272" width="480" height="38" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1"/>
+  <rect x="240" y="272" width="140" height="38" rx="8" fill="#FEE2E2"/>
+  <text x="310" y="296" text-anchor="middle" fill="#B91C1C" font-size="12" font-weight="700">
+修改依赖</text>
+  <text x="400" y="296" fill="#991B1B" font-size="12">
+package.json · Cargo.toml</text>
+  <text x="650" y="296" fill="#EF4444" font-size="14" font-weight="700">
+需要审批 ✘</text>
+  <!-- Level 6 -->
+  <rect x="270" y="316" width="420" height="38" rx="8" fill="#FEF2F2" stroke="#F87171" stroke-width="1"/>
+  <rect x="270" y="316" width="140" height="38" rx="8" fill="#FEE2E2"/>
+  <text x="340" y="340" text-anchor="middle" fill="#7F1D1D" font-size="12" font-weight="700">
+网络请求</text>
+  <text x="430" y="340" fill="#7F1D1D" font-size="12">
+防止数据泄露</text>
+  <text x="620" y="340" fill="#DC2626" font-size="14" font-weight="700">
+需要审批 ✘</text>
+  <!-- Level 7 -->
+  <rect x="300" y="360" width="360" height="38" rx="8" fill="#DC2626" opacity="0.1" stroke="#DC2626" stroke-width="1.5"/>
+  <rect x="300" y="360" width="140" height="38" rx="8" fill="#DC2626" opacity="0.15"/>
+  <text x="370" y="384" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="700">
+数据库操作</text>
+  <text x="460" y="384" fill="#DC2626" font-size="12">
+最高风险级别</text>
+  <text x="648" y="384" text-anchor="end" fill="#DC2626" font-size="14" font-weight="700">
+严格审批 🔴</text>
+  <!-- Codex Security -->
+  <rect x="36" y="412" width="450" height="68" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="60" y="436" fill="#1E40AF" font-size="13" font-weight="700">
+🔒 Codex Security (2026.3 新功能)</text>
+  <text x="60" y="456" fill="#475569" font-size="12">
+分析仓库结构 → 生成威胁模型 → 在沙箱中验证 → 项目级上下文</text>
+  <text x="60" y="472" fill="#64748B" font-size="12">
+不是替代正规安全审查，但能捕获通用扫描器遗漏的真实问题</text>
+  <!-- MCP Security -->
+  <rect x="506" y="412" width="418" height="68" rx="10" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="530" y="436" fill="#D97706" font-size="13" font-weight="700">
+🔌 MCP 安全原则</text>
+  <text x="530" y="456" fill="#92400E" font-size="12">
+最小权限：只授予完成任务必需的 MCP 工具访问权限</text>
+  <text x="530" y="472" fill="#92400E" font-size="12">
+connect Skill 权力越大，审批越要严格</text>
+  <!-- Footer -->
+  <rect x="0" y="494" width="960" height="46" fill="#FFFFFF"/>
+  <text x="48" y="520" fill="#64748B" font-size="12">
+💡 "Most mistakes I've seen people make with Codex come from skipping the approval step out of impatience." — Reddit 高赞</text>
+</svg>
+</div>
+<!-- ==================== PAGE 10: AUTOMATION ==================== -->
+<div class="slide" id="slide-10">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr10" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="54" fill="url(#hdr10)"/>
+  <text x="48" y="36" fill="#FFFFFF" font-size="21" font-weight="700">
+八、自动化与调度</text>
+  <text x="900" y="36" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+10 / 16</text>
+  <!-- Core Philosophy -->
+  <rect x="36" y="70" width="888" height="44" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="480" y="98" text-anchor="middle" fill="#1E40AF" font-size="14" font-weight="700">
+🤖 凡是重复的事情，都值得自动化。设置一次。停止操心。</text>
+  <!-- 5 Automation Scenarios -->
+  <text x="48" y="142" fill="#1E293B" font-size="14" font-weight="700">
+📅 五大自动化场景</text>
+  <rect x="36" y="156" width="168" height="150" rx="10" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1"/>
+  <circle cx="120" cy="186" r="22" fill="#EFF6FF"/>
+  <text x="120" y="192" text-anchor="middle" fill="#2563EB" font-size="20">
+🌙</text>
+  <text x="120" y="222" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="700">
+夜间测试摘要</text>
+  <text x="120" y="244" text-anchor="middle" fill="#64748B" font-size="12">
+频率：每日</text>
+  <text x="120" y="262" text-anchor="middle" fill="#64748B" font-size="12">
+每天早上一到公司</text>
+  <text x="120" y="280" text-anchor="middle" fill="#64748B" font-size="12">
+就看到昨晚测试结果</text>
+  <rect x="64" y="290" width="112" height="10" rx="3" fill="#BFDBFE"/>
+  <rect x="220" y="156" width="168" height="150" rx="10" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1"/>
+  <circle cx="304" cy="186" r="22" fill="#FFFBEB"/>
+  <text x="304" y="192" text-anchor="middle" fill="#F59E0B" font-size="20">
+📦</text>
+  <text x="304" y="222" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="700">
+每周依赖审计</text>
+  <text x="304" y="244" text-anchor="middle" fill="#64748B" font-size="12">
+频率：每周</text>
+  <text x="304" y="262" text-anchor="middle" fill="#64748B" font-size="12">
+自动检查依赖更新</text>
+  <text x="304" y="280" text-anchor="middle" fill="#64748B" font-size="12">
+和安全公告</text>
+  <rect x="248" y="290" width="112" height="10" rx="3" fill="#FCD34D"/>
+  <rect x="404" y="156" width="168" height="150" rx="10" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="1"/>
+  <circle cx="488" cy="186" r="22" fill="#ECFDF5"/>
+  <text x="488" y="192" text-anchor="middle" fill="#10B981" font-size="20">
+📝</text>
+  <text x="488" y="222" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="700">
+发布前Changelog</text>
+  <text x="488" y="244" text-anchor="middle" fill="#64748B" font-size="12">
+频率：每次发布</text>
+  <text x="488" y="262" text-anchor="middle" fill="#64748B" font-size="12">
+配合 changelog-</text>
+  <text x="488" y="280" text-anchor="middle" fill="#64748B" font-size="12">
+generator Skill</text>
+  <rect x="432" y="290" width="112" height="10" rx="3" fill="#6EE7B7"/>
+  <rect x="588" y="156" width="168" height="150" rx="10" fill="#FFFFFF" stroke="#EF4444" stroke-width="1"/>
+  <circle cx="672" cy="186" r="22" fill="#FEF2F2"/>
+  <text x="672" y="192" text-anchor="middle" fill="#EF4444" font-size="20">
+🔧</text>
+  <text x="672" y="222" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="700">
+CI失败自动修复</text>
+  <text x="672" y="244" text-anchor="middle" fill="#64748B" font-size="12">
+频率：事件触发</text>
+  <text x="672" y="262" text-anchor="middle" fill="#64748B" font-size="12">
+配合 gh-fix-ci</text>
+  <text x="672" y="280" text-anchor="middle" fill="#64748B" font-size="12">
+替代一天最痛苦的部分</text>
+  <rect x="616" y="290" width="112" height="10" rx="3" fill="#FCA5A5"/>
+  <rect x="772" y="156" width="152" height="150" rx="10" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1"/>
+  <circle cx="848" cy="186" r="22" fill="#F5F3FF"/>
+  <text x="848" y="192" text-anchor="middle" fill="#8B5CF6" font-size="20">
+👀</text>
+  <text x="848" y="222" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="700">
+代码审查辅助</text>
+  <text x="848" y="244" text-anchor="middle" fill="#64748B" font-size="12">
+频率：每次PR</text>
+  <text x="848" y="262" text-anchor="middle" fill="#64748B" font-size="12">
+配合 gh-address-</text>
+  <text x="848" y="280" text-anchor="middle" fill="#64748B" font-size="12">
+comments Skill</text>
+  <rect x="800" y="290" width="96" height="10" rx="3" fill="#C4B5FD"/>
+  <!-- Configuration tips -->
+  <text x="48" y="340" fill="#1E293B" font-size="14" font-weight="700">
+⚙️ 自动化配置四大要点</text>
+  <rect x="36" y="354" width="210" height="65" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="56" y="376" fill="#1E293B" font-size="12" font-weight="700">
+① 结果进入审查队列</text>
+  <text x="56" y="394" fill="#64748B" font-size="12">
+自动化 ≠ 无监管</text>
+  <text x="56" y="412" fill="#64748B" font-size="12">
+人工确认后再合并</text>
+  <rect x="262" y="354" width="210" height="65" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="282" y="376" fill="#1E293B" font-size="12" font-weight="700">
+② 合理触发条件</text>
+  <text x="282" y="394" fill="#64748B" font-size="12">
+避免不合适时机触发</text>
+  <text x="282" y="412" fill="#64748B" font-size="12">
+如半夜自动改生产配置</text>
+  <rect x="488" y="354" width="210" height="65" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="508" y="376" fill="#1E293B" font-size="12" font-weight="700">
+③ 失败通知</text>
+  <text x="508" y="394" fill="#64748B" font-size="12">
+配置失败时通知机制</text>
+  <text x="508" y="412" fill="#64748B" font-size="12">
+Slack消息 · 邮件等</text>
+  <rect x="714" y="354" width="210" height="65" rx="8" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="734" y="376" fill="#1E293B" font-size="12" font-weight="700">
+④ CI/CD 集成</text>
+  <text x="734" y="394" fill="#64748B" font-size="12">
+Codex自动化作为</text>
+  <text x="734" y="412" fill="#64748B" font-size="12">
+CI/CD管道的一个步骤</text>
+  <!-- Bottom -->
+  <rect x="36" y="440" width="888" height="42" rx="8" fill="#EFF6FF"/>
+  <text x="480" y="466" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+💬 "Set up automations for anything recurring. Results go into a review queue. Set it once. Stop thinking about it." — Reddit 社区</text>
+  <rect x="0" y="500" width="960" height="40" fill="#FFFFFF"/>
+  <text x="48" y="525" fill="#64748B" font-size="12">
+案例：gh-fix-ci 每天为团队节约约 2.5 小时 ← CI修复时间从 15分钟 → 2分钟（审查时间）</text>
+</svg>
+</div>
+<!-- ==================== PAGE 11: CONTEXT WINDOW ==================== -->
+<div class="slide" id="slide-11">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr11" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="54" fill="url(#hdr11)"/>
+  <text x="48" y="36" fill="#FFFFFF" font-size="21" font-weight="700">
+九、上下文窗口管理</text>
+  <text x="900" y="36" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+11 / 16</text>
+  <!-- Left: Management Strategies -->
+  <rect x="36" y="70" width="440" height="290" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="96" fill="#1E293B" font-size="14" font-weight="700">
+📐 上下文管理五大策略</text>
+  <rect x="60" y="112" width="394" height="42" rx="8" fill="#EFF6FF"/>
+  <rect x="68" y="118" width="36" height="30" rx="6" fill="#2563EB"/>
+  <text x="86" y="138" text-anchor="middle" fill="#FFF" font-size="13" font-weight="800">
+1</text>
+  <text x="116" y="136" fill="#1E40AF" font-size="12" font-weight="600">
+/clear — 清空对话上下文</text>
+  <text x="116" y="154" fill="#64748B" font-size="12">
+切换任务时使用，防止上下文泄漏</text>
+  <rect x="60" y="162" width="394" height="42" rx="8" fill="#ECFDF5"/>
+  <rect x="68" y="168" width="36" height="30" rx="6" fill="#10B981"/>
+  <text x="86" y="188" text-anchor="middle" fill="#FFF" font-size="13" font-weight="800">
+2</text>
+  <text x="116" y="186" fill="#047857" font-size="12" font-weight="600">
+/compact — 压缩上下文</text>
+  <text x="116" y="204" fill="#64748B" font-size="12">
+保留关键信息，继续当前任务</text>
+  <rect x="60" y="212" width="394" height="42" rx="8" fill="#FFFBEB"/>
+  <rect x="68" y="218" width="36" height="30" rx="6" fill="#F59E0B"/>
+  <text x="86" y="238" text-anchor="middle" fill="#FFF" font-size="13" font-weight="800">
+3</text>
+  <text x="116" y="236" fill="#D97706" font-size="12" font-weight="600">
+拆分任务 — 大任务拆小任务</text>
+  <text x="116" y="254" fill="#64748B" font-size="12">
+每个在新会话中执行，大型功能开发</text>
+  <rect x="60" y="262" width="394" height="42" rx="8" fill="#F5F3FF"/>
+  <rect x="68" y="268" width="36" height="30" rx="6" fill="#8B5CF6"/>
+  <text x="86" y="288" text-anchor="middle" fill="#FFF" font-size="13" font-weight="800">
+4</text>
+  <text x="116" y="286" fill="#7C3AED" font-size="12" font-weight="600">
+精简 AGENTS.md — 保留核心信息</text>
+  <text x="116" y="304" fill="#64748B" font-size="12">
+避免每次加载过多无用信息</text>
+  <rect x="60" y="312" width="394" height="36" rx="8" fill="#FEF2F2"/>
+  <rect x="68" y="318" width="36" height="24" rx="6" fill="#EF4444"/>
+  <text x="86" y="335" text-anchor="middle" fill="#FFF" font-size="12" font-weight="800">
+5</text>
+  <text x="116" y="335" fill="#DC2626" font-size="12" font-weight="600">
+最小化文件读取 — 精准描述需求</text>
+  <!-- Right: Warning Signals -->
+  <rect x="496" y="70" width="428" height="290" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="520" y="96" fill="#1E293B" font-size="14" font-weight="700">
+🚨 上下文过载的五大预警信号</text>
+  <rect x="520" y="112" width="382" height="40" rx="8" fill="#FEF3C7"/>
+  <circle cx="542" cy="132" r="10" fill="#F59E0B"/>
+  <text x="542" y="136" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+!</text>
+  <text x="562" y="132" fill="#92400E" font-size="12" font-weight="600">
+Codex 开始"遗忘"早期指令</text>
+  <text x="562" y="148" fill="#B45309" font-size="12">
+回复质量不连贯</text>
+  <rect x="520" y="160" width="382" height="40" rx="8" fill="#FEE2E2"/>
+  <circle cx="542" cy="180" r="10" fill="#EF4444"/>
+  <text x="542" y="184" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+!</text>
+  <text x="562" y="180" fill="#991B1B" font-size="12" font-weight="600">
+回复质量明显下降</text>
+  <text x="562" y="196" fill="#B91C1C" font-size="12">
+更模糊、更不准确</text>
+  <rect x="520" y="208" width="382" height="40" rx="8" fill="#FEE2E2"/>
+  <circle cx="542" cy="228" r="10" fill="#DC2626"/>
+  <text x="542" y="232" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+!</text>
+  <text x="562" y="228" fill="#7F1D1D" font-size="12" font-weight="600">
+开始重复已讨论过的内容</text>
+  <text x="562" y="244" fill="#991B1B" font-size="12">
+上下文冗余</text>
+  <rect x="520" y="256" width="382" height="40" rx="8" fill="#FFEDD5"/>
+  <circle cx="542" cy="276" r="10" fill="#F97316"/>
+  <text x="542" y="280" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+!</text>
+  <text x="562" y="276" fill="#9A3412" font-size="12" font-weight="600">
+执行速度变慢</text>
+  <text x="562" y="292" fill="#C2410C" font-size="12">
+token 处理效率下降</text>
+  <rect x="520" y="304" width="382" height="40" rx="8" fill="#FFFBEB"/>
+  <circle cx="542" cy="324" r="10" fill="#F59E0B"/>
+  <text x="542" y="328" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+!</text>
+  <text x="562" y="324" fill="#92400E" font-size="12" font-weight="600">
+出现与当前任务无关的建议</text>
+  <text x="562" y="340" fill="#B45309" font-size="12">
+上下文污染扩散</text>
+  <!-- Spec-Driven Development -->
+  <rect x="36" y="378" width="888" height="80" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="402" fill="#1E293B" font-size="13" font-weight="700">
+📐 Spec-Driven Development（规格驱动开发）—— 上下文管理进阶方法</text>
+  <text x="60" y="424" fill="#475569" font-size="12">
+在 .codex/specs/ 目录下维护多层次规格文件：</text>
+  <text x="80" y="444" fill="#64748B" font-size="12">
+① 项目级规格（全局架构、技术决策） ② 功能级规格（每个功能的详细设计） ③ 任务级规格（当前任务的具体要求）</text>
+  <!-- Footer -->
+  <rect x="0" y="478" width="960" height="62" fill="#FFFFFF"/>
+  <text x="48" y="498" fill="#64748B" font-size="12">
+核心认知：上下文窗口是 AI 编程代理最重要的资源约束 — </text>
+  <text x="48" y="514" fill="#64748B" font-size="12">
+"It Gets Confused in Large Codebases. Once your project grows beyond a certain size, even the best model can lose track."</text>
+  <text x="48" y="530" fill="#64748B" font-size="12">
+一旦出现 2 个以上预警信号，立即使用 /clear 或 /compact。大代码库中 Codex 迷失 → 拆分任务而非盲目升级模型。</text>
+</svg>
+</div>
+<!-- ==================== PAGE 12: TEAM COLLABORATION ==================== -->
+<div class="slide" id="slide-12">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr12" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="54" fill="url(#hdr12)"/>
+  <text x="48" y="36" fill="#FFFFFF" font-size="21" font-weight="700">
+十、团队协作最佳实践</text>
+  <text x="900" y="36" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+12 / 16</text>
+  <!-- 4 Quadrants -->
+  <!-- Q1: 统一配置 -->
+  <rect x="36" y="74" width="430" height="190" rx="12" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <rect x="36" y="74" width="430" height="36" rx="12" fill="#EFF6FF"/>
+  <text x="251" y="98" text-anchor="middle" fill="#1E40AF" font-size="14" font-weight="700">
+🔧 统一团队配置</text>
+  <rect x="56" y="122" width="180" height="32" rx="6" fill="#ECFDF5"/>
+  <text x="146" y="143" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+AGENTS.md — 必须统一</text>
+  <rect x="248" y="122" width="198" height="32" rx="6" fill="#ECFDF5"/>
+  <text x="347" y="143" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+Skills — 推荐统一</text>
+  <rect x="56" y="162" width="180" height="32" rx="6" fill="#FFFBEB"/>
+  <text x="146" y="183" text-anchor="middle" fill="#B45309" font-size="12" font-weight="600">
+模型选择 — 建议不强制</text>
+  <rect x="248" y="162" width="198" height="32" rx="6" fill="#ECFDF5"/>
+  <text x="347" y="183" text-anchor="middle" fill="#047857" font-size="12" font-weight="600">
+审批策略 — 推荐统一</text>
+  <rect x="56" y="204" width="390" height="46" rx="6" fill="#F8FAFC"/>
+  <text x="251" y="226" text-anchor="middle" fill="#64748B" font-size="12">
+所有配置纳入版本控制 (Git)，团队共享一致性</text>
+  <text x="251" y="242" text-anchor="middle" fill="#64748B" font-size="12">
+"团队用不同版本 → 行为不一致"</text>
+  <!-- Q2: Skills 分发 -->
+  <rect x="486" y="74" width="438" height="190" rx="12" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1.5"/>
+  <rect x="486" y="74" width="438" height="36" rx="12" fill="#F5F3FF"/>
+  <text x="705" y="98" text-anchor="middle" fill="#7C3AED" font-size="14" font-weight="700">
+📦 Skills 在团队中的分发</text>
+  <rect x="506" y="124" width="185" height="60" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="598" y="150" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="700">
+👤 个人开发者</text>
+  <text x="598" y="170" text-anchor="middle" fill="#64748B" font-size="12">
+Skills 放 .codex/skills/ 即可</text>
+  <line x1="695" y1="154" x2="720" y2="154" stroke="#64748B" stroke-width="1.5"/>
+  <text x="707" y="145" text-anchor="middle" fill="#64748B" font-size="12">
+→ 打包 →</text>
+  <rect x="724" y="124" width="185" height="60" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1"/>
+  <text x="816" y="150" text-anchor="middle" fill="#047857" font-size="12" font-weight="700">
+👥 团队规模</text>
+  <text x="816" y="170" text-anchor="middle" fill="#64748B" font-size="12">
+打包为 Plugins 安装</text>
+  <rect x="506" y="196" width="403" height="52" rx="6" fill="#FFFBEB"/>
+  <text x="707" y="220" text-anchor="middle" fill="#D97706" font-size="12" font-weight="600">
+💡 "Build a skill for your own workflow, package it as a plugin when sharing."</text>
+  <text x="707" y="238" text-anchor="middle" fill="#92400E" font-size="12">
+避免手动复制文件夹 → 通过包管理器干净安装</text>
+  <!-- Q3: Code Review -->
+  <rect x="36" y="284" width="430" height="150" rx="12" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="1.5"/>
+  <rect x="36" y="284" width="430" height="36" rx="12" fill="#ECFDF5"/>
+  <text x="251" y="308" text-anchor="middle" fill="#047857" font-size="14" font-weight="700">
+✅ Code Review 辅助</text>
+  <text x="56" y="336" fill="#475569" font-size="12">
+1. PR 提交前自审：让 Codex 先审查改动</text>
+  <text x="56" y="356" fill="#475569" font-size="12">
+2. 评审评论处理：gh-address-comments Skill 自动处理</text>
+  <text x="56" y="376" fill="#475569" font-size="12">
+3. 代码质量检查：PR 创建时自动运行</text>
+  <text x="56" y="402" fill="#64748B" font-size="12">
+目标：AI 辅助但不替代人类评审</text>
+  <rect x="56" y="414" width="390" height="8" rx="3" fill="#6EE7B7" opacity="0.3"/>
+  <!-- Q4: 知识共享 -->
+  <rect x="486" y="284" width="438" height="150" rx="12" fill="#FFFFFF" stroke="#FCD34D" stroke-width="1.5"/>
+  <rect x="486" y="284" width="438" height="36" rx="12" fill="#FFFBEB"/>
+  <text x="705" y="308" text-anchor="middle" fill="#D97706" font-size="14" font-weight="700">
+📚 知识共享</text>
+  <rect x="506" y="332" width="185" height="42" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="598" y="356" text-anchor="middle" fill="#475569" font-size="12">
+Skills 共享库</text>
+  <rect x="706" y="332" width="200" height="42" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="806" y="356" text-anchor="middle" fill="#475569" font-size="12">
+Prompt 模板分享</text>
+  <rect x="506" y="382" width="185" height="38" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="598" y="404" text-anchor="middle" fill="#475569" font-size="12">
+陷阱与解决方案</text>
+  <rect x="706" y="382" width="200" height="38" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="806" y="404" text-anchor="middle" fill="#475569" font-size="12">
+最佳实践文档</text>
+
+  <!-- Bottom summary bar -->
+  <rect x="36" y="444" width="888" height="34" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="480" y="466" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">💡 统一配置纳入版本控制 · Skills 按需打包为 Plugins · AI 辅助但不替代人类 Code Review · 定期分享最佳实践</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="518" fill="#64748B" font-size="12">
+配置一致性 = 团队效率基石 ｜ Skills 版本控制 (.codex/skills/ 加入 git) ｜ 定期分享"有效的 prompt 模板"和"常见陷阱"</text>
+</svg>
+</div>
+<!-- ==================== PAGE 13: ANTI-PATTERNS ==================== -->
+<div class="slide" id="slide-13">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr13" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="52" fill="url(#hdr13)"/>
+  <text x="48" y="35" fill="#FFFFFF" font-size="21" font-weight="700">
+十一、反模式与常见错误速查</text>
+  <text x="900" y="35" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+13 / 16</text>
+  <!-- Row 1: 5 cards -->
+  <rect x="36" y="64" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="40" y="68" width="18" height="18" rx="4" fill="#EF4444"/>
+  <text x="49" y="81" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+1</text>
+  <text x="66" y="82" fill="#DC2626" font-size="12" font-weight="700">
+不设 AGENTS.md</text>
+  <text x="66" y="98" fill="#991B1B" font-size="12">
+Codex不理解项目</text>
+  <text x="66" y="116" fill="#047857" font-size="12" font-weight="600">
+→ 花20分钟写</text>
+  <text x="66" y="134" fill="#64748B" font-size="12">
+新人入职手册</text>
+  <rect x="218" y="64" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="222" y="68" width="18" height="18" rx="4" fill="#F97316"/>
+  <text x="231" y="81" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+2</text>
+  <text x="248" y="82" fill="#C2410C" font-size="12" font-weight="700">
+跳过审批执行</text>
+  <text x="248" y="98" fill="#9A3412" font-size="12">
+最常见最危险错误</text>
+  <text x="248" y="116" fill="#047857" font-size="12" font-weight="600">
+→ 始终先批计划</text>
+  <text x="248" y="134" fill="#64748B" font-size="12">
+信任但验证</text>
+  <rect x="400" y="64" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="404" y="68" width="18" height="18" rx="4" fill="#F59E0B"/>
+  <text x="413" y="81" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+3</text>
+  <text x="430" y="82" fill="#B45309" font-size="12" font-weight="700">
+一会话多任务</text>
+  <text x="430" y="98" fill="#92400E" font-size="12">
+上下文污染质量降</text>
+  <text x="430" y="116" fill="#047857" font-size="12" font-weight="600">
+→ /clear分隔</text>
+  <text x="430" y="134" fill="#64748B" font-size="12">
+一任务一线程</text>
+  <rect x="582" y="64" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="586" y="68" width="18" height="18" rx="4" fill="#8B5CF6"/>
+  <text x="595" y="81" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+4</text>
+  <text x="612" y="82" fill="#6D28D9" font-size="12" font-weight="700">
+读太多无关文件</text>
+  <text x="612" y="98" fill="#5B21B6" font-size="12">
+浪费上下文窗口</text>
+  <text x="612" y="116" fill="#047857" font-size="12" font-weight="600">
+→ 精准描述需求</text>
+  <text x="612" y="134" fill="#64748B" font-size="12">
+让Codex自探索</text>
+  <rect x="764" y="64" width="160" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="768" y="68" width="18" height="18" rx="4" fill="#EC4899"/>
+  <text x="777" y="81" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+5</text>
+  <text x="794" y="82" fill="#BE185D" font-size="12" font-weight="700">
+大重构不计划</text>
+  <text x="794" y="98" fill="#9D174D" font-size="12">
+坏决策发现太晚</text>
+  <text x="794" y="116" fill="#047857" font-size="12" font-weight="600">
+→ 先规划后执行</text>
+  <text x="794" y="134" fill="#64748B" font-size="12">
+3-5步骤拆分</text>
+  <!-- Row 2: 5 more cards -->
+  <rect x="36" y="156" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="40" y="160" width="18" height="18" rx="4" fill="#06B6D4"/>
+  <text x="49" y="173" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+6</text>
+  <text x="66" y="174" fill="#0E7490" font-size="12" font-weight="700">
+Skills不版本控制</text>
+  <text x="66" y="190" fill="#155E75" font-size="12">
+同事版本不一致</text>
+  <text x="66" y="208" fill="#047857" font-size="12" font-weight="600">
+→ 加入Git</text>
+  <text x="66" y="226" fill="#64748B" font-size="12">
+.codex/skills/</text>
+  <rect x="218" y="156" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="222" y="160" width="18" height="18" rx="4" fill="#14B8A6"/>
+  <text x="231" y="173" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+7</text>
+  <text x="248" y="174" fill="#0F766E" font-size="12" font-weight="700">
+盲目升级模型</text>
+  <text x="248" y="190" fill="#115E59" font-size="12">
+治标不治本更贵</text>
+  <text x="248" y="208" fill="#047857" font-size="12" font-weight="600">
+→ 先优化上下文</text>
+  <text x="248" y="226" fill="#64748B" font-size="12">
+成本意识</text>
+  <rect x="400" y="156" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="404" y="160" width="18" height="18" rx="4" fill="#6366F1"/>
+  <text x="413" y="173" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+8</text>
+  <text x="430" y="174" fill="#4338CA" font-size="12" font-weight="700">
+忽视Codex Security</text>
+  <text x="430" y="190" fill="#3730A3" font-size="12">
+错过项目级漏洞</text>
+  <text x="430" y="208" fill="#047857" font-size="12" font-weight="600">
+→ 开启并定期运行</text>
+  <text x="430" y="226" fill="#64748B" font-size="12">
+2026.3新功能</text>
+  <rect x="582" y="156" width="172" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="586" y="160" width="18" height="18" rx="4" fill="#D946EF"/>
+  <text x="595" y="173" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+9</text>
+  <text x="612" y="174" fill="#A21CAF" font-size="12" font-weight="700">
+不清理过时AGENTS</text>
+  <text x="612" y="190" fill="#86198F" font-size="12">
+基于错误信息决策</text>
+  <text x="612" y="208" fill="#047857" font-size="12" font-weight="600">
+→ 随项目同步更新</text>
+  <text x="612" y="226" fill="#64748B" font-size="12">
+持续维护</text>
+  <rect x="764" y="156" width="160" height="82" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1"/>
+  <rect x="768" y="160" width="18" height="18" rx="4" fill="#EF4444"/>
+  <text x="777" y="173" text-anchor="middle" fill="#FFF" font-size="12" font-weight="700">
+10</text>
+  <text x="794" y="174" fill="#DC2626" font-size="12" font-weight="700">
+自动无人审查</text>
+  <text x="794" y="190" fill="#B91C1C" font-size="12">
+AI错误悄悄合入</text>
+  <text x="794" y="208" fill="#047857" font-size="12" font-weight="600">
+→ 审查队列</text>
+  <text x="794" y="226" fill="#64748B" font-size="12">
+人工确认后合并</text>
+  <!-- Common Complaints -->
+  <rect x="36" y="258" width="888" height="110" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="60" y="282" fill="#1E293B" font-size="14" font-weight="700">
+💬 社区最常见的 5 大抱怨</text>
+  <rect x="60" y="296" width="260" height="28" rx="6" fill="#FEF2F2"/>
+  <text x="190" y="315" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="600">
+在大代码库中迷失方向</text>
+  <rect x="332" y="296" width="200" height="28" rx="6" fill="#FEF2F2"/>
+  <text x="432" y="315" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="600">
+CLI 不稳定/不可用</text>
+  <rect x="544" y="296" width="190" height="28" rx="6" fill="#FFFBEB"/>
+  <text x="639" y="315" text-anchor="middle" fill="#D97706" font-size="12" font-weight="600">
+怎么持续运行数小时</text>
+  <rect x="60" y="332" width="260" height="28" rx="6" fill="#FFFBEB"/>
+  <text x="190" y="351" text-anchor="middle" fill="#D97706" font-size="12" font-weight="600">
+Codex App 还是 CLI？</text>
+  <rect x="332" y="332" width="230" height="28" rx="6" fill="#FEF2F2"/>
+  <text x="447" y="351" text-anchor="middle" fill="#DC2626" font-size="12" font-weight="600">
+模型选择不知道怎么选</text>
+  <!-- Bottom insight -->
+  <rect x="36" y="388" width="888" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="480" y="414" text-anchor="middle" fill="#1E40AF" font-size="13" font-weight="700">
+⚠️ 核心教训：反模式清单将社区反复踩坑的经验浓缩为 10 条规则</text>
+  <text x="480" y="432" text-anchor="middle" fill="#3B82F6" font-size="12">
+花 5 分钟浏览这份清单，可以避免数小时的调试和挫败感</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="516" fill="#64748B" font-size="12">
+"Most mistakes I've seen people make with Codex come from skipping the approval step out of impatience." — Reddit 社区</text>
+</svg>
+</div>
+<!-- ==================== PAGE 14: COMPETITOR COMPARISON ==================== -->
+<div class="slide" id="slide-14">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr14" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="52" fill="url(#hdr14)"/>
+  <text x="48" y="35" fill="#FFFFFF" font-size="21" font-weight="700">
+十二、竞品对比：Codex CLI vs Claude Code vs Gemini CLI</text>
+  <text x="900" y="35" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+14 / 16</text>
+  <rect x="36" y="66" width="888" height="280" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <!-- Left accent -->
+  <rect x="38" y="68" width="8" height="276" rx="4" fill="#2563EB" opacity="0.3"/>
+  <!-- Table Headers -->
+  <rect x="52" y="74" width="150" height="30" rx="5" fill="#F1F5F9"/>
+  <text x="127" y="94" text-anchor="middle" fill="#64748B" font-size="12" font-weight="700">
+对比维度</text>
+  <rect x="210" y="74" width="220" height="30" rx="5" fill="#DBEAFE"/>
+  <text x="320" y="94" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="700">
+Codex CLI</text>
+  <rect x="438" y="74" width="220" height="30" rx="5" fill="#F3F4F6"/>
+  <text x="548" y="94" text-anchor="middle" fill="#64748B" font-size="12" font-weight="700">
+Claude Code</text>
+  <rect x="666" y="74" width="240" height="30" rx="5" fill="#F3F4F6"/>
+  <text x="786" y="94" text-anchor="middle" fill="#64748B" font-size="12" font-weight="700">
+Gemini CLI</text>
+  <!-- Rows -->
+  <line x1="52" y1="110" x2="890" y2="110" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="128" text-anchor="middle" fill="#475569" font-size="12">
+开发商</text>
+  <text x="320" y="128" text-anchor="middle" fill="#1E293B" font-size="12" font-weight="600">
+OpenAI</text>
+  <text x="548" y="128" text-anchor="middle" fill="#1E293B" font-size="12">
+Anthropic</text>
+  <text x="786" y="128" text-anchor="middle" fill="#1E293B" font-size="12">
+Google</text>
+  <line x1="52" y1="140" x2="890" y2="140" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="156" text-anchor="middle" fill="#475569" font-size="12">
+首次发布</text>
+  <text x="320" y="156" text-anchor="middle" fill="#1E293B" font-size="12">
+2025年4月</text>
+  <text x="548" y="156" text-anchor="middle" fill="#1E293B" font-size="12">
+2024年末</text>
+  <text x="786" y="156" text-anchor="middle" fill="#1E293B" font-size="12">
+2025年</text>
+  <line x1="52" y1="168" x2="890" y2="168" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="184" text-anchor="middle" fill="#475569" font-size="12">
+核心模型</text>
+  <text x="320" y="184" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="600">
+GPT-5.x 系列</text>
+  <text x="548" y="184" text-anchor="middle" fill="#1E293B" font-size="12">
+Claude 4.x</text>
+  <text x="786" y="184" text-anchor="middle" fill="#1E293B" font-size="12">
+Gemini 2.x</text>
+  <line x1="52" y1="196" x2="890" y2="196" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="212" text-anchor="middle" fill="#475569" font-size="12">
+配置文件</text>
+  <text x="320" y="212" text-anchor="middle" fill="#1E293B" font-size="12">
+AGENTS.md</text>
+  <text x="548" y="212" text-anchor="middle" fill="#1E293B" font-size="12">
+CLAUDE.md</text>
+  <text x="786" y="212" text-anchor="middle" fill="#1E293B" font-size="12">
+GEMINI.md</text>
+  <line x1="52" y1="224" x2="890" y2="224" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="240" text-anchor="middle" fill="#475569" font-size="12">
+扩展机制</text>
+  <text x="320" y="240" text-anchor="middle" fill="#10B981" font-size="12" font-weight="600">
+Skills+Plugins+MCP</text>
+  <text x="548" y="240" text-anchor="middle" fill="#10B981" font-size="12">
+Skills+Plugins+MCP</text>
+  <text x="786" y="240" text-anchor="middle" fill="#F59E0B" font-size="12">
+相对早期</text>
+  <line x1="52" y1="252" x2="890" y2="252" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="268" text-anchor="middle" fill="#475569" font-size="12">
+安全分析</text>
+  <text x="320" y="268" text-anchor="middle" fill="#10B981" font-size="12" font-weight="700">
+Codex Security(2026.3)</text>
+  <text x="548" y="268" text-anchor="middle" fill="#EF4444" font-size="12">
+无内置</text>
+  <text x="786" y="268" text-anchor="middle" fill="#EF4444" font-size="12">
+无内置</text>
+  <line x1="52" y1="280" x2="890" y2="280" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="296" text-anchor="middle" fill="#475569" font-size="12">
+自动化调度</text>
+  <text x="320" y="296" text-anchor="middle" fill="#10B981" font-size="12" font-weight="600">
+内置</text>
+  <text x="548" y="296" text-anchor="middle" fill="#F59E0B" font-size="12">
+部分支持</text>
+  <text x="786" y="296" text-anchor="middle" fill="#F59E0B" font-size="12">
+有限</text>
+  <line x1="52" y1="312" x2="890" y2="312" stroke="#F1F5F9" stroke-width="1"/>
+  <text x="127" y="328" text-anchor="middle" fill="#475569" font-size="12">
+定价模式</text>
+  <text x="320" y="328" text-anchor="middle" fill="#1E293B" font-size="12">
+含ChatGPT订阅</text>
+  <text x="548" y="328" text-anchor="middle" fill="#1E293B" font-size="12">
+独立订阅+API</text>
+  <text x="786" y="328" text-anchor="middle" fill="#1E293B" font-size="12">
+含Google Cloud</text>
+  <!-- Advantages -->
+  <rect x="36" y="360" width="430" height="115" rx="10" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="56" y="384" fill="#047857" font-size="13" font-weight="700">
+✅ Codex CLI 独特优势</text>
+  <text x="56" y="404" fill="#065F46" font-size="12">
+• GPT 模型生态灵活：Spark → med/high → xhigh reasoning</text>
+  <text x="56" y="420" fill="#065F46" font-size="12">
+• Codex Security：内置项目级安全分析（竞品暂无）</text>
+  <text x="56" y="440" fill="#065F46" font-size="12">
+• Skills/Plugins 分层策略清晰｜ChatGPT 订阅共享无额外费</text>
+  <text x="56" y="458" fill="#065F46" font-size="12">
+• connect 打通 1000+ 工具</text>
+  <rect x="486" y="360" width="438" height="115" rx="10" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="506" y="384" fill="#DC2626" font-size="13" font-weight="700">
+⚠️ 待改进之处</text>
+  <text x="506" y="404" fill="#991B1B" font-size="12">
+• 大代码库处理：多位用户反映大项目中表现不佳</text>
+  <text x="506" y="420" fill="#991B1B" font-size="12">
+• 稳定性：部分用户报告 CLI 不可用 ｜ 文档可及性有限制</text>
+  <text x="506" y="440" fill="#991B1B" font-size="12">
+• 社区规模：相比 Claude Code HN 热度讨论量稍小</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="516" fill="#64748B" font-size="12">
+数据来源：社区讨论 | 模型选择灵活 + 安全分析内置 = 差异化优势 ｜ 大代码库性能 + 稳定性 = 主要短板</text>
+</svg>
+</div>
+<!-- ==================== PAGE 15: SUMMARY ==================== -->
+<div class="slide" id="slide-15">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hdr15" x1="0" y1="0" x2="960" y2="0">
+<stop offset="0%" stop-color="#1E3A5F"/>
+<stop offset="100%" stop-color="#2563EB"/>
+</linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="52" fill="url(#hdr15)"/>
+  <text x="48" y="35" fill="#FFFFFF" font-size="21" font-weight="700">
+十三、总结与行动建议</text>
+  <text x="900" y="35" text-anchor="end" fill="rgba(255,255,255,.55)" font-size="12">
+15 / 16</text>
+  <!-- Left: Priority Recommendations -->
+  <text x="48" y="76" fill="#1E293B" font-size="14" font-weight="700">
+🎯 五条最高优先级建议</text>
+  <rect x="36" y="88" width="440" height="48" rx="8" fill="#DC2626" opacity="0.08" stroke="#FCA5A5" stroke-width="1"/>
+  <rect x="44" y="94" width="36" height="22" rx="5" fill="#EF4444"/>
+  <text x="62" y="110" text-anchor="middle" fill="#FFF" font-size="12" font-weight="800">
+P0</text>
+  <text x="92" y="110" fill="#DC2626" font-size="12" font-weight="700">
+为每个项目编写 AGENTS.md</text>
+  <text x="370" y="110" fill="#991B1B" font-size="12">
+预计投入 20-30分钟</text>
+  <text x="92" y="128" fill="#991B1B" font-size="12">
+后续一切工作的效率基石</text>
+  <rect x="36" y="142" width="440" height="48" rx="8" fill="#DC2626" opacity="0.08" stroke="#FCA5A5" stroke-width="1"/>
+  <rect x="44" y="148" width="36" height="22" rx="5" fill="#EF4444"/>
+  <text x="62" y="164" text-anchor="middle" fill="#FFF" font-size="12" font-weight="800">
+P0</text>
+  <text x="92" y="164" fill="#DC2626" font-size="12" font-weight="700">
+始终先批准计划再执行</text>
+  <text x="340" y="164" fill="#991B1B" font-size="12">
+每次 10-30秒</text>
+  <text x="92" y="182" fill="#991B1B" font-size="12">
+防止 90% 的 AI 错误</text>
+  <rect x="36" y="196" width="440" height="48" rx="8" fill="#F59E0B" opacity="0.08" stroke="#FCD34D" stroke-width="1"/>
+  <rect x="44" y="202" width="36" height="22" rx="5" fill="#F59E0B"/>
+  <text x="62" y="218" text-anchor="middle" fill="#FFF" font-size="12" font-weight="800">
+P1</text>
+  <text x="92" y="218" fill="#D97706" font-size="12" font-weight="700">
+养成 /clear 习惯</text>
+  <text x="340" y="218" fill="#92400E" font-size="12">
+每次 1秒</text>
+  <text x="92" y="236" fill="#92400E" font-size="12">
+上下文不污染，输出质量稳定</text>
+  <rect x="36" y="250" width="440" height="48" rx="8" fill="#F59E0B" opacity="0.08" stroke="#FCD34D" stroke-width="1"/>
+  <rect x="44" y="256" width="36" height="22" rx="5" fill="#F59E0B"/>
+  <text x="62" y="272" text-anchor="middle" fill="#FFF" font-size="12" font-weight="800">
+P1</text>
+  <text x="92" y="272" fill="#D97706" font-size="12" font-weight="700">
+安装核心 Skills</text>
+  <text x="300" y="272" fill="#92400E" font-size="12">
+预计投入 1小时</text>
+  <text x="92" y="290" fill="#92400E" font-size="12">
+gh-fix-ci · create-plan 等高频操作自动化</text>
+  <rect x="36" y="304" width="440" height="48" rx="8" fill="#10B981" opacity="0.08" stroke="#6EE7B7" stroke-width="1"/>
+  <rect x="44" y="310" width="36" height="22" rx="5" fill="#10B981"/>
+  <text x="62" y="326" text-anchor="middle" fill="#FFF" font-size="12" font-weight="800">
+P2</text>
+  <text x="92" y="326" fill="#047857" font-size="12" font-weight="700">
+为重复任务设置自动化</text>
+  <text x="370" y="326" fill="#065F46" font-size="12">
+预计投入 2-4小时</text>
+  <text x="92" y="344" fill="#065F46" font-size="12">
+长期"设置一次，永远受益"</text>
+  <!-- Right: Roadmap -->
+  <rect x="496" y="76" width="428" height="280" rx="12" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1"/>
+  <text x="520" y="102" fill="#1E293B" font-size="14" font-weight="700">
+🗺️ 学习路径</text>
+  <!-- Newbie path -->
+  <text x="520" y="128" fill="#2563EB" font-size="12" font-weight="700">
+新手入门路径（第1周）</text>
+  <line x1="520" y1="138" x2="550" y2="138" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="530" y="156" fill="#475569" font-size="12">
+Day1: 安装 → 简单项目试用</text>
+  <text x="530" y="174" fill="#475569" font-size="12">
+Day2: 编写 AGENTS.md</text>
+  <text x="530" y="192" fill="#475569" font-size="12">
+Day3: 熟悉 Plan Mode → 小任务</text>
+  <text x="530" y="210" fill="#475569" font-size="12">
+Day4: 安装 gh-fix-ci · create-plan</text>
+  <text x="530" y="228" fill="#475569" font-size="12">
+Day5: 尝试大型重构完整流程</text>
+  <text x="530" y="246" fill="#475569" font-size="12">
+Week1: 建立 /clear 习惯</text>
+  <line x1="520" y1="260" x2="900" y2="260" stroke="#E2E8F0" stroke-width="1"/>
+  <!-- Advanced path -->
+  <text x="520" y="282" fill="#7C3AED" font-size="12" font-weight="700">
+进阶路线（第2周起）</text>
+  <line x1="520" y1="292" x2="550" y2="292" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="530" y="310" fill="#475569" font-size="12">
+Week2: 编写自定义 Skills</text>
+  <text x="530" y="328" fill="#475569" font-size="12">
+Week3: 打包 Plugins 供团队</text>
+  <text x="530" y="346" fill="#475569" font-size="12">
+Week4: CI/CD 集成 + 自动化</text>
+  <!-- One-sentence summary -->
+  <rect x="36" y="372" width="888" height="78" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="480" y="402" text-anchor="middle" fill="#1E40AF" font-size="16" font-weight="800">
+Codex CLI 的核心哲学</text>
+  <text x="480" y="428" text-anchor="middle" fill="#3B82F6" font-size="13" font-weight="600">
+花 20 分钟写好 AGENTS.md · 每次执行前先看计划 · 任务之间用 /clear 清理 · 重复的事情让它自动化</text>
+  <text x="480" y="446" text-anchor="middle" fill="#2563EB" font-size="12">
+做好这四件事 → Codex 从"偶尔有用的 AI 工具"变成"你真正信赖的编程伙伴"</text>
+  <!-- Footer -->
+  <rect x="0" y="490" width="960" height="50" fill="#FFFFFF"/>
+  <text x="48" y="520" fill="#64748B" font-size="12">
+报告基于 2026年5月22日-29日公开信息编写 ｜ Codex CLI 处于快速迭代中 ｜ 建议持续关注 OpenAI 官方 Changelog 和 Reddit r/codex</text>
+</svg>
+</div>
+<!-- ==================== PAGE 16: ENDING ==================== -->
+<div class="slide" id="slide-16">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg16" x1="0" y1="0" x2="960" y2="540">
+      <stop offset="0%" stop-color="#EBF4FF"/>
+      <stop offset="50%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F0F7FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#bg16)"/>
+  <!-- Decorative elements -->
+  <circle cx="700" cy="260" r="250" fill="rgba(37,99,235,.03)"/>
+  <circle cx="220" cy="340" r="190" fill="rgba(37,99,235,.025)"/>
+  <circle cx="700" cy="390" r="140" fill="rgba(37,99,235,.018)"/>
+  <!-- Main text -->
+  <text x="480" y="195" text-anchor="middle" fill="#0F172A" font-size="36" font-weight="800" letter-spacing="3">
+感谢阅读</text>
+  <rect x="380" y="215" width="200" height="4" rx="2" fill="#F59E0B"/>
+  <text x="480" y="255" text-anchor="middle" fill="#334155" font-size="18" font-weight="500">
+Codex CLI 最佳实践深度调研报告</text>
+  <!-- Divider -->
+  <line x1="280" y1="285" x2="680" y2="285" stroke="rgba(37,99,235,.15)" stroke-width="1"/>
+  <!-- Report info -->
+  <text x="480" y="315" text-anchor="middle" fill="#64748B" font-size="13">
+调研周期：2026年5月22日 — 29日 ｜ 等效约 10,000 字</text>
+  <!-- Key message -->
+  <rect x="160" y="340" width="640" height="65" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1"/>
+  <text x="480" y="367" text-anchor="middle" fill="#1E3A5F" font-size="14" font-weight="600">
+花 20 分钟写好 AGENTS.md · 先计划再执行 · /clear 清理 · 重复的事自动化</text>
+  <text x="480" y="392" text-anchor="middle" fill="#2563EB" font-size="12" font-weight="500">
+Codex 从"偶尔有用的 AI 工具"变成"你真正信赖的编程伙伴"</text>
+  <!-- Resource links -->
+  <text x="480" y="440" text-anchor="middle" fill="#64748B" font-size="12">
+📎 社区资源：developers.openai.com/codex · reddit.com/r/codex · community.openai.com</text>
+  <!-- Bottom bar -->
+  <rect x="0" y="500" width="960" height="40" fill="rgba(37,99,235,.06)"/>
+  <text x="40" y="525" fill="#64748B" font-size="12">
+报告基于公开信息编写 · Codex CLI 处于快速迭代中 · 持续关注官方 Changelog</text>
+  <text x="920" y="525" text-anchor="end" fill="#64748B" font-size="12">
+16 / 16</text>
+</svg>
+</div>
+</div>
+<!-- /#app -->
+<!-- NAVIGATION -->
+<div class="nav-bar visible" id="navBar">
+  <button id="prevBtn" title="上一页">
+◀</button>
+  <span class="page-indicator" id="pageIndicator">
+1/16</span>
+  <button id="nextBtn" title="下一页">
+▶</button>
+</div>
+<div class="progress-dots" id="progressDots">
+</div>
+<script>
+(function(){
+  let current = 1;
+  const total = 16;
+  const slides = document.querySelectorAll('.slide');
+  const navBar = document.getElementById('navBar');
+  const progressDots = document.getElementById('progressDots');
+  let hideTimer = null;
+
+  // Create progress dots
+  for(let i=1;i<=total;i++){
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i===1 ? ' active' : '');
+    dot.title = '第'+i+'页';
+    dot.addEventListener('click',()=>goTo(i));
+    progressDots.appendChild(dot);
+  }
+
+  function showNav(){
+    navBar.classList.add('visible');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(()=>{ if(!navBar.matches(':hover')) navBar.classList.remove('visible'); }, 2000);
+  }
+
+  function goTo(n){
+    if(n<1||n>total||n===current) return;
+    slides[current-1].classList.remove('active');
+    slides[n-1].classList.add('active');
+    current = n;
+    document.getElementById('pageIndicator').textContent = current+'/'+total;
+    progressDots.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current-1));
+    showNav();
+  }
+
+  document.getElementById('prevBtn').addEventListener('click',()=>goTo(current-1));
+  document.getElementById('nextBtn').addEventListener('click',()=>goTo(current+1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') goTo(current+1);
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp') goTo(current-1);
+  });
+  document.addEventListener('mousemove',showNav);
+  document.addEventListener('click',showNav);
+})();
+</script>
+</body>
+</html>
+

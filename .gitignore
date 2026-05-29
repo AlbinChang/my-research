@@ -1,0 +1,26 @@
+# ── 操作系统生成文件 ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── 依赖目录 ──
+node_modules/
+
+# ── 构建产物 ──
+dist/
+*.pptx
+
+# ── 临时文件与评估 ──
+.temp/
+.evaluate/
+
+# ── Agent 系统目录 ──
+.ide-agent/
+.llm/
+.memory/
+.tools/
+
+# ── 日志与缓存 ──
+*.log
+*.cache
+.vite/

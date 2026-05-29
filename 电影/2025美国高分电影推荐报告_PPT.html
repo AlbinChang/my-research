@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=960, initial-scale=1.0">
+<title>2025年美国高分电影深度推荐报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1a1a2e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  }
+  .deck-container {
+    position: relative;
+    width: 960pt;
+    height: 540pt;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .slide.active svg {
+    pointer-events: none;
+  }
+  /* Navigation toolbar */
+  .nav-toolbar {
+    position: absolute;
+    bottom: 12pt;
+    right: 15pt;
+    display: flex;
+    align-items: center;
+    gap: 7.5pt;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.8s ease;
+  }
+  .nav-toolbar.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .nav-btn {
+    width: 27pt;
+    height: 27pt;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.9);
+    color: #333;
+    font-size: 13.5pt;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: #fff; transform: scale(1.1); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .page-indicator {
+    background: rgba(255,255,255,0.85);
+    padding: 3pt 9pt;
+    border-radius: 10.5pt;
+    font-size: 10pt;
+    color: #333;
+    font-weight: 500;
+  }
+  /* progress bar */
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e50914, #f5c518);
+    z-index: 999;
+    transition: width 0.5s ease;
+  }
+  /* Slide base backgrounds */
+  .slide-bg-light {
+    background: #f8f9fc;
+  }
+  .slide-bg-dark {
+    background: linear-gradient(135deg, #0f0c29, #1a1a3e, #24243e);
+  }
+  .slide-bg-accent {
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  }
+</style>
+</head>
+<body>
+
+<div class="deck-container" id="deck">
+
+  <!-- ==================== SLIDE 1: COVER ==================== -->
+  <div class="slide active" data-slide="1">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="coverGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0f0c29"/>
+          <stop offset="50%" stop-color="#1a1a3e"/>
+          <stop offset="100%" stop-color="#1a1a2e"/>
+        </linearGradient>
+        <linearGradient id="goldLine" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#f5c518"/>
+          <stop offset="50%" stop-color="#ffd700"/>
+          <stop offset="100%" stop-color="#f5c518"/>
+        </linearGradient>
+        <linearGradient id="redAccent" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#e50914"/>
+          <stop offset="100%" stop-color="#b20710"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="coverClip">
+          <rect x="0" y="0" width="960" height="540"/>
+        </clipPath>
+      </defs>
+
+      <!-- Background -->
+      <rect x="0" y="0" width="960" height="540" fill="url(#coverGrad)"/>
+
+      <!-- Decorative abstract film elements -->
+      <!-- Film reel circles -->
+      <circle cx="120" cy="100" r="180" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+      <circle cx="120" cy="100" r="130" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+      <circle cx="120" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+      <circle cx="840" cy="440" r="99" fill="none" stroke="rgba(229,9,20,0.06)" stroke-width="1"/>
+      <circle cx="840" cy="440" r="80" fill="none" stroke="rgba(229,9,20,0.08)" stroke-width="1"/>
+      <circle cx="840" cy="440" r="60" fill="none" stroke="rgba(229,9,20,0.1)" stroke-width="1"/>
+
+      <!-- Decorative film frame pattern top-right -->
+      <g opacity="0.15" transform="translate(720, 60)">
+        <rect x="0" y="0" width="160" height="100" rx="4" fill="none" stroke="#f5c518" stroke-width="1.5"/>
+        <rect x="6" y="6" width="148" height="88" rx="2" fill="none" stroke="#f5c518" stroke-width="0.5"/>
+        <circle cx="20" cy="50" r="3" fill="#f5c518"/>
+        <circle cx="140" cy="50" r="3" fill="#f5c518"/>
+        <circle cx="80" cy="14" r="3" fill="#f5c518"/>
+        <circle cx="80" cy="86" r="3" fill="#f5c518"/>
+      </g>
+
+      <g opacity="0.12" transform="translate(180, 380) rotate(-15)">
+        <rect x="0" y="0" width="120" height="80" rx="3" fill="none" stroke="#e50914" stroke-width="1.5"/>
+        <rect x="5" y="5" width="110" height="70" rx="2" fill="none" stroke="#e50914" stroke-width="0.5"/>
+        <circle cx="15" cy="40" r="2.5" fill="#e50914"/>
+        <circle cx="105" cy="40" r="2.5" fill="#e50914"/>
+      </g>
+
+      <!-- Main title area -->
+      <text x="480" y="175" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="rgba(245,197,24,0.7)" letter-spacing="6">深度探索 · 匠心推荐</text>
+
+      <!-- Gold line above title -->
+      <rect x="280" y="198" width="400" height="2" rx="1" fill="url(#goldLine)" opacity="0.6"/>
+
+      <!-- Main Title -->
+      <text x="480" y="250" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="4">2025年美国高分电影</text>
+      <text x="480" y="330" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="4">深度推荐报告</text>
+
+      <!-- Gold line below title -->
+      <rect x="280" y="345" width="400" height="2" rx="1" fill="url(#goldLine)" opacity="0.6"/>
+
+      <!-- Subtitle -->
+      <text x="480" y="385" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="rgba(255,255,255,0.5)" letter-spacing="3">从 80+ 部认证新鲜佳作中，精选你的年度必看清单</text>
+
+      <!-- Stats badge -->
+      <rect x="330" y="415" width="300" height="36" rx="18" fill="rgba(229,9,20,0.2)" stroke="rgba(229,9,20,0.4)" stroke-width="1"/>
+      <text x="480" y="439" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="rgba(255,255,255,0.8)" letter-spacing="2">覆盖烂番茄 97% ~ 82% · 年度十佳 + 分类推荐</text>
+
+      <!-- Bottom meta -->
+      <text x="480" y="500" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.3)" letter-spacing="2">数据来源：Rotten Tomatoes / IMDb / Variety · 2026年5月</text>
+
+      <!-- Decorative stars -->
+      <g fill="#f5c518" opacity="0.3">
+        <polygon points="50,480 53,490 63,490 55,496 58,506 50,500 42,506 45,496 37,490 47,490" />
+        <polygon points="900,70 902,76 909,76 904,80 906,87 900,83 894,87 896,80 891,76 898,76" />
+        <polygon points="80,80 82,86 89,86 84,90 86,97 80,93 74,97 76,90 71,86 78,86" />
+        <polygon points="880,480 882,486 889,486 884,490 886,497 880,493 874,497 876,490 871,486 878,486" />
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 2: INDEX ==================== -->
+  <div class="slide" data-slide="2">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="indexBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#indexBg)"/>
+
+      <!-- Left accent bar -->
+      <rect x="0" y="0" width="6" height="540" fill="#e50914"/>
+
+      <!-- Title -->
+      <text x="48" y="68" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="28" font-weight="700" fill="#1a1a2e" letter-spacing="2">内容目录</text>
+      <rect x="48" y="80" width="50" height="3" rx="1.5" fill="#e50914"/>
+
+      <!-- Index items with connecting line -->
+      <line x1="120" y1="120" x2="120" y2="500" stroke="#e0e0e8" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+      <!-- Index item 1 -->
+      <circle cx="120" cy="145" r="12" fill="#e50914"/>
+      <text x="120" y="149" text-anchor="middle" font-size="12" fill="#fff" font-family="sans-serif" font-weight="700">1</text>
+      <text x="150" y="149" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="600" fill="#1a1a2e">年度画卷</text>
+      <text x="150" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">2025好莱坞大年 · 关键数据总览</text>
+
+      <!-- Index item 2 -->
+      <circle cx="120" cy="220" r="12" fill="#e50914"/>
+      <text x="120" y="224" text-anchor="middle" font-size="12" fill="#fff" font-family="sans-serif" font-weight="700">2</text>
+      <text x="150" y="224" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="600" fill="#1a1a2e">年度十佳</text>
+      <text x="150" y="243" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">TOP 1-10 深度解读 · 从《罪人》到《疯狂动物城2》</text>
+
+      <!-- Index item 3 -->
+      <circle cx="120" cy="295" r="12" fill="#e50914"/>
+      <text x="120" y="299" text-anchor="middle" font-size="12" fill="#fff" font-family="sans-serif" font-weight="700">3</text>
+      <text x="150" y="299" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="600" fill="#1a1a2e">分类佳作</text>
+      <text x="150" y="318" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">科幻 · 超英 · 动作 · 战争 · 恐怖 · 独立 · 喜剧</text>
+
+      <!-- Index item 4 -->
+      <circle cx="120" cy="370" r="12" fill="#e50914"/>
+      <text x="120" y="374" text-anchor="middle" font-size="12" fill="#fff" font-family="sans-serif" font-weight="700">4</text>
+      <text x="150" y="374" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="600" fill="#1a1a2e">趋势分析</text>
+      <text x="150" y="393" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">八大趋势解读 · 行业全景观察</text>
+
+      <!-- Index item 5 -->
+      <circle cx="120" cy="445" r="12" fill="#e50914"/>
+      <text x="120" y="449" text-anchor="middle" font-size="12" fill="#fff" font-family="sans-serif" font-weight="700">5</text>
+      <text x="150" y="449" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="600" fill="#1a1a2e">推荐指南 & 事件簿</text>
+      <text x="150" y="468" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">分级推荐 · 奥斯卡颁奖 · 北美票房Top10</text>
+
+      <!-- Right side decorative -->
+      <g>
+        <rect x="780" y="0" width="180" height="540" fill="rgba(229,9,20,0.03)"/>
+        <text x="870" y="140" text-anchor="middle" font-size="120" font-weight="900" fill="#e50914" font-family="sans-serif">05</text>
+        <text x="870" y="350" text-anchor="middle" font-size="100" font-weight="900" fill="#e50914" font-family="sans-serif">25</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 3: OVERVIEW DATA ==================== -->
+  <div class="slide" data-slide="3">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="overviewBg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#overviewBg)"/>
+
+      <!-- Header bar -->
+      <rect x="0" y="0" width="960" height="60" fill="#1a1a2e"/>
+      <text x="48" y="38" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#fff" letter-spacing="2">2025 · 好莱坞的"大年"</text>
+
+      <!-- Key data cards -->
+      <!-- Card 1: 80+ -->
+      <rect x="48" y="88" width="270" height="130" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+      <circle cx="108" cy="128" r="28" fill="rgba(229,9,20,0.1)"/>
+      <text x="108" y="134" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#e50914">80+</text>
+      <text x="150" y="124" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="600" fill="#1a1a2e">认证新鲜影片</text>
+      <text x="150" y="146" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">烂番茄 ≥ 75% 的美国电影</text>
+      <text x="150" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">类型覆盖全面，佳作井喷</text>
+
+      <line x1="340" y1="88" x2="340" y2="218" stroke="#e8e8f0" stroke-width="1"/>
+
+      <!-- Card 2: 40+ 90%+ -->
+      <rect x="355" y="88" width="270" height="130" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+      <circle cx="415" cy="128" r="28" fill="rgba(245,197,24,0.12)"/>
+      <text x="415" y="134" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#d4a017">40+</text>
+      <text x="457" y="124" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="600" fill="#1a1a2e">高分佳作</text>
+      <text x="457" y="146" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">烂番茄新鲜度 ≥ 90%</text>
+      <text x="457" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">年度豆瓣必看级影片</text>
+
+      <line x1="647" y1="88" x2="647" y2="218" stroke="#e8e8f0" stroke-width="1"/>
+
+      <!-- Card 3: 6 Oscar BP -->
+      <rect x="662" y="88" width="250" height="130" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+      <circle cx="722" cy="128" r="28" fill="rgba(26,26,46,0.08)"/>
+      <text x="722" y="135" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">6项</text>
+      <text x="764" y="124" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="600" fill="#1a1a2e">奥斯卡最佳影片</text>
+      <text x="764" y="146" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">《一场又一场的战役》</text>
+      <text x="764" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">横扫第98届奥斯卡</text>
+
+      <!-- Middle section: Key highlights -->
+      <rect x="48" y="240" width="864" height="1" fill="#e0e0e8"/>
+
+      <!-- Year summary text -->
+      <text x="480" y="278" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="17" font-weight="600" fill="#1a1a2e" letter-spacing="1">2025年 · 美国电影的"文艺复兴"</text>
+      <text x="480" y="302" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#666" letter-spacing="1">好莱坞在经历了流媒体冲击、疫情震荡和行业罢工后，以惊人的创造力和韧性重新站稳脚跟</text>
+
+      <!-- Three driving forces -->
+      <g transform="translate(80, 330)">
+        <rect x="0" y="0" width="245" height="100" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="245" height="3" rx="1.5" fill="#e50914"/>
+        <text x="122" y="32" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#1a1a2e">🎬 作者导演的崛起</text>
+        <text x="122" y="54" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">库格勒·PTA·索德伯格</text>
+        <text x="122" y="72" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">萨夫迪·特里耶·德尔·托罗</text>
+        <text x="122" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">风格鲜明的作者电影统治年度榜单</text>
+      </g>
+
+      <g transform="translate(357, 330)">
+        <rect x="0" y="0" width="245" height="100" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="245" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="122" y="32" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#1a1a2e">🎭 类型的再发明</text>
+        <text x="122" y="54" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">恐怖+历史·西部+荒诞</text>
+        <text x="122" y="72" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">体育+黑色幽默</text>
+        <text x="122" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">大胆混合创造"新类型电影"</text>
+      </g>
+
+      <g transform="translate(634, 330)">
+        <rect x="0" y="0" width="245" height="100" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="245" height="3" rx="1.5" fill="#1a1a2e"/>
+        <text x="122" y="32" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#1a1a2e">🌟 新声音的涌现</text>
+        <text x="122" y="54" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">伊娃·维克多《抱歉，宝贝》</text>
+        <text x="122" y="72" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">克里斯汀·斯图尔特导演首秀</text>
+        <text x="122" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">新生代电影人惊艳亮相</text>
+      </g>
+
+      <!-- Bottom rating scale -->
+      <rect x="48" y="460" width="864" height="1" fill="#e0e0e8"/>
+      <text x="48" y="490" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">评分分布：</text>
+      <rect x="148" y="478" width="140" height="8" rx="4" fill="#1a1a2e"/>
+      <text x="295" y="490" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">95+分 · 约15部</text>
+      <rect x="395" y="478" width="180" height="8" rx="4" fill="#f5c518"/>
+      <text x="582" y="490" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">90-94分 · 约30部</text>
+      <rect x="710" y="478" width="100" height="8" rx="4" fill="#e0e0e8"/>
+      <text x="817" y="490" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">85-89分 · 约50部</text>
+
+      <text x="480" y="520" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">数据来源：Rotten Tomatoes（烂番茄）· 截至2026年5月</text>
+    </svg>
+  </div>
+  <!-- ==================== SLIDE 4: TOP 10 OVERVIEW ==================== -->
+  <div class="slide" data-slide="4">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgTop10" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0f0c29"/>
+          <stop offset="100%" stop-color="#1a1a2e"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgTop10)"/>
+
+      <!-- Header -->
+      <rect x="0" y="0" width="960" height="56" fill="rgba(255,255,255,0.06)"/>
+      <text x="48" y="36" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#f5c518" letter-spacing="2">🎬 年度十佳 · 巅峰之作</text>
+
+      <!-- Top 10 grid - 2 rows x 5 columns -->
+      <!-- Row 1: TOP 1-5 -->
+      <!-- 1. Sinners 97% -->
+      <g transform="translate(30, 78)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.08" stroke="rgba(245,197,24,0.3)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="44" rx="8" fill="#f5c518"/>
+        <rect x="0" y="20" width="170" height="24" fill="#f5c518"/>
+        <text x="85" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">🥇 TOP 1</text>
+        <text x="85" y="44" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a2e">97%</text>
+        <text x="85" y="70" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="600" fill="#fff">《罪人》</text>
+        <text x="85" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">瑞恩·库格勒</text>
+        <text x="85" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">恐怖/音乐/历史</text>
+        <line x1="20" y1="122" x2="150" y2="122" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <text x="85" y="142" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">类型融合的革命之作</text>
+        <text x="85" y="160" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">迈克尔·B·乔丹</text>
+        <text x="85" y="182" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">海莉·斯坦菲尔德</text>
+      </g>
+
+      <!-- 2. One Battle 94% -->
+      <g transform="translate(215, 78)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.08" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="44" rx="8" fill="#e50914"/>
+        <rect x="0" y="20" width="170" height="24" fill="#e50914"/>
+        <text x="85" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">🥇 TOP 2</text>
+        <text x="85" y="44" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff">94%</text>
+        <text x="85" y="70" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="600" fill="#fff">《一场又一场的战役》</text>
+        <text x="85" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">PTA</text>
+        <text x="85" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">西部/冒险/喜剧</text>
+        <line x1="20" y1="122" x2="150" y2="122" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <text x="85" y="142" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">PTA的西部狂想曲</text>
+        <text x="85" y="160" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">莱昂纳多·迪卡普里奥</text>
+        <text x="85" y="182" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">西恩·潘</text>
+      </g>
+
+      <!-- 3. Train Dreams 94% -->
+      <g transform="translate(400, 78)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.08" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="44" rx="8" fill="#e50914"/>
+        <rect x="0" y="20" width="170" height="24" fill="#e50914"/>
+        <text x="85" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">🥇 TOP 3</text>
+        <text x="85" y="44" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff">94%</text>
+        <text x="85" y="70" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="600" fill="#fff">《列车之梦》</text>
+        <text x="85" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">克林特·本特利</text>
+        <text x="85" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">历史/剧情</text>
+        <line x1="20" y1="122" x2="150" y2="122" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <text x="85" y="142" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">美国乡愁的诗意挽歌</text>
+        <text x="85" y="160" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">乔尔·埃哲顿</text>
+        <text x="85" y="182" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">菲丽希缇·琼斯</text>
+      </g>
+
+      <!-- 4. Marty Supreme 93% -->
+      <g transform="translate(585, 78)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.08" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="44" rx="8" fill="#e50914"/>
+        <rect x="0" y="20" width="170" height="24" fill="#e50914"/>
+        <text x="85" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">🥇 TOP 4</text>
+        <text x="85" y="44" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff">93%</text>
+        <text x="85" y="70" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="600" fill="#fff">《马蒂至尊》</text>
+        <text x="85" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">约什·萨夫迪</text>
+        <text x="85" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">体育/喜剧/剧情</text>
+        <line x1="20" y1="122" x2="150" y2="122" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <text x="85" y="142" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">乒乓桌前的美国梦</text>
+        <text x="85" y="160" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">蒂莫西·柴勒梅德</text>
+        <text x="85" y="182" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">格温妮丝·帕特洛</text>
+      </g>
+
+      <!-- 5. Black Bag 96% -->
+      <g transform="translate(770, 78)">
+        <rect x="0" y="0" width="160" height="195" rx="8" fill="#fff" fill-opacity="0.08" stroke="rgba(245,197,24,0.2)" stroke-width="1"/>
+        <rect x="0" y="0" width="160" height="44" rx="8" fill="#f5c518"/>
+        <rect x="0" y="20" width="160" height="24" fill="#f5c518"/>
+        <text x="80" y="22" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">🥇 TOP 5</text>
+        <text x="80" y="44" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a2e">96%</text>
+        <text x="80" y="70" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="600" fill="#fff">《黑袋行动》</text>
+        <text x="80" y="90" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">索德伯格</text>
+        <text x="80" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">间谍/惊悚</text>
+        <line x1="15" y1="122" x2="145" y2="122" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+        <text x="80" y="142" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">特工夫妻的优雅谍战</text>
+        <text x="80" y="160" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">凯特·布兰切特</text>
+        <text x="80" y="182" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">迈克尔·法斯宾德</text>
+      </g>
+
+      <!-- Row 2: TOP 6-10 -->
+      <!-- 6. Weapons 93% -->
+      <g transform="translate(30, 293)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.06" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="38" rx="8" fill="rgba(229,9,20,0.7)"/>
+        <rect x="0" y="16" width="170" height="22" fill="rgba(229,9,20,0.7)"/>
+        <text x="85" y="19" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 6</text>
+        <text x="85" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">93%</text>
+        <text x="85" y="62" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">《武器》</text>
+        <text x="85" y="80" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">扎克·克雷格</text>
+        <text x="85" y="96" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">恐怖/悬疑</text>
+        <line x1="20" y1="108" x2="150" y2="108" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <text x="85" y="128" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">年度恐怖惊喜</text>
+        <text x="85" y="148" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">乔什·布洛林</text>
+        <text x="85" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">朱莉娅·加纳</text>
+      </g>
+
+      <!-- 7. Baltimorons 93% -->
+      <g transform="translate(215, 293)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.06" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="38" rx="8" fill="rgba(229,9,20,0.7)"/>
+        <rect x="0" y="16" width="170" height="22" fill="rgba(229,9,20,0.7)"/>
+        <text x="85" y="19" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 7</text>
+        <text x="85" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">93%</text>
+        <text x="85" y="62" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">《巴尔的摩人》</text>
+        <text x="85" y="80" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">杰伊·杜普拉斯</text>
+        <text x="85" y="96" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">喜剧/剧情</text>
+        <line x1="20" y1="108" x2="150" y2="108" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <text x="85" y="128" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">圣诞夜的温柔喜剧</text>
+        <text x="85" y="148" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">迈克尔·斯特拉斯纳</text>
+        <text x="85" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">丽兹·拉森</text>
+      </g>
+
+      <!-- 8. Sovereign 95% -->
+      <g transform="translate(400, 293)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.06" stroke="rgba(245,197,24,0.2)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="38" rx="8" fill="rgba(245,197,24,0.8)"/>
+        <rect x="0" y="16" width="170" height="22" fill="rgba(245,197,24,0.8)"/>
+        <text x="85" y="19" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">TOP 8</text>
+        <text x="85" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">95%</text>
+        <text x="85" y="62" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">《哨兵》</text>
+        <text x="85" y="80" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">克里斯蒂安·斯维格尔</text>
+        <text x="85" y="96" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">惊悚/犯罪</text>
+        <line x1="20" y1="108" x2="150" y2="108" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <text x="85" y="128" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">极端主义的警世寓言</text>
+        <text x="85" y="148" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">丹尼斯·奎德</text>
+        <text x="85" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">雅各布·特伦布莱</text>
+      </g>
+
+      <!-- 9. Sentimental Value 95% -->
+      <g transform="translate(585, 293)">
+        <rect x="0" y="0" width="170" height="195" rx="8" fill="#fff" fill-opacity="0.06" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <rect x="0" y="0" width="170" height="38" rx="8" fill="rgba(229,9,20,0.7)"/>
+        <rect x="0" y="16" width="170" height="22" fill="rgba(229,9,20,0.7)"/>
+        <text x="85" y="19" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 9</text>
+        <text x="85" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">95%</text>
+        <text x="85" y="62" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">《Sentimental Value》</text>
+        <text x="85" y="80" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">约阿希姆·特里耶</text>
+        <text x="85" y="96" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">剧情</text>
+        <line x1="20" y1="108" x2="150" y2="108" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <text x="85" y="128" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">家族情感的艺术纠葛</text>
+        <text x="85" y="148" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">雷娜特·赖因斯夫</text>
+        <text x="85" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">艾丽·范宁</text>
+      </g>
+
+      <!-- 10. Zootopia 2 91% -->
+      <g transform="translate(770, 293)">
+        <rect x="0" y="0" width="160" height="195" rx="8" fill="#fff" fill-opacity="0.06" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <rect x="0" y="0" width="160" height="38" rx="8" fill="rgba(229,9,20,0.7)"/>
+        <rect x="0" y="16" width="160" height="22" fill="rgba(229,9,20,0.7)"/>
+        <text x="80" y="19" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 10</text>
+        <text x="80" y="38" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">91%</text>
+        <text x="80" y="62" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">《疯狂动物城2》</text>
+        <text x="80" y="80" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">杰拉德·布什</text>
+        <text x="80" y="96" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">动画/冒险/喜剧</text>
+        <line x1="15" y1="108" x2="145" y2="108" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+        <text x="80" y="128" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#aaa">动物城的华丽回归</text>
+        <text x="80" y="148" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">金妮弗·古德温</text>
+        <text x="80" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">杰森·贝特曼</text>
+      </g>
+
+      <!-- Gradient overlay at bottom -->
+      <rect x="0" y="510" width="960" height="30" fill="url(#bgTop10)"/>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 5: TOP 1-2 DEEP DIVE ==================== -->
+  <div class="slide" data-slide="5">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgDeep1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+        <clipPath id="c5c1"><rect x="0" y="0" width="435" height="430" rx="8"/></clipPath>
+        <clipPath id="c5c2"><rect x="0" y="0" width="435" height="430" rx="8"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgDeep1)"/>
+      <rect x="0" y="0" width="960" height="56" fill="#1a1a2e"/>
+      <text x="48" y="36" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#f5c518" letter-spacing="2">深度解读 · TOP 1-2</text>
+      <g transform="translate(30, 75)" clip-path="url(#c5c1)">
+      <!-- Sinners section -->
+        <rect x="0" y="0" width="435" height="430" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <!-- Gold accent -->
+        <rect x="0" y="0" width="435" height="4" rx="2" fill="#f5c518"/>
+        <!-- Rank badge -->
+        <rect x="16" y="16" width="70" height="28" rx="14" fill="#f5c518"/>
+        <text x="51" y="35" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#1a1a2e">🥇 TOP 1</text>
+        <!-- Score -->
+        <text x="380" y="35" font-family="sans-serif" font-size="22" font-weight="700" fill="#f5c518">97%</text>
+        <!-- Title -->
+        <text x="16" y="72" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" font-weight="700" fill="#1a1a2e">《罪人》Sinners</text>
+        <text x="16" y="96" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">瑞恩·库格勒 执导 · 2025年4月上映</text>
+
+        <!-- Info tags -->
+        <rect x="16" y="110" width="60" height="22" rx="4" fill="rgba(229,9,20,0.1)"/>
+        <text x="46" y="125" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">恐怖</text>
+        <rect x="82" y="110" width="60" height="22" rx="4" fill="rgba(245,197,24,0.1)"/>
+        <text x="112" y="125" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">音乐</text>
+        <rect x="148" y="110" width="60" height="22" rx="4" fill="rgba(26,26,46,0.08)"/>
+        <text x="178" y="125" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">历史剧情</text>
+
+        <line x1="16" y1="148" x2="419" y2="148" stroke="#eee" stroke-width="1"/>
+
+        <!-- Cast -->
+        <text x="16" y="170" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">主演</text>
+        <text x="16" y="190" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">迈克尔·B·乔丹（分饰两角）· 海莉·斯坦菲尔德 · 杰克·奥康奈尔</text>
+
+        <!-- Description -->
+        <text x="16" y="220" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">深度看点</text>
+        <text x="16" y="242" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="16" dy="0">库格勒继《黑豹》后的原创力作，大胆将恐怖片、歌舞片和美国</tspan>
+          <tspan x="16" dy="20">南方历史熔于一炉。讲述双胞胎兄弟试图摆脱过去，却发现</tspan>
+          <tspan x="16" dy="20">比过往更可怕的超自然黑暗存在——与吉姆·克劳时代非裔历史深度关联。</tspan>
+        </text>
+
+        <!-- Critic quote -->
+        <rect x="16" y="310" width="403" height="52" rx="6" fill="rgba(245,197,24,0.06)" stroke="rgba(245,197,24,0.2)" stroke-width="1"/>
+        <text x="26" y="330" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">"一部融合了精湛视觉叙事和悦耳音乐的宏大原创大片，</text>
+        <text x="26" y="348" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">编剧兼导演库格勒展现了他独特想象力的全部广度。"</text>
+        <text x="380" y="352" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">—— 烂番茄影评人共识</text>
+
+        <!-- Reason -->
+        <text x="16" y="390" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#e50914">推荐理由</text>
+        <text x="16" y="406" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">
+          <tspan x="16" dy="0">2025年只看一部美国电影，那一定是《罪人》。类型融合</tspan>
+          <tspan x="16" dy="20">的革命之作，将黑人历史叙事的深度与商业类型片的可看性推向全新高度。</tspan>
+        </text>
+      </g>
+      <g transform="translate(495, 75)" clip-path="url(#c5c2)">
+      <!-- One Battle section -->
+        <rect x="0" y="0" width="435" height="430" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="435" height="4" rx="2" fill="#e50914"/>
+        <rect x="16" y="16" width="70" height="28" rx="14" fill="#e50914"/>
+        <text x="51" y="35" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#fff">🥇 TOP 2</text>
+        <text x="380" y="35" font-family="sans-serif" font-size="22" font-weight="700" fill="#e50914">94%</text>
+        <text x="16" y="72" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#1a1a2e">《一场又一场的战役》</text>
+        <text x="16" y="96" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">One Battle After Another</text>
+        <text x="16" y="112" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">PTA 执导 · 第98届奥斯卡最佳影片</text>
+
+        <rect x="16" y="126" width="60" height="22" rx="4" fill="rgba(229,9,20,0.1)"/>
+        <text x="46" y="141" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">西部</text>
+        <rect x="82" y="126" width="60" height="22" rx="4" fill="rgba(245,197,24,0.1)"/>
+        <text x="112" y="141" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">冒险</text>
+        <rect x="148" y="126" width="60" height="22" rx="4" fill="rgba(26,26,46,0.08)"/>
+        <text x="178" y="141" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">喜剧</text>
+
+        <line x1="16" y1="162" x2="419" y2="162" stroke="#eee" stroke-width="1"/>
+
+        <text x="16" y="184" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">主演</text>
+        <text x="16" y="204" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">莱昂纳多·迪卡普里奥 · 西恩·潘 · 蔡斯·茵菲尼蒂 · 本尼西奥·德尔·托罗</text>
+
+        <text x="16" y="234" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">深度看点</text>
+        <text x="16" y="256" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="16" dy="0">PTA与小李子首次合作，带来一部\"疯狂的荒诞西部片\"。讲述</tspan>
+          <tspan x="16" dy="20">落魄革命者鲍勃与女儿在野外求生，邪恶前同伙追踪而至，</tspan>
+          <tspan x="16" dy="20">一场横跨西部的疯狂追逐就此展开。解构经典美国英雄神</tspan>
+          <tspan x="16" dy="20">话，注入21世纪政治敏感性与黑色幽默。</tspan>
+        </text>
+
+        <rect x="16" y="320" width="403" height="52" rx="6" fill="rgba(229,9,20,0.04)" stroke="rgba(229,9,20,0.15)" stroke-width="1"/>
+        <text x="26" y="340" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">"一部充满令人敬畏的动作场面的史诗级怪诞冒险，</text>
+        <text x="26" y="358" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">是PTA最具娱乐性的作品，同时也是他主题最丰富的作品之一。"</text>
+        <text x="310" y="362" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#bbb">—— 烂番茄影评人共识</text>
+
+        <!-- Oscar badge -->
+        <rect x="16" y="390" width="403" height="34" rx="6" fill="rgba(245,197,24,0.1)" stroke="rgba(245,197,24,0.3)" stroke-width="1"/>
+        <text x="217" y="412" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#d4a017">🏆 第98届奥斯卡 · 最佳影片 · 最佳导演 · 共6项大奖</text>
+      </g>
+    </svg>
+  </div>
+  <!-- ==================== SLIDE 6: TOP 3-5 DEEP DIVE ==================== -->
+  <div class="slide" data-slide="6">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgDeep2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+        <clipPath id="c6c1"><rect x="0" y="0" width="295" height="445" rx="8"/></clipPath>
+        <clipPath id="c6c2"><rect x="0" y="0" width="295" height="445" rx="8"/></clipPath>
+        <clipPath id="c6c3"><rect x="0" y="0" width="296" height="445" rx="8"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgDeep2)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">深度解读 · TOP 3-5</text>
+
+      <!-- Train Dreams 94% -->
+      <g transform="translate(20, 62)" clip-path="url(#c6c1)">
+        <rect x="0" y="0" width="295" height="445" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#e50914"/>
+        <rect x="12" y="14" width="65" height="24" rx="12" fill="#e50914"/>
+        <text x="44" y="31" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">🥇 TOP 3</text>
+        <text x="250" y="31" font-family="sans-serif" font-size="18" font-weight="700" fill="#e50914">94%</text>
+        <text x="12" y="62" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#1a1a2e">《列车之梦》</text>
+        <text x="12" y="82" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">Train Dreams · 克林特·本特利 执导</text>
+        <rect x="12" y="94" width="50" height="20" rx="4" fill="rgba(229,9,20,0.1)"/>
+        <text x="37" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">历史</text>
+        <rect x="68" y="94" width="50" height="20" rx="4" fill="rgba(26,26,46,0.08)"/>
+        <text x="93" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">剧情</text>
+        <line x1="12" y1="128" x2="283" y2="128" stroke="#eee" stroke-width="1"/>
+        <text x="12" y="150" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">主演</text>
+        <text x="12" y="170" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">乔尔·埃哲顿 · 菲丽希缇·琼斯 · 小克利夫顿·柯林斯</text>
+        <text x="12" y="200" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">深度看点</text>
+        <text x="12" y="220" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">改编自丹尼斯·约翰逊的中篇小说，以20世纪</tspan>
+          <tspan x="12" dy="20">之交的美国西部为背景，讲述伐木工人罗伯特</tspan>
+          <tspan x="12" dy="20">跨越数十年的生活画卷。近乎冥想的叙事节奏，</tspan>
+          <tspan x="12" dy="20">描绘了一个普通人在时代巨变中的生命轨迹。</tspan>
+        </text>
+        <rect x="12" y="320" width="271" height="48" rx="6" fill="rgba(229,9,20,0.04)" stroke="rgba(229,9,20,0.12)" stroke-width="1"/>
+        <text x="22" y="338" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">"一部关于美国的华美沉思，由乔尔·埃哲顿</text>
+        <text x="22" y="354" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">职业生涯最佳表演之一撑起。"</text>
+        <text x="12" y="400" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#e50914">推荐理由</text>
+        <text x="12" y="416" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">
+          <tspan x="12" dy="0">热爱特伦斯·马利克式诗意电影语言和《荒野生存》式孤独</tspan>
+          <tspan x="12" dy="20">美学的观众，这部作品将直击心灵深处。</tspan>
+        </text>
+      </g>
+      <g transform="translate(332, 62)" clip-path="url(#c6c2)">
+
+      <!-- Marty Supreme 93% -->
+        <rect x="0" y="0" width="295" height="445" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#f5c518"/>
+        <rect x="12" y="14" width="65" height="24" rx="12" fill="#f5c518"/>
+        <text x="44" y="31" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">🥇 TOP 4</text>
+        <text x="250" y="31" font-family="sans-serif" font-size="18" font-weight="700" fill="#d4a017">93%</text>
+        <text x="12" y="62" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#1a1a2e">《马蒂至尊》</text>
+        <text x="12" y="82" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">Marty Supreme · 约什·萨夫迪 执导</text>
+        <rect x="12" y="94" width="50" height="20" rx="4" fill="rgba(245,197,24,0.1)"/>
+        <text x="37" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">体育</text>
+        <rect x="68" y="94" width="50" height="20" rx="4" fill="rgba(229,9,20,0.1)"/>
+        <text x="93" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">喜剧</text>
+        <rect x="124" y="94" width="50" height="20" rx="4" fill="rgba(26,26,46,0.08)"/>
+        <text x="149" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">剧情</text>
+        <line x1="12" y1="128" x2="283" y2="128" stroke="#eee" stroke-width="1"/>
+        <text x="12" y="150" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">主演</text>
+        <text x="12" y="170" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">蒂莫西·柴勒梅德 · 格温妮丝·帕特洛 · 奥德萨·阿齐恩</text>
+        <text x="12" y="200" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">深度看点</text>
+        <text x="12" y="220" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">萨夫迪兄弟单飞之作，镜头对准1950年代美国</tspan>
+          <tspan x="12" dy="20">乒乓球地下世界。甜茶饰演的马蒂怀揣无人尊</tspan>
+          <tspan x="12" dy="20">重的梦想——成为乒乓球世界冠军。萨夫迪标志</tspan>
+          <tspan x="12" dy="20">性的能量爆棚导演风格完美延续，柴勒梅德贡</tspan>
+          <tspan x="12" dy="20">献了迄今最具身体性的表演。</tspan>
+        </text>
+        <rect x="12" y="320" width="271" height="48" rx="6" fill="rgba(245,197,24,0.04)" stroke="rgba(245,197,24,0.15)" stroke-width="1"/>
+        <text x="22" y="338" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">"柴勒梅德以最具感染力的魅力亮相，</text>
+        <text x="22" y="354" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">一部充满动力的史诗。"</text>
+        <text x="12" y="400" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#e50914">推荐理由</text>
+        <text x="12" y="416" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">
+          <tspan x="12" dy="0">萨夫迪影迷不会失望——肾上腺素飙升的体育</tspan>
+          <tspan x="12" dy="20">史诗，甜茶转型"硬核"的绝对值得一看。</tspan>
+        </text>
+      </g>
+      <g transform="translate(644, 62)" clip-path="url(#c6c3)">
+
+      <!-- Black Bag 96% -->
+        <rect x="0" y="0" width="296" height="445" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="296" height="3" rx="1.5" fill="#e50914"/>
+        <rect x="12" y="14" width="65" height="24" rx="12" fill="#e50914"/>
+        <text x="44" y="31" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">🥇 TOP 5</text>
+        <text x="250" y="31" font-family="sans-serif" font-size="18" font-weight="700" fill="#e50914">96%</text>
+        <text x="12" y="62" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#1a1a2e">《黑袋行动》</text>
+        <text x="12" y="82" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">Black Bag · 索德伯格 执导</text>
+        <rect x="12" y="94" width="50" height="20" rx="4" fill="rgba(26,26,46,0.08)"/>
+        <text x="37" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">间谍</text>
+        <rect x="68" y="94" width="50" height="20" rx="4" fill="rgba(229,9,20,0.1)"/>
+        <text x="93" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">惊悚</text>
+        <line x1="12" y1="128" x2="284" y2="128" stroke="#eee" stroke-width="1"/>
+        <text x="12" y="150" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">主演</text>
+        <text x="12" y="170" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">凯特·布兰切特 · 迈克尔·法斯宾德 · 玛丽莎·阿贝拉 · 汤姆·伯克</text>
+        <text x="12" y="200" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">深度看点</text>
+        <text x="12" y="220" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">索德伯格再次证明他是好莱坞最多才多艺的导演。</tspan>
+          <tspan x="12" dy="20">一对传奇情报官夫妇陷入叛国疑云，职业责任与</tspan>
+          <tspan x="12" dy="20">私人情感的致命拉扯。标志性的冷静视角和干净</tspan>
+          <tspan x="12" dy="20">利落的叙事节奏，每一场对手戏都充满张力。</tspan>
+        </text>
+        <rect x="12" y="320" width="272" height="48" rx="6" fill="rgba(229,9,20,0.04)" stroke="rgba(229,9,20,0.12)" stroke-width="1"/>
+        <text x="22" y="338" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">"设计时尚、充满冷峻机智，一部典范级的</text>
+        <text x="22" y="354" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">谍战片，让电影明星做他们最擅长的事。"</text>
+        <text x="12" y="400" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#e50914">推荐理由</text>
+        <text x="12" y="416" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">
+          <tspan x="12" dy="0">厌倦了《碟中谍》式爆炸轰鸣？这部充满成年人智慧</tspan>
+          <tspan x="12" dy="20">和优雅格调的间谍片将是最佳选择。</tspan>
+        </text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 7: TOP 6-10 OVERVIEW ==================== -->
+  <div class="slide" data-slide="7">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgTop6" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+        <clipPath id="c7c"><rect x="0" y="0" width="290" height="210" rx="8"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgTop6)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">深度解读 · TOP 6-10</text>
+
+      <!-- Weapons 93% -->
+      <g transform="translate(20, 62)" clip-path="url(#c7c)">
+        <rect x="0" y="0" width="290" height="210" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <rect x="12" y="14" width="55" height="22" rx="11" fill="#e50914"/>
+        <text x="39" y="29" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 6</text>
+        <text x="250" y="29" font-family="sans-serif" font-size="16" font-weight="700" fill="#e50914">93%</text>
+        <text x="12" y="58" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">《武器》Weapons</text>
+        <text x="12" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">扎克·克雷格 执导 · 恐怖/悬疑</text>
+        <text x="12" y="100" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">一个班级的孩子除一人外全部神秘失踪，</tspan>
+          <tspan x="12" dy="17">社区陷入恐惧。克雷格继《野蛮人》后</tspan>
+          <tspan x="12" dy="17">的精巧恐怖谜团，对美国郊区生活和</tspan>
+          <tspan x="12" dy="17">育儿焦虑的深刻隐喻。</tspan>
+        </text>
+        <rect x="12" y="140" width="266" height="32" rx="4" fill="rgba(229,9,20,0.04)"/>
+        <text x="20" y="152" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">
+          <tspan x="20" dy="0">\"克雷格编织了一个精巧的恐怖谜团，</tspan>
+          <tspan x="20" dy="18">巩固了他作为恐怖大师的地位。\"</tspan>
+        </text>
+        <text x="12" y="190" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">乔什·布洛林 · 朱莉娅·加纳 · 阿尔登·埃伦瑞奇</text>
+      </g>
+
+      <!-- Baltimorons 93% -->
+      <g transform="translate(335, 62)" clip-path="url(#c7c)">
+        <rect x="0" y="0" width="290" height="210" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#f5c518"/>
+        <rect x="12" y="14" width="55" height="22" rx="11" fill="#f5c518"/>
+        <text x="39" y="29" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">TOP 7</text>
+        <text x="250" y="29" font-family="sans-serif" font-size="16" font-weight="700" fill="#d4a017">93%</text>
+        <text x="12" y="58" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">《巴尔的摩人》</text>
+        <text x="12" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">The Baltimorons · 杜普拉斯 执导 · 喜剧/剧情</text>
+        <text x="12" y="100" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">倒霉的喜剧演员在圣诞夜崩掉一颗牙，</tspan>
+          <tspan x="12" dy="17">深夜牙科护理中展开了一段意想不到的</tspan>
+          <tspan x="12" dy="17">温情之旅。小成本独立喜剧的惊喜突围，</tspan>
+          <tspan x="12" dy="17">温暖的人性小品在大片洪流中散发别样魅力。</tspan>
+        </text>
+        <rect x="12" y="140" width="266" height="32" rx="4" fill="rgba(245,197,24,0.04)"/>
+        <text x="20" y="152" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">
+          <tspan x="20" dy="0">\"就像最令人愉悦的圣诞袜礼物一样，</tspan>
+          <tspan x="20" dy="18">虽然个头不大但魅力无穷。\"</tspan>
+        </text>
+        <text x="12" y="190" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">迈克尔·斯特拉斯纳 · 丽兹·拉森 · 奥莉维亚·卢卡迪</text>
+      </g>
+
+      <!-- Sovereign 95% -->
+      <g transform="translate(650, 62)" clip-path="url(#c7c)">
+        <rect x="0" y="0" width="290" height="210" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <rect x="12" y="14" width="55" height="22" rx="11" fill="#e50914"/>
+        <text x="39" y="29" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 8</text>
+        <text x="250" y="29" font-family="sans-serif" font-size="16" font-weight="700" fill="#e50914">95%</text>
+        <text x="12" y="58" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">《哨兵》Sovereign</text>
+        <text x="12" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">克里斯蒂安·斯维格尔 执导 · 惊悚/犯罪</text>
+        <text x="12" y="100" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">基于真实事件改编，讲述父亲与儿子卷入</tspan>
+          <tspan x="12" dy="17">主权公民极端主义运动。尼克·奥弗曼贡献</tspan>
+          <tspan x="12" dy="17">\"令人难忘的疯狂表演\"。在当今美国政治</tspan>
+          <tspan x="12" dy="17">极化的背景下具有迫切的现实意义。</tspan>
+        </text>
+        <rect x="12" y="140" width="266" height="32" rx="4" fill="rgba(229,9,20,0.04)"/>
+        <text x="20" y="152" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">
+          <tspan x="20" dy="0">\"一部神经紧绷的惊悚片，揭露了极端主义</tspan>
+          <tspan x="20" dy="18">如何走向毁灭之路。\"</tspan>
+        </text>
+        <text x="12" y="190" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">丹尼斯·奎德 · 雅各布·特伦布莱 · 尼克·奥弗曼</text>
+      </g>
+
+      <!-- Sentimental Value 95% -->
+      <g transform="translate(20, 290)" clip-path="url(#c7c)">
+        <rect x="0" y="0" width="290" height="210" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#f5c518"/>
+        <rect x="12" y="14" width="55" height="22" rx="11" fill="#f5c518"/>
+        <text x="39" y="29" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">TOP 9</text>
+        <text x="250" y="29" font-family="sans-serif" font-size="16" font-weight="700" fill="#d4a017">95%</text>
+        <text x="12" y="58" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">《Sentimental Value》</text>
+        <text x="12" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">约阿希姆·特里耶 执导 · 剧情</text>
+        <text x="12" y="100" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">两位姐妹与疏远的父亲——一位曾经的</tspan>
+          <tspan x="12" dy="17">导演重聚。当父亲为大女儿提供出演机会，</tspan>
+          <tspan x="12" dy="17">艺术与家庭的张力被推向极致。特里耶</tspan>
+          <tspan x="12" dy="17">令人振奋的成熟作品，全体演员表演堪称精彩。</tspan>
+        </text>
+        <rect x="12" y="140" width="266" height="32" rx="4" fill="rgba(245,197,24,0.04)"/>
+        <text x="20" y="152" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">
+          <tspan x="20" dy="0">\"巧妙地探讨了艺术表达与个人关系</tspan>
+          <tspan x="20" dy="18">之间的紧张感。\"</tspan>
+        </text>
+        <text x="12" y="190" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">雷娜特·赖因斯夫 · 斯特兰·斯卡斯加德 · 艾丽·范宁</text>
+      </g>
+
+      <!-- Zootopia 2 91% -->
+      <g transform="translate(335, 290)" clip-path="url(#c7c)">
+        <rect x="0" y="0" width="290" height="210" rx="8" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <rect x="12" y="14" width="55" height="22" rx="11" fill="#e50914"/>
+        <text x="39" y="29" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">TOP 10</text>
+        <text x="250" y="29" font-family="sans-serif" font-size="16" font-weight="700" fill="#e50914">91%</text>
+        <text x="12" y="58" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">《疯狂动物城2》</text>
+        <text x="12" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">Zootopia 2 · 杰拉德·布什执导 · 动画/冒险</text>
+        <text x="12" y="100" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">时隔九年回归，朱迪和尼克前往马林加</tspan>
+          <tspan x="12" dy="17">盆地——充满蛇、水牛和爬行动物的</tspan>
+          <tspan x="12" dy="17">全新大都市。巧妙地将深思熟虑的信息</tspan>
+          <tspan x="12" dy="17">融入精彩冒险，巩固了近年来最可爱的</tspan>
+          <tspan x="12" dy="17">银幕搭档地位。</tspan>
+        </text>
+        <rect x="12" y="140" width="266" height="32" rx="4" fill="rgba(229,9,20,0.04)"/>
+        <text x="20" y="152" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999" font-style="italic">
+          <tspan x="20" dy="0">\"完全值得重返这座大都市，朱迪和尼克</tspan>
+          <tspan x="20" dy="18">是近年来最可爱的银幕搭档。\"</tspan>
+        </text>
+        <text x="12" y="190" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">金妮弗·古德温 · 杰森·贝特曼 · 关继威</text>
+      </g>
+
+      <!-- More section -->
+      <g transform="translate(650, 290)" clip-path="url(#c7c)">
+        <rect x="0" y="0" width="290" height="210" rx="8" fill="rgba(26,26,46,0.04)" stroke="#ddd" stroke-width="1" stroke-dasharray="6,3"/>
+        <text x="145" y="80" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#555">更多高分佳作</text>
+        <text x="145" y="108" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">科幻 · 动作 · 恐怖 · 独立</text>
+        <text x="145" y="130" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#999">超英 · 战争 · 喜剧 · 音乐</text>
+        <text x="145" y="160" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">继续探索 ➔</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 8: SCI-FI / SUPERHERO + ACTION / WAR ==================== -->
+  <div class="slide" data-slide="8">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bgCats" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+        <clipPath id="c8c1"><rect x="0" y="0" width="290" height="190" rx="6"/></clipPath>
+        <clipPath id="c8c2"><rect x="0" y="0" width="305" height="190" rx="6"/></clipPath>
+        <clipPath id="c8c3"><rect x="0" y="0" width="295" height="190" rx="6"/></clipPath>
+        <clipPath id="c8c4"><rect x="0" y="0" width="290" height="180" rx="6"/></clipPath>
+        <clipPath id="c8c5"><rect x="0" y="0" width="305" height="180" rx="6"/></clipPath>
+        <clipPath id="c8c6"><rect x="0" y="0" width="295" height="180" rx="6"/></clipPath>
+      </defs>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgCats)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">分类佳作 · 科幻 / 超级英雄 + 动作 / 战争</text>
+
+      <!-- Section label: Sci-Fi & Superhero -->
+      <rect x="20" y="60" width="8" height="24" rx="4" fill="#e50914"/>
+      <text x="36" y="76" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">🚀 科幻与超级英雄</text>
+
+      <!-- Superman 83% -->
+      <g transform="translate(20, 90)" clip-path="url(#c8c1)">
+        <rect x="0" y="0" width="290" height="190" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#1a1a2e"/>
+        <text x="12" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">《超人》Superman</text>
+        <text x="240" y="30" font-family="sans-serif" font-size="16" font-weight="700" fill="#555">83%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">詹姆斯·古恩 执导 · DC宇宙全新重启</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">大卫·科伦斯韦接过红色斗篷，被卷入</tspan>
+          <tspan x="12" dy="13">国内外冲突，莱克斯·卢瑟获得扳倒</tspan>
+          <tspan x="12" dy="13">钢铁之躯的机会。古恩标志性的幽默感</tspan>
+          <tspan x="12" dy="13">与角色内心深度挖掘相结合，保留传统</tspan>
+          <tspan x="12" dy="13">精神的同时注入了21世纪全新视角。</tspan>
+        </text>
+        <text x="12" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">大卫·科伦斯韦 · 瑞秋·布罗斯纳罕 · 尼古拉斯·霍尔特</text>
+        <rect x="12" y="130" width="266" height="24" rx="4" fill="rgba(245,197,24,0.08)"/>
+        <text x="145" y="143" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">
+          <tspan x="145" dy="0">\"塑造了充满活力的新世界，</tspan>
+          <tspan x="145" dy="17">将英雄的宽广胸怀置于中心\"</tspan>
+        </text>
+      </g>
+
+      <!-- Fantastic Four 86% -->
+      <g transform="translate(325, 90)" clip-path="url(#c8c2)">
+        <rect x="0" y="0" width="305" height="190" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="305" height="3" rx="1.5" fill="#e50914"/>
+        <text x="12" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">《神奇四侠：第一步》</text>
+        <text x="265" y="30" font-family="sans-serif" font-size="16" font-weight="700" fill="#e50914">86%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">The Fantastic Four: First Steps · 马特·沙克曼 执导</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">设定在复古未来主义1960年代背景，</tspan>
+          <tspan x="12" dy="13">极具风格的视觉设计和扎实的阵容</tspan>
+          <tspan x="12" dy="13">化学反应，成功为漫威第一家庭正名。</tspan>
+          <tspan x="12" dy="13">佩德罗·帕斯卡和凡妮莎·柯比呈现了</tspan>
+          <tspan x="12" dy="13">MCU中最具人情味的超级英雄家庭。</tspan>
+        </text>
+        <text x="12" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">佩德罗·帕斯卡 · 凡妮莎·柯比 · 埃邦·莫斯-巴克拉赫 · 约瑟夫·奎因</text>
+      </g>
+
+      <g transform="translate(645, 90)" clip-path="url(#c8c3)">
+        <rect x="0" y="0" width="295" height="190" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">《霹雳特攻队*》</text>
+        <text x="255" y="30" font-family="sans-serif" font-size="16" font-weight="700" fill="#d4a017">88%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">Thunderbolts* · 杰克·施莱尔 执导</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">MCU反英雄集结号，叶莲娜、巴基、</tspan>
+          <tspan x="12" dy="13">红色守卫者等组成的团队为漫威电影</tspan>
+          <tspan x="12" dy="13">宇宙注入全新活力。耳目一新地回归了</tspan>
+          <tspan x="12" dy="13">MCU最优秀冒险的经典蓝图。</tspan>
+        </text>
+        <text x="12" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">弗洛伦丝·皮尤 · 塞巴斯蒂安·斯坦 · 大卫·哈伯</text>
+      </g>
+
+      <!-- Section label: Action & War -->
+      <rect x="20" y="300" width="8" height="24" rx="4" fill="#e50914"/>
+      <text x="36" y="316" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">⚔️ 动作与战争</text>
+
+      <!-- Warfare 92% -->
+      <g transform="translate(20, 330)" clip-path="url(#c8c4)">
+        <rect x="0" y="0" width="290" height="180" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《战争》Warfare</text>
+        <text x="240" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#e50914">92%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">雷·门多萨 & 亚历克斯·加兰 联合执导。</tspan>
+          <tspan x="12" dy="13">由伊拉克战争老兵参与创作，海豹突击队</tspan>
+          <tspan x="12" dy="13">在拉马迪执行危险任务的沉浸式记忆。</tspan>
+          <tspan x="12" dy="13">叙事精简到极致，唤起战斗的原始恐惧。</tspan>
+        </text>
+        <text x="12" y="90" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">D'Pharaoh Woon-A-Tai · 威尔·保尔特 · 基特·康纳</text>
+      </g>
+
+      <!-- She Rides Shotgun 88% -->
+      <g transform="translate(325, 330)" clip-path="url(#c8c5)">
+        <rect x="0" y="0" width="305" height="180" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="305" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《与枪同行》She Rides Shotgun</text>
+        <text x="265" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#d4a017">88%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">塔伦·埃格顿饰演一名刚出狱的前科犯，</tspan>
+          <tspan x="12" dy="13">为了保护11岁女儿不被仇敌追杀，</tspan>
+          <tspan x="12" dy="13">不得不带着她一起亡命天涯。父女情感</tspan>
+          <tspan x="12" dy="13">纽带赋予了这部硬核动作片超越一般</tspan>
+          <tspan x="12" dy="13">类型片的情感深度。</tspan>
+        </text>
+        <text x="12" y="90" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">塔伦·埃格顿 · 安娜·索菲亚·赫格</text>
+      </g>
+
+      <!-- F1 82% -->
+      <g transform="translate(645, 330)" clip-path="url(#c8c6)">
+        <rect x="0" y="0" width="295" height="180" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#1a1a2e"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《F1》</text>
+        <text x="255" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#555">82%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">《壮志凌云：独行侠》导演科辛斯基</tspan>
+          <tspan x="12" dy="13">的F1赛车大片，布拉德·皮特饰演</tspan>
+          <tspan x="12" dy="13">\"史上最伟大的从未成功者\"前F1车手。</tspan>
+          <tspan x="12" dy="13">真实的F1赛车实拍镜头和震撼音效</tspan>
+          <tspan x="12" dy="13">设计，大银幕必看之作。</tspan>
+        </text>
+        <text x="12" y="90" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">布拉德·皮特 · 达姆森·伊德里斯 · 哈维尔·巴登</text>
+        <rect x="12" y="115" width="271" height="24" rx="4" fill="rgba(26,26,46,0.05)"/>
+      </g>
+    </svg>
+  </div>
+  <!-- ==================== SLIDE 9: HORROR + COMEDY ==================== -->
+  <div class="slide" data-slide="9">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgHorror" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+        <clipPath id="c9c1"><rect x="0" y="0" width="290" height="185" rx="6"/></clipPath>
+        <clipPath id="c9c2"><rect x="0" y="0" width="305" height="185" rx="6"/></clipPath>
+        <clipPath id="c9c3"><rect x="0" y="0" width="295" height="185" rx="6"/></clipPath>
+        <clipPath id="c9c4"><rect x="0" y="0" width="290" height="215" rx="6"/></clipPath>
+        <clipPath id="c9c5"><rect x="0" y="0" width="305" height="185" rx="6"/></clipPath>
+        <clipPath id="c9c6"><rect x="0" y="0" width="295" height="185" rx="6"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgHorror)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">分类佳作 · 恐怖 / 悬疑 + 喜剧 / 音乐</text>
+      <!-- Horror section -->
+      <rect x="20" y="60" width="8" height="24" rx="4" fill="#e50914"/>
+      <text x="36" y="76" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">👻 恐怖与悬疑</text>
+
+      <!-- Companion 93% -->
+      <g transform="translate(20, 90)" clip-path="url(#c9c1)">
+        <rect x="0" y="0" width="290" height="185" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《伴侣》Companion</text>
+        <text x="245" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#e50914">93%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">来自《野蛮人》制片团队，讲述一个关于</tspan>
+          <tspan x="12" dy="13">\"新型爱情故事\"的扭曲版本。一个无比</tspan>
+          <tspan x="12" dy="13">狡猾的装置，不满足于仅仅依靠反转取胜，</tspan>
+          <tspan x="12" dy="13">将疯狂注入家庭幸福之中。《笔记本》制片</tspan>
+          <tspan x="12" dy="13">方拍了一部《机械姬》式的恐怖片。</tspan>
+        </text>
+        <text x="12" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">索菲·撒切尔 · 杰克·奎德 · 卢卡斯·盖奇</text>
+      </g>
+      <g transform="translate(325, 90)" clip-path="url(#c9c2)">
+        <rect x="0" y="0" width="305" height="185" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="305" height="3" rx="1.5" fill="#1a1a2e"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《弗兰肯斯坦》Frankenstein</text>
+        <text x="265" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#555">85%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">吉尔莫·德尔·托罗终于实现多年夙愿——</tspan>
+          <tspan x="12" dy="13">改编玛丽·雪莱经典。雅各布·埃洛迪饰演</tspan>
+          <tspan x="12" dy="13">的怪物令人惊叹，奥斯卡·伊萨克饰演的</tspan>
+          <tspan x="12" dy="13">维克多充满悲剧色彩。\"在电影史上最具</tspan>
+          <tspan x="12" dy="13">标志性的怪物之一中找到了人性，陀螺的</tspan>
+          <tspan x="12" dy="13">《弗兰肯斯坦》是一部华丽的史诗。\"</tspan>
+        </text>
+        <text x="12" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">奥斯卡·伊萨克 · 雅各布·埃洛迪 · 米娅·高斯 · 克里斯托弗·瓦尔兹</text>
+      </g>
+
+      <g transform="translate(645, 90)" clip-path="url(#c9c3)">
+        <rect x="0" y="0" width="295" height="185" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《杀戮之王》Predator</text>
+        <text x="255" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#d4a017">95%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">2025年最大惊喜之一——铁血战士选集电影。</tspan>
+          <tspan x="12" dy="13">讲述人类史上三位最勇猛战士：维京女战士、</tspan>
+          <tspan x="12" dy="13">日本武士和现代特种兵分别与铁血战士的</tspan>
+          <tspan x="12" dy="13">殊死对决。精悍、纯粹的科幻经典系列杰作。</tspan>
+        </text>
+        <text x="12" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">丹·特拉亨伯格 执导</text>
+      </g>
+
+      <!-- 28 Years Later 88% + Knives Out 92% -->
+      <g transform="translate(20, 290)" clip-path="url(#c9c4)">
+        <rect x="0" y="0" width="290" height="215" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《28年后》28 Years Later</text>
+        <text x="245" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#e50914">88%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">丹尼·博伊尔和亚历克斯·加兰再度联手。</tspan>
+          <tspan x="12" dy="13">以感染了狂怒病毒的凶猛紧迫感切入当代</tspan>
+          <tspan x="12" dy="13">焦虑，呈现了一段令人难以忘怀、充满</tspan>
+          <tspan x="12" dy="13">惊险感的末世之旅。</tspan>
+        </text>
+        <text x="12" y="90" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">朱迪·科默 · 亚伦·泰勒-约翰逊 · 杰克·奥康奈尔</text>
+        <rect x="12" y="120" width="266" height="62" rx="6" fill="rgba(245,197,24,0.06)" stroke="rgba(245,197,24,0.15)" stroke-width="1"/>
+        <text x="22" y="140" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#d4a017">《唤醒死者：利刃出鞘谜案》</text>
+        <text x="22" y="158" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">Wake Up Dead Man · 莱恩·约翰逊执导</text>
+        <text x="22" y="175" font-family="sans-serif" font-size="13" font-weight="700" fill="#e50914">92%</text>
+      </g>
+
+      <!-- Comedy section -->
+      <rect x="325" y="290" width="8" height="24" rx="4" fill="#f5c518"/>
+      <text x="341" y="306" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">🎭 喜剧与音乐</text>
+
+      <g transform="translate(325, 320)" clip-path="url(#c9c5)">
+        <rect x="0" y="0" width="305" height="185" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="305" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《这样的一天》One of Them Days</text>
+        <text x="265" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#d4a017">94%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">劳伦斯·拉蒙特执导。好朋友兼室友德雷</tspan>
+          <tspan x="12" dy="13">和艾莉莎正在经历\"人生中最糟糕的一天\"</tspan>
+          <tspan x="12" dy="13">之一。凯克·帕尔默和SZA之间迸发出</tspan>
+          <tspan x="12" dy="13">足够的笑点和化学反应，让伙伴喜剧类型</tspan>
+          <tspan x="12" dy="13">再次焕发生机。</tspan>
+        </text>
+        <text x="12" y="108" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">凯克·帕尔默 · SZA · 莫德·阿帕托</text>
+      </g>
+
+      <g transform="translate(645, 320)" clip-path="url(#c9c6)">
+        <rect x="0" y="0" width="295" height="185" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#1a1a2e"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《蓝色月光》Blue Moon</text>
+        <text x="250" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#555">89%</text>
+        <text x="12" y="50" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">理查德·林克莱特和伊桑·霍克再度合作，</tspan>
+          <tspan x="12" dy="13">讲述著名音乐剧作词家洛伦兹·哈特晚年</tspan>
+          <tspan x="12" dy="13">的故事。伊桑·霍克以令人心碎的表演，</tspan>
+          <tspan x="12" dy="13">演绎了一个在荣誉与自我毁灭之间挣扎的</tspan>
+          <tspan x="12" dy="13">艺术家。</tspan>
+        </text>
+        <text x="12" y="108" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">伊桑·霍克 · 玛格丽特·库里 · 鲍比·坎纳瓦尔</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 10: DRAMA & INDEPENDENT ==================== -->
+  <div class="slide" data-slide="10">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgDrama" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+        <clipPath id="c10c1"><rect x="0" y="0" width="290" height="215" rx="6"/></clipPath>
+        <clipPath id="c10c2"><rect x="0" y="0" width="305" height="215" rx="6"/></clipPath>
+        <clipPath id="c10c3"><rect x="0" y="0" width="295" height="215" rx="6"/></clipPath>
+        <clipPath id="c10c4"><rect x="0" y="0" width="290" height="210" rx="6"/></clipPath>
+        <clipPath id="c10c5"><rect x="0" y="0" width="305" height="210" rx="6"/></clipPath>
+        <clipPath id="c10c6"><rect x="0" y="0" width="295" height="210" rx="6"/></clipPath>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgDrama)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">分类佳作 · 剧情与独立电影</text>
+
+      <!-- Sorry Baby 97% -->
+      <g transform="translate(20, 62)" clip-path="url(#c10c1)">
+        <rect x="0" y="0" width="290" height="215" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《抱歉，宝贝》Sorry, Baby</text>
+        <text x="245" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#d4a017">97%</text>
+        <text x="12" y="48" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">伊娃·维克多 自编自导自演 · 剧情/喜剧</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">圣丹斯电影节大放异彩的独立电影，</tspan>
+          <tspan x="12" dy="13">以轻巧的触感和冷幽默处理了一个黑暗</tspan>
+          <tspan x="12" dy="13">的主题。讲述一个遭受创伤后试图重新</tspan>
+          <tspan x="12" dy="13">生活的女性的故事。宣告了一位才华横溢</tspan>
+          <tspan x="12" dy="13">的新声音的诞生。</tspan>
+        </text>
+        <rect x="12" y="130" width="266" height="24" rx="4" fill="rgba(245,197,24,0.08)"/>
+        <text x="145" y="143" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">
+          <tspan x="145" dy="0">\"以轻巧的触感和冷幽默</tspan>
+          <tspan x="145" dy="17">处理了困难的主题\"</tspan>
+        </text>
+        <text x="12" y="175" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">伊娃·维克多 · 娜奥米·阿基 · 卢卡斯·赫奇斯</text>
+      </g>
+
+      <g transform="translate(325, 62)" clip-path="url(#c10c2)">
+        <rect x="0" y="0" width="305" height="215" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="305" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《无孪》Twinless</text>
+        <text x="265" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#d4a017">97%</text>
+        <text x="12" y="48" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">詹姆斯·斯威尼 执导 · 剧情/喜剧</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">两个年轻人在\"双胞胎支持小组\"中相遇</tspan>
+          <tspan x="12" dy="13">并建立了意想不到的友谊。迪伦·奥布莱恩</tspan>
+          <tspan x="12" dy="13">展现了令人惊叹的演技层次。詹姆斯·</tspan>
+          <tspan x="12" dy="13">斯威尼的第二部长片揭示了一段充满</tspan>
+          <tspan x="12" dy="13">曲折和悲伤的意外之旅。</tspan>
+        </text>
+        <rect x="12" y="130" width="281" height="24" rx="4" fill="rgba(245,197,24,0.08)"/>
+        <text x="152" y="143" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">
+          <tspan x="152" dy="0">\"由迪伦·奥布莱恩</tspan>
+          <tspan x="152" dy="17">极其敏感的表演支撑\"</tspan>
+        </text>
+        <text x="12" y="175" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">迪伦·奥布莱恩 · 詹姆斯·斯威尼 · 艾斯林·弗朗乔西</text>
+      </g>
+
+      <!-- Chronology of Water 90% -->
+      <g transform="translate(645, 62)" clip-path="url(#c10c3)">
+        <rect x="0" y="0" width="295" height="215" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#e50914"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#1a1a2e">《水之编年史》Chronology of Water</text>
+        <text x="255" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#e50914">90%</text>
+        <text x="12" y="48" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">克里斯汀·斯图尔特 导演首秀 · 剧情</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">克里斯汀·斯图尔特的长片导演首秀获得</tspan>
+          <tspan x="12" dy="13">一致好评。伊莫金·普茨饰演一位经历</tspan>
+          <tspan x="12" dy="13">情感愈合之旅的女性。以令人印象深刻的</tspan>
+          <tspan x="12" dy="13">流畅性驾驭了一段情感旅程。</tspan>
+        </text>
+        <text x="12" y="130" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">伊莫金·普茨 · 莎拉·博琪 · 吉姆·贝鲁西</text>
+      </g>
+
+      <!-- Hamnet 87% -->
+      <g transform="translate(20, 295)" clip-path="url(#c10c4)">
+        <rect x="0" y="0" width="290" height="210" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="290" height="3" rx="1.5" fill="#e50914"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《哈姆内特》Hamnet</text>
+        <text x="245" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#e50914">87%</text>
+        <text x="12" y="48" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">赵婷 执导 · 改编自玛吉·奥法雷尔畅销小说</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">聚焦莎士比亚妻子安妮在11岁儿子夭折后，</tspan>
+          <tspan x="12" dy="13">如何在丧子之痛中支撑家庭、维系婚姻。</tspan>
+          <tspan x="12" dy="13">赵婷以标志性的自然主义风格呈现16世纪</tspan>
+          <tspan x="12" dy="13">英格兰乡村与安妮的内心世界。威尼斯</tspan>
+          <tspan x="12" dy="13">电影节首映获十分钟起立鼓掌。</tspan>
+        </text>
+        <text x="12" y="148" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">杰西·巴克利 · 保罗·麦斯卡</text>
+        <rect x="12" y="164" width="266" height="20" rx="4" fill="rgba(245,197,24,0.1)"/>
+        <text x="145" y="178" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">🏆 最佳女主角获奖 · 2026奥斯卡颁奖季大热</text>
+      </g>
+
+      <!-- The Lost Bus 88% -->
+      <g transform="translate(325, 295)" clip-path="url(#c10c5)">
+        <rect x="0" y="0" width="305" height="210" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="305" height="3" rx="1.5" fill="#f5c518"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">《迷失巴士》The Lost Bus</text>
+        <text x="265" y="28" font-family="sans-serif" font-size="15" font-weight="700" fill="#d4a017">88%</text>
+        <text x="12" y="48" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">保罗·格林格拉斯 执导 · 改编自真实山火事件</text>
+        <text x="12" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">
+          <tspan x="12" dy="0">马修·麦康纳饰演一名普通学校巴士司机，</tspan>
+          <tspan x="12" dy="13">在加州坎普斯山火中以难以想象的速度</tspan>
+          <tspan x="12" dy="13">蔓延的危急时刻，临危不乱将一车22名</tspan>
+          <tspan x="12" dy="13">孩子安全运送至安全地带。格林格拉斯</tspan>
+          <tspan x="12" dy="13">标志性的手持摄影和纪实风格将山火的</tspan>
+          <tspan x="12" dy="13">恐怖与逃生的紧张感渲染到极致。</tspan>
+        </text>
+        <text x="12" y="148" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">马修·麦康纳 · 亚美莉卡·费雷拉 · 杰伊·埃利斯</text>
+      </g>
+
+      <!-- More indie -->
+      <g transform="translate(645, 295)" clip-path="url(#c10c6)">
+        <rect x="0" y="0" width="295" height="210" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="295" height="3" rx="1.5" fill="#1a1a2e"/>
+        <text x="12" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#1a1a2e">更多独立佳作</text>
+        <line x1="12" y1="42" x2="283" y2="42" stroke="#eee" stroke-width="1"/>
+        <text x="12" y="68" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">《屋顶人》Roofman</text>
+        <text x="245" y="68" font-family="sans-serif" font-size="13" font-weight="700" fill="#555">87%</text>
+        <text x="12" y="88" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">查宁·塔图姆饰演退伍军人，为生计从屋顶抢劫麦当劳</text>
+
+        <line x1="12" y1="106" x2="283" y2="106" stroke="#eee" stroke-width="0.5"/>
+
+        <text x="12" y="128" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">《大师》The Mastermind</text>
+        <text x="245" y="128" font-family="sans-serif" font-size="13" font-weight="700" fill="#555">90%</text>
+        <text x="12" y="148" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">凯莉·莱卡特执导，乔什·奥康纳主演的慢热犯罪诗</text>
+
+        <line x1="12" y1="166" x2="283" y2="166" stroke="#eee" stroke-width="0.5"/>
+
+        <text x="12" y="188" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">《宋歌蓝调》Song Sung Blue</text>
+        <text x="245" y="188" font-family="sans-serif" font-size="13" font-weight="700" fill="#555">77%</text>
+        <text x="12" y="205" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">休·杰克曼 · 凯特·哈德森 尼尔·戴蒙德致敬乐队</text>
+      </g>
+    </svg>
+  </div>
+  <!-- ==================== SLIDE 11: TRENDS 1-4 ==================== -->
+  <div class="slide" data-slide="11">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgTrend" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgTrend)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">📊 2025年美国电影 · 八大趋势解读 (上)</text>
+
+      <!-- Trend 1 -->
+      <g transform="translate(20, 65)">
+        <rect x="0" y="0" width="445" height="220" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="220" rx="3" fill="#e50914"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#e50914">趋势一</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">美国历史叙事的类型化重生</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">非裔美国电影人将类型片作为历史叙事的载体。《罪人》将恐怖片</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">与吉姆·克劳时代的历史创伤结合；《哨兵》用犯罪惊悚片的外壳</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">包裹对美国极端主义的反思。类型片不是逃避现实的工具，而是</text>
+        <text x="20" y="126" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">直面历史的最有力武器。</text>
+        <rect x="20" y="150" width="405" height="28" rx="4" fill="rgba(229,9,20,0.05)"/>
+        <text x="222" y="168" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">典型案例：《罪人》《哨兵》</text>
+      </g>
+
+      <!-- Trend 2 -->
+      <g transform="translate(495, 65)">
+        <rect x="0" y="0" width="445" height="220" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="220" rx="3" fill="#f5c518"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#d4a017">趋势二</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">超级英雄宇宙的"再中心化"</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">2025超英电影从多元宇宙宏大叙事回归到角色本身的魅力。</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">《超人》和《神奇四侠：第一步》都选择回归角色本源，聚焦</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">家庭、身份和责任感。《霹雳特攻队*》证明观众对反英雄的喜爱</text>
+        <text x="20" y="126" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">已经超越了对传统英雄的关注。</text>
+        <rect x="20" y="150" width="405" height="28" rx="4" fill="rgba(245,197,24,0.06)"/>
+        <text x="222" y="168" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">典型案例：《超人》《神奇四侠》《霹雳特攻队*》</text>
+      </g>
+
+      <!-- Trend 3 -->
+      <g transform="translate(20, 300)">
+        <rect x="0" y="0" width="445" height="205" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="205" rx="3" fill="#e50914"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#e50914">趋势三</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">作者导演的"大制作"探索</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">作者导演与高预算制作的完美结合。PTA、瑞恩·库格勒、德尔·</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">托罗等作者导演获得大制片厂重磅支持，制作了个人职业生涯中</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">场面最宏大的作品。双赢：作者导演获得资源，大制片厂收获</text>
+        <text x="20" y="126" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">独特的艺术品质。</text>
+        <rect x="20" y="152" width="405" height="28" rx="4" fill="rgba(229,9,20,0.05)"/>
+        <text x="222" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">典型案例：PTA《一场又一场》、库格勒《罪人》、陀螺《弗兰肯斯坦》</text>
+      </g>
+
+      <!-- Trend 4 -->
+      <g transform="translate(495, 300)">
+        <rect x="0" y="0" width="445" height="205" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="205" rx="3" fill="#f5c518"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#d4a017">趋势四</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">独立电影的全面爆发</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">2025年圣丹斯电影节输送了一大批高质量独立电影。《抱歉，</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">宝贝》（97%）、《无孪》（97%）、《巴尔的摩人》（93%）等</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">作品在商业上取得了超出预期的成功。流媒体平台（Netflix、</text>
+        <text x="20" y="126" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">A24等）对独立电影的持续投资，使更多元化声音被主流看见。</text>
+        <rect x="20" y="152" width="405" height="28" rx="4" fill="rgba(245,197,24,0.06)"/>
+        <text x="222" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">典型案例：《抱歉，宝贝》《无孪》《巴尔的摩人》</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 12: TRENDS 5-8 ==================== -->
+  <div class="slide" data-slide="12">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgTrend2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgTrend2)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">📊 2025年美国电影 · 八大趋势解读 (下)</text>
+
+      <!-- Trend 5 -->
+      <g transform="translate(20, 65)">
+        <rect x="0" y="0" width="445" height="220" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="220" rx="3" fill="#e50914"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#e50914">趋势五</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">恐怖片的艺术化突围</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">2025年是恐怖片的黄金年。《武器》《伴侣》《弗兰肯斯坦》等</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">作品不仅获得商业成功，更在艺术层面获得影评人一致认可。</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">恐怖片已经不再是边缘类型，而是当代电影中最具创新活力的</text>
+        <text x="20" y="126" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">领域之一。</text>
+        <rect x="20" y="150" width="405" height="28" rx="4" fill="rgba(229,9,20,0.05)"/>
+        <text x="222" y="168" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">典型案例：《武器》《伴侣》《弗兰肯斯坦》</text>
+      </g>
+
+      <!-- Trend 6 -->
+      <g transform="translate(495, 65)">
+        <rect x="0" y="0" width="445" height="220" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="220" rx="3" fill="#f5c518"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#d4a017">趋势六</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">两位"新导演"的惊艳首秀</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">克里斯汀·斯图尔特（《水之编年史》，90%）和伊娃·维克多</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">（《抱歉，宝贝》，97%）的导演首秀标志着新一代电影人的</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">崛起。她们不仅在前台发光，更在幕后展现了惊人的叙事掌控力。</text>
+        <rect x="20" y="150" width="405" height="28" rx="4" fill="rgba(245,197,24,0.06)"/>
+        <text x="222" y="168" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">典型案例：《水之编年史》《抱歉，宝贝》</text>
+      </g>
+
+      <!-- Trend 7 -->
+      <g transform="translate(20, 300)">
+        <rect x="0" y="0" width="445" height="205" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="205" rx="3" fill="#e50914"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#e50914">趋势七</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">运动题材的多元化表达</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">从乒乓球的《马蒂至尊》到F1赛车的《F1》，2025年的运动类</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">型片不再局限于"励志"的单一模板，而是融入了更多关于野心、</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">疯狂、身份和阶级的复杂讨论。</text>
+        <text x="20" y="130" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">萨夫迪的手持摄影让乒乓球有了拳击赛般的冲击力。</text>
+        <rect x="20" y="152" width="405" height="28" rx="4" fill="rgba(229,9,20,0.05)"/>
+        <text x="222" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">典型案例：《马蒂至尊》《F1》</text>
+      </g>
+
+      <!-- Trend 8 -->
+      <g transform="translate(495, 300)">
+        <rect x="0" y="0" width="445" height="205" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="6" height="205" rx="3" fill="#f5c518"/>
+        <text x="20" y="28" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#d4a017">趋势八</text>
+        <text x="20" y="52" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">真实事件改编浪潮的情感力量</text>
+        <text x="20" y="78" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">2025年是真实事件改编电影的丰收之年。《哨兵》《战争》</text>
+        <text x="20" y="94" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">《迷失巴士》等影片通过类型化的叙事框架赋予真实事件以</text>
+        <text x="20" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">强烈的情感冲击力。"真实事件+类型叙事"正在成为最具感染力</text>
+        <text x="20" y="126" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">的表达方式之一。</text>
+        <rect x="20" y="152" width="405" height="28" rx="4" fill="rgba(245,197,24,0.06)"/>
+        <text x="222" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">典型案例：《哨兵》《战争》《迷失巴士》</text>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 13: TIERED RECOMMENDATIONS ==================== -->
+  <div class="slide" data-slide="13">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgRec" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgRec)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">分级推荐指南 · 快速选片</text>
+
+      <!-- Must Watch section -->
+      <rect x="20" y="60" width="8" height="24" rx="4" fill="#f5c518"/>
+      <text x="36" y="76" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">👑 必看经典（烂番茄 95%+）</text>
+
+      <!-- Table header -->
+      <rect x="20" y="90" width="920" height="28" rx="4" fill="#1a1a2e"/>
+      <text x="50" y="109" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#f5c518">排名</text>
+      <text x="130" y="109" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">电影</text>
+      <text x="420" y="109" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">评分</text>
+      <text x="500" y="109" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">类型</text>
+      <text x="620" y="109" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#fff">一句话推荐</text>
+
+      <!-- Row 1 -->
+      <rect x="20" y="120" width="920" height="28" rx="2" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="138" font-family="sans-serif" font-size="12" fill="#555">1</text>
+      <text x="130" y="138" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《罪人》Sinners</text>
+      <text x="420" y="138" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">97%</text>
+      <text x="500" y="138" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">恐怖/音乐</text>
+      <text x="620" y="138" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">年度最具原创性的类型融合巨制</text>
+
+      <!-- Row 2 -->
+      <rect x="20" y="150" width="920" height="28" rx="2" fill="#f8f8fc" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="168" font-family="sans-serif" font-size="12" fill="#555">2</text>
+      <text x="130" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《抱歉，宝贝》Sorry, Baby</text>
+      <text x="420" y="168" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">97%</text>
+      <text x="500" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">剧情/喜剧</text>
+      <text x="620" y="168" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">圣丹斯大爆款，独立电影新标杆</text>
+
+      <!-- Row 3 -->
+      <rect x="20" y="180" width="920" height="28" rx="2" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="198" font-family="sans-serif" font-size="12" fill="#555">3</text>
+      <text x="130" y="198" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《无孪》Twinless</text>
+      <text x="420" y="198" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">97%</text>
+      <text x="500" y="198" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">剧情/喜剧</text>
+      <text x="620" y="198" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">迪伦·奥布莱恩演技突破之作</text>
+
+      <!-- Row 4 -->
+      <rect x="20" y="210" width="920" height="28" rx="2" fill="#f8f8fc" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="228" font-family="sans-serif" font-size="12" fill="#555">4</text>
+      <text x="130" y="228" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《黑袋行动》Black Bag</text>
+      <text x="420" y="228" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">96%</text>
+      <text x="500" y="228" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">间谍/惊悚</text>
+      <text x="620" y="228" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">索德伯格最优雅的成年人谍战片</text>
+
+      <!-- Row 5 -->
+      <rect x="20" y="240" width="920" height="28" rx="2" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="258" font-family="sans-serif" font-size="12" fill="#555">5</text>
+      <text x="130" y="258" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《哨兵》Sovereign</text>
+      <text x="420" y="258" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">95%</text>
+      <text x="500" y="258" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">惊悚/犯罪</text>
+      <text x="620" y="258" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">尼克·奥弗曼年度最佳表演</text>
+
+      <!-- Row 6 -->
+      <rect x="20" y="270" width="920" height="28" rx="2" fill="#f8f8fc" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="288" font-family="sans-serif" font-size="12" fill="#555">6</text>
+      <text x="130" y="288" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《杀戮之王》Predator</text>
+      <text x="420" y="288" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">95%</text>
+      <text x="500" y="288" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">科幻/恐怖</text>
+      <text x="620" y="288" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">铁血战士系列最好的作品之一</text>
+
+      <!-- Row 7 -->
+      <rect x="20" y="300" width="920" height="28" rx="2" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+      <text x="50" y="318" font-family="sans-serif" font-size="12" fill="#555">7</text>
+      <text x="130" y="318" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《Sentimental Value》</text>
+      <text x="420" y="318" font-family="sans-serif" font-size="12" font-weight="700" fill="#f5c518">95%</text>
+      <text x="500" y="318" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">剧情</text>
+      <text x="620" y="318" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">特里耶关于家庭与艺术的成熟之作</text>
+
+      <!-- Strongly Recommended section -->
+      <rect x="20" y="345" width="8" height="24" rx="4" fill="#e50914"/>
+      <text x="36" y="361" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">⭐ 强烈推荐（烂番茄 90-94%）</text>
+
+      <!-- mini grid for 90-94% -->
+      <g transform="translate(20, 378)">
+        <rect x="0" y="0" width="295" height="36" rx="4" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《一场又一场的战役》94% · 西部</text>
+      </g>
+      <g transform="translate(325, 378)">
+        <rect x="0" y="0" width="305" height="36" rx="4" fill="#f8f8fc" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《列车之梦》94% · 《这样的一天》94%</text>
+      </g>
+      <g transform="translate(640, 378)">
+        <rect x="0" y="0" width="300" height="36" rx="4" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《马蒂至尊》93% · 《武器》93%</text>
+      </g>
+
+      <g transform="translate(20, 420)">
+        <rect x="0" y="0" width="295" height="36" rx="4" fill="#f8f8fc" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《伴侣》93% · 《巴尔的摩人》93%</text>
+      </g>
+      <g transform="translate(325, 420)">
+        <rect x="0" y="0" width="305" height="36" rx="4" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《唤醒死者》92% · 《战争》92%</text>
+      </g>
+      <g transform="translate(640, 420)">
+        <rect x="0" y="0" width="300" height="36" rx="4" fill="#f8f8fc" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《疯狂动物城2》91% · 《大师》90%</text>
+      </g>
+
+      <g transform="translate(20, 462)">
+        <rect x="0" y="0" width="295" height="36" rx="4" fill="#fff" stroke="#eee" stroke-width="0.5"/>
+        <text x="12" y="23" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《水之编年史》90%</text>
+      </g>
+
+      <!-- Worth watching badge -->
+      <g transform="translate(600, 465)">
+        <rect x="0" y="0" width="340" height="32" rx="16" fill="rgba(26,26,46,0.06)"/>
+        <text x="170" y="21" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">✅ 值得一看（85-89%）涵盖超英·恐怖·独立等类型共12部</text>
+      </g>
+    </svg>
+  </div>
+  <!-- ==================== SLIDE 14: OSCARS & BOX OFFICE ==================== -->
+  <div class="slide" data-slide="14">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgEvent" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f9fc"/>
+          <stop offset="100%" stop-color="#eef0f5"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgEvent)"/>
+      <rect x="0" y="0" width="960" height="46" fill="#1a1a2e"/>
+      <text x="48" y="30" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" font-weight="700" fill="#f5c518" letter-spacing="2">🎬 2025年电影事件簿</text>
+
+      <!-- Oscars Section -->
+      <rect x="20" y="60" width="8" height="24" rx="4" fill="#f5c518"/>
+      <text x="36" y="76" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">🏆 第98届奥斯卡金像奖（2026年3月）</text>
+
+      <g transform="translate(20, 92)">
+        <rect x="0" y="0" width="450" height="200" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+
+        <!-- Oscar winner highlight -->
+        <rect x="0" y="0" width="450" height="3" rx="1.5" fill="#f5c518"/>
+
+        <rect x="14" y="14" width="120" height="26" rx="13" fill="#f5c518"/>
+        <text x="74" y="32" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">🎬 最大赢家</text>
+
+        <text x="14" y="62" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#1a1a2e">《一场又一场的战役》</text>
+        <text x="14" y="84" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">🏆 最佳影片 · 最佳导演 · 最佳改编剧本 · 最佳摄影</text>
+        <text x="14" y="104" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#d4a017">🏆 最佳男主角 · 最佳剪辑 · 共6项大奖</text>
+
+        <line x1="14" y1="120" x2="436" y2="120" stroke="#eee" stroke-width="1"/>
+
+        <text x="14" y="142" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#555">其他重要奖项</text>
+        <text x="14" y="164" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">最佳女主角：杰西·巴克利《哈姆内特》</text>
+        <text x="14" y="184" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#777">最佳男主角：迈克尔·B·乔丹《罪人》（分饰两角）</text>
+      </g>
+
+      <!-- Box Office Section -->
+      <rect x="490" y="60" width="8" height="24" rx="4" fill="#e50914"/>
+      <text x="506" y="76" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#1a1a2e">💰 北美票房年度 Top 10（预估）</text>
+
+      <g transform="translate(490, 92)">
+        <rect x="0" y="0" width="450" height="200" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <rect x="0" y="0" width="450" height="3" rx="1.5" fill="#e50914"/>
+
+        <!-- Rank 1 -->
+        <rect x="14" y="14" width="16" height="16" rx="3" fill="#f5c518"/>
+        <text x="22" y="26" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#1a1a2e">1</text>
+        <text x="38" y="26" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《我的世界大电影》 华纳兄弟</text>
+
+        <rect x="14" y="36" width="16" height="16" rx="3" fill="#ddd"/>
+        <text x="22" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#555">2</text>
+        <text x="38" y="48" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《星际宝贝》迪士尼真人版</text>
+
+        <rect x="14" y="58" width="16" height="16" rx="3" fill="#ddd"/>
+        <text x="22" y="70" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#555">3</text>
+        <text x="38" y="70" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《超人》华纳兄弟/DC</text>
+
+        <rect x="14" y="80" width="16" height="16" rx="3" fill="#ddd"/>
+        <text x="22" y="92" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#555">4</text>
+        <text x="38" y="92" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《侏罗纪世界：重生》环球</text>
+
+        <rect x="14" y="102" width="16" height="16" rx="3" fill="#e50914"/>
+        <text x="22" y="114" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#fff">5</text>
+        <text x="38" y="114" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">《罪人》华纳兄弟 ★ 原创IP奇迹</text>
+
+        <rect x="14" y="124" width="16" height="16" rx="3" fill="#ddd"/>
+        <text x="22" y="136" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#555">6</text>
+        <text x="38" y="136" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《莫阿娜2》迪士尼动画</text>
+
+        <rect x="14" y="146" width="16" height="16" rx="3" fill="#ddd"/>
+        <text x="22" y="158" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#555">7</text>
+        <text x="38" y="158" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《神奇四侠：第一步》漫威/迪士尼</text>
+
+        <rect x="14" y="168" width="16" height="16" rx="3" fill="#ddd"/>
+        <text x="22" y="180" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="#555">8-10</text>
+        <text x="38" y="180" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#1a1a2e">《疯狂动物城2》/《F1》/《霹雳特攻队*》</text>
+      </g>
+
+      <!-- Insight Section -->
+      <rect x="20" y="310" width="920" height="60" rx="8" fill="rgba(245,197,24,0.08)" stroke="rgba(245,197,24,0.2)" stroke-width="1"/>
+      <text x="480" y="336" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="600" fill="#d4a017">💡 年度洞察</text>
+      <text x="480" y="356" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#666">原创IP《罪人》凭借口碑和话题度杀入票房前五，证明了高质量原创作品在当今市场的强大号召力</text>
+
+      <!-- Key facts row -->
+      <g transform="translate(20, 390)">
+        <rect x="0" y="0" width="295" height="48" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <text x="147" y="20" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#1a1a2e">🏆 最佳影片得主</text>
+        <text x="147" y="38" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#e50914">《一场又一场的战役》6项大奖</text>
+      </g>
+      <g transform="translate(332, 390)">
+        <rect x="0" y="0" width="295" height="48" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <text x="147" y="20" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#1a1a2e">🎭 最佳男女主角</text>
+        <text x="147" y="38" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">迈克尔·B·乔丹 · 杰西·巴克利</text>
+      </g>
+      <g transform="translate(644, 390)">
+        <rect x="0" y="0" width="296" height="48" rx="6" fill="#fff" stroke="#e8e8f0" stroke-width="1"/>
+        <text x="148" y="20" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#1a1a2e">🎬 年度票房冠军</text>
+        <text x="148" y="38" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">《我的世界大电影》华纳兄弟</text>
+      </g>
+
+      <!-- Nominees badge -->
+      <rect x="20" y="455" width="920" height="28" rx="14" fill="rgba(26,26,46,0.05)"/>
+      <text x="480" y="473" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#555">最佳影片提名：《罪人》《列车之梦》《哈姆内特》《马蒂至尊》《Sentimental Value》《Bugonia》《F1》《弗兰肯斯坦》《The Secret Agent》</text>
+    </svg>
+  </div>
+
+  <!-- ==================== SLIDE 15: CONCLUSION ==================== -->
+  <div class="slide" data-slide="15">
+    <svg viewBox="0 0 960 540" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bgConcl" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0f0c29"/>
+          <stop offset="50%" stop-color="#1a1a3e"/>
+          <stop offset="100%" stop-color="#1a1a2e"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="960" height="540" fill="url(#bgConcl)"/>
+
+      <!-- Decorative circles -->
+      <circle cx="200" cy="270" r="250" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/>
+      <circle cx="760" cy="270" r="200" fill="none" stroke="rgba(245,197,24,0.03)" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="480" y="100" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(245,197,24,0.6)" letter-spacing="4">CONCLUSION</text>
+
+      <rect x="380" y="115" width="200" height="2" rx="1" fill="url(#goldLine)" opacity="0.5"/>
+
+      <text x="480" y="170" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="34" font-weight="700" fill="#ffffff" letter-spacing="3">2025·美国电影的"文艺复兴"</text>
+
+      <text x="480" y="220" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="rgba(255,255,255,0.6)" letter-spacing="1">好莱坞在经历了流媒体冲击、疫情震荡和行业罢工的多重打击后</text>
+      <text x="480" y="246" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="rgba(255,255,255,0.6)" letter-spacing="1">以令人惊叹的韧性和创造力重新站稳了脚跟</text>
+
+      <!-- Three core drivers as cards -->
+      <g transform="translate(60, 290)">
+        <rect x="0" y="0" width="250" height="100" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <text x="125" y="32" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#f5c518">🎬 作者导演的崛起</text>
+        <text x="125" y="56" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">库格勒 · PTA · 索德伯格</text>
+        <text x="125" y="76" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">萨夫迪 · 特里耶 · 德尔·托罗</text>
+      </g>
+
+      <g transform="translate(355, 290)">
+        <rect x="0" y="0" width="250" height="100" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <text x="125" y="32" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#f5c518">🎭 类型的再发明</text>
+        <text x="125" y="56" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">恐怖+历史 · 西部+荒诞</text>
+        <text x="125" y="76" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">体育+黑色幽默</text>
+      </g>
+
+      <g transform="translate(650, 290)">
+        <rect x="0" y="0" width="250" height="100" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <text x="125" y="32" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" font-weight="700" fill="#f5c518">🌟 新声音的涌现</text>
+        <text x="125" y="56" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">伊娃·维克多 · C.斯图尔特</text>
+        <text x="125" y="76" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.6)">詹姆斯·斯威尼</text>
+      </g>
+
+      <!-- Closing message -->
+      <text x="480" y="440" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="rgba(255,255,255,0.5)" letter-spacing="2">无论你是追求艺术深度的影迷，还是寻找周末娱乐的普通观众</text>
+      <text x="480" y="466" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="rgba(255,255,255,0.5)" letter-spacing="2">都能在2025年的美国电影中找到属于自己的那片风景</text>
+
+      <text x="480" y="510" text-anchor="middle" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="rgba(255,255,255,0.25)" letter-spacing="2">光影流转 · 故事永存 ✦ 报告制作：AI 智能助手 · 2026年5月</text>
+    </svg>
+  </div>
+</div>
+
+<!-- Navigation Toolbar -->
+<div class="nav-toolbar" id="toolbar">
+  <button class="nav-btn" id="prevBtn" disabled>◀</button>
+  <span class="page-indicator" id="pageIndicator">1 / 15</span>
+  <button class="nav-btn" id="nextBtn">▶</button>
+</div>
+
+<div class="progress-bar" id="progressBar" style="width: 6.67%;"></div>
+
+<script>
+(function() {
+  // --- Auto-hide toolbar ---
+  const toolbar = document.getElementById('toolbar');
+  let hideTimer = null;
+
+  function showToolbar() {
+    toolbar.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      toolbar.classList.add('hidden');
+    }, 2000);
+  }
+
+  document.addEventListener('mousemove', showToolbar);
+  document.addEventListener('click', showToolbar);
+  showToolbar();
+
+  // --- Slide Navigation ---
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pageIndicator = document.getElementById('pageIndicator');
+  const progressBar = document.getElementById('progressBar');
+
+  function updateSlide() {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === current);
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === totalSlides - 1;
+    pageIndicator.textContent = (current + 1) + ' / ' + totalSlides;
+    progressBar.style.width = ((current + 1) / totalSlides * 100) + '%';
+    showToolbar();
+  }
+
+  prevBtn.addEventListener('click', () => {
+    if (current > 0) { current--; updateSlide(); }
+  });
+  nextBtn.addEventListener('click', () => {
+    if (current < totalSlides - 1) { current++; updateSlide(); }
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      if (current < totalSlides - 1) { current++; updateSlide(); }
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      if (current > 0) { current--; updateSlide(); }
+    }
+  });
+
+  // Touch support for mobile/tablet
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].screenX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && current < totalSlides - 1) { current++; updateSlide(); }
+      else if (diff < 0 && current > 0) { current--; updateSlide(); }
+    }
+  });
+
+  updateSlide();
+})();
+</script>
+</body>
+</html>
+

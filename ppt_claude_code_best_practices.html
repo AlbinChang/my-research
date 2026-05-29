@@ -1,0 +1,1304 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 最佳实践深度总结 - 2026年5月</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#e8ecf2;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow:hidden;}
+.slide-container{width:960px;height:540px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.18);border-radius:8px;background:#fff;}
+.slide{width:960px;height:540px;position:absolute;top:0;left:0;opacity:0;transition:opacity .35s ease;pointer-events:none;}
+.slide.active{opacity:1;pointer-events:auto;z-index:1;}
+.slide svg{width:960px;height:540px;display:block;}
+/* 翻页工具栏 */
+.toolbar{position:fixed;bottom:24px;right:24px;display:flex;gap:10px;align-items:center;z-index:100;opacity:0;transition:opacity .4s ease;}
+.toolbar.visible{opacity:1;}
+.toolbar .btn{width:40px;height:40px;border-radius:50%;border:1.5px solid #d1d5db;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4b5563;font-size:18px;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.toolbar .btn:hover{background:#4F46E5;color:#fff;border-color:#4F46E5;box-shadow:0 4px 14px rgba(79,70,229,.35);}
+.toolbar .page-info{font-size:13px;color:#6b7280;background:#fff;padding:6px 14px;border-radius:20px;border:1.5px solid #e5e7eb;box-shadow:0 1px 4px rgba(0,0,0,.06);white-space:nowrap;}
+.toolbar .btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none;}
+</style>
+</head>
+<body>
+<div class="slide-container" id="slideContainer">
+
+<!-- ==================== P01 封面 ==================== -->
+<div class="slide active" id="slide-1">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="960" y2="540">
+      <stop offset="0%" stop-color="#F0F4FF"/>
+      <stop offset="45%" stop-color="#FAFBFF"/>
+      <stop offset="100%" stop-color="#F5F3FF"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="cyanGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="softGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4F46E5" stop-opacity=".12"/>
+      <stop offset="100%" stop-color="#4F46E5" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow1"><feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#4F46E5" flood-opacity=".15"/></filter>
+    <filter id="shadow2"><feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000" flood-opacity=".08"/></filter>
+  </defs>
+  <!-- 背景 -->
+  <rect x="0" y="0" width="960" height="540" fill="url(#bgGrad)"/>
+  <!-- 左侧抽象装饰 -->
+  <path d="M30,520 Q60,300 200,180 Q340,60 480,90" stroke="#4F46E5" stroke-width="2.5" fill="none" stroke-opacity=".25"/>
+  <path d="M20,510 Q80,280 220,160 Q360,40 500,70" stroke="#7C3AED" stroke-width="1.8" fill="none" stroke-opacity=".18"/>
+  <path d="M40,530 Q100,320 240,200 Q380,80 520,110" stroke="#06B6D4" stroke-width="1.5" fill="none" stroke-opacity=".15"/>
+  <!-- 装饰圆环 -->
+  <circle cx="520" cy="180" r="180" fill="none" stroke="#4F46E5" stroke-width="1" stroke-opacity=".08"/>
+  <circle cx="520" cy="180" r="120" fill="none" stroke="#7C3AED" stroke-width="1" stroke-opacity=".06"/>
+  <circle cx="520" cy="180" r="60" fill="none" stroke="#06B6D4" stroke-width=".8" stroke-opacity=".1"/>
+  <!-- 装饰点 -->
+  <circle cx="200" cy="160" r="5" fill="#4F46E5" opacity=".3"/>
+  <circle cx="320" cy="100" r="3.5" fill="#7C3AED" opacity=".25"/>
+  <circle cx="440" cy="70" r="4" fill="#06B6D4" opacity=".2"/>
+  <circle cx="140" cy="340" r="3" fill="#4F46E5" opacity=".2"/>
+  <circle cx="280" cy="260" r="2.5" fill="#7C3AED" opacity=".18"/>
+  <!-- 底部装饰线 -->
+  <rect x="0" y="530" width="960" height="10" fill="url(#accentGrad)" opacity=".7"/>
+  <rect x="0" y="530" width="320" height="10" fill="#06B6D4" opacity=".5"/>
+  <!-- 主标题 -->
+  <text x="560" y="170" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="44" font-weight="800" fill="#1E293B" letter-spacing="3">Claude Code</text>
+  <text x="560" y="225" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="32" font-weight="700" fill="#4F46E5" letter-spacing="2">最佳实践深度总结</text>
+  <!-- 副标题 -->
+  <text x="560" y="275" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#475569">从 v2.1.147 → v2.1.153 · 六个版本的演进洞察</text>
+  <!-- 分隔线 -->
+  <line x1="560" y1="300" x2="780" y2="300" stroke="#4F46E5" stroke-width="2.5" stroke-opacity=".5"/>
+  <!-- 元信息 -->
+  <text x="560" y="340" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#475569">调研周期：2026年5月21日—28日  ·  等效约 10,000 字</text>
+  <text x="560" y="365" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#475569">数据来源：Anthropic 官方文档 · Changelog · HN 社区讨论 (121条)</text>
+  <!-- 关键词标签 -->
+  <rect x="560" y="395" width="88" height="28" rx="14" fill="#EEF2FF"/>
+  <text x="604" y="414" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#4F46E5" text-anchor="middle">上下文管理</text>
+  <rect x="658" y="395" width="76" height="28" rx="14" fill="#EEF2FF"/>
+  <text x="696" y="414" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#7C3AED" text-anchor="middle">Prompt 工程</text>
+  <rect x="744" y="395" width="76" height="28" rx="14" fill="#EEF2FF"/>
+  <text x="782" y="414" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#0E7490" text-anchor="middle">自动化</text>
+  <!-- 右侧中心图标区 - 抽象代码结构 -->
+  <rect x="620" y="70" width="80" height="5" rx="2.5" fill="#4F46E5" opacity=".12"/>
+  <rect x="660" y="85" width="60" height="5" rx="2.5" fill="#7C3AED" opacity=".09"/>
+  <rect x="640" y="100" width="70" height="5" rx="2.5" fill="#06B6D4" opacity=".08"/>
+</svg>
+</div>
+
+
+<!-- ==================== P02 目录总览 ==================== -->
+<div class="slide" id="slide-2">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="p2bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4F46E5"/><stop offset="100%" stop-color="#7C3AED"/></linearGradient>
+    <filter id="p2sh"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#4F46E5" flood-opacity=".08"/></filter>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="6" fill="url(#p2bar)"/>
+  <text x="60" y="52" font-size="26" font-weight="700" fill="#1E293B">十大模块 · 内容导航</text>
+  <text x="60" y="76" font-size="13" fill="#475569">从 Claude Code 定位认知到实践落地，系统化梳理最佳实践全貌</text>
+  <!-- 左列 5 卡片 -->
+  <rect x="40" y="100" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="40" y="100" width="6" height="66" rx="3" fill="#4F46E5"/>
+  <text x="60" y="124" font-size="16" font-weight="700" fill="#1E293B">01  引言与本周动态</text>
+  <text x="60" y="145" font-size="12" fill="#475569">定位再认识 · 6版本演进 · 社区121条讨论</text>
+  <rect x="40" y="178" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="40" y="178" width="6" height="66" rx="3" fill="#7C3AED"/>
+  <text x="60" y="202" font-size="16" font-weight="700" fill="#1E293B">02  上下文窗口管理</text>
+  <text x="60" y="223" font-size="12" fill="#475569">最核心约束 · 四种武器 · Token 预算</text>
+  <rect x="40" y="256" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="40" y="256" width="6" height="66" rx="3" fill="#06B6D4"/>
+  <text x="60" y="280" font-size="16" font-weight="700" fill="#1E293B">03  项目级环境配置</text>
+  <text x="60" y="301" font-size="12" fill="#475569">CLAUDE.md · Skills · Hooks · Plugins · MCP</text>
+  <rect x="40" y="334" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="40" y="334" width="6" height="66" rx="3" fill="#F59E0B"/>
+  <text x="60" y="358" font-size="16" font-weight="700" fill="#1E293B">04  Prompt 工程最佳实践</text>
+  <text x="60" y="379" font-size="12" fill="#475569">四阶段工作流 · 三段式提示 · 验证闭环</text>
+  <rect x="40" y="412" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="40" y="412" width="6" height="66" rx="3" fill="#10B981"/>
+  <text x="60" y="436" font-size="16" font-weight="700" fill="#1E293B">05  会话管理与纠偏策略</text>
+  <text x="60" y="457" font-size="12" fill="#475569">高效会话 · 纠偏三连击 · 子代理用法</text>
+  <!-- 右列 5 卡片 -->
+  <rect x="490" y="100" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="490" y="100" width="6" height="66" rx="3" fill="#EF4444"/>
+  <text x="510" y="124" font-size="16" font-weight="700" fill="#1E293B">06  自动化与规模化</text>
+  <text x="510" y="145" font-size="12" fill="#475569">非交互模式 · CI/CD集成 · 多会话并行</text>
+  <rect x="490" y="178" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="490" y="178" width="6" height="66" rx="3" fill="#EC4899"/>
+  <text x="510" y="202" font-size="16" font-weight="700" fill="#1E293B">07  团队协作最佳实践</text>
+  <text x="510" y="223" font-size="12" fill="#475569">分层CLAUDE.md · KPI体系 · 知识沉淀</text>
+  <rect x="490" y="256" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="490" y="256" width="6" height="66" rx="3" fill="#F97316"/>
+  <text x="510" y="280" font-size="16" font-weight="700" fill="#1E293B">08  反模式与失败模式速查</text>
+  <text x="510" y="301" font-size="12" fill="#475569">六大失败模式 · 反模式识别清单</text>
+  <rect x="490" y="334" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="490" y="334" width="6" height="66" rx="3" fill="#8B5CF6"/>
+  <text x="510" y="358" font-size="16" font-weight="700" fill="#1E293B">09  国内使用特别注意事项</text>
+  <text x="510" y="379" font-size="12" fill="#475569">网络代理 · API Key · 中文支持 · 成本优化</text>
+  <rect x="490" y="412" width="430" height="66" rx="8" fill="#fff" filter="url(#p2sh)"/>
+  <rect x="490" y="412" width="6" height="66" rx="3" fill="#4F46E5"/>
+  <text x="510" y="436" font-size="16" font-weight="700" fill="#1E293B">10  总结与行动建议</text>
+  <text x="510" y="457" font-size="12" fill="#475569">七条核心认知 · 分时段行动 · 决策矩阵</text>
+  <rect x="0" y="498" width="960" height="42" fill="#F1F5F9"/>
+  <text x="60" y="523" font-size="12" fill="#475569">调研范围：Anthropic 官方文档 · Changelog v2.1.147→v2.1.153 · HN 社区 121 条讨论 · 等效约 10,000 字</text>
+</svg>
+</div>
+
+<!-- ==================== P03 引言 ==================== -->
+<div class="slide" id="slide-3">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p3sh"><feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000" flood-opacity=".07"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#4F46E5"/>
+  <text x="60" y="50" font-size="24" font-weight="700" fill="#1E293B">Claude Code 定位再认识</text>
+  <text x="60" y="72" font-size="12" fill="#475569">一个完整的 Agentic 编程环境，而不仅是"AI 写代码助手"</text>
+  <rect x="40" y="95" width="880" height="80" rx="10" fill="#EEF2FF" opacity=".6"/>
+  <text x="70" y="122" font-size="18" font-weight="700" fill="#4F46E5">核心转变：你不再自己写代码让 Claude 审查 —— 而是描述目标，Claude 探索、规划、实现</text>
+  <text x="70" y="148" font-size="13" fill="#475569">自主性 ≠ 无约束。理解其运行边界和约束条件是高效使用的关键。</text>
+  <text x="60" y="210" font-size="18" font-weight="700" fill="#1E293B">本周版本演进的三大核心方向</text>
+  <!-- 方向1 -->
+  <rect x="40" y="230" width="280" height="170" rx="10" fill="#fff" filter="url(#p3sh)"/>
+  <rect x="40" y="230" width="280" height="48" rx="10" fill="#4F46E5"/><rect x="40" y="268" width="280" height="10" fill="#4F46E5"/>
+  <text x="180" y="260" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">工具 → 平台</text>
+  <text x="60" y="300" font-size="13" font-weight="600" fill="#1E293B">生态化演进</text>
+  <text x="60" y="322" font-size="14" fill="#475569">· disallowed-tools 权限隔离</text>
+  <text x="60" y="342" font-size="14" fill="#475569">· /reload-skills 热加载</text>
+  <text x="60" y="362" font-size="14" fill="#475569">· MessageDisplay 钩子</text>
+  <text x="60" y="382" font-size="14" fill="#475569">· skipLfs 加速插件安装</text>
+  <!-- 方向2 -->
+  <rect x="340" y="230" width="280" height="170" rx="10" fill="#fff" filter="url(#p3sh)"/>
+  <rect x="340" y="230" width="280" height="48" rx="10" fill="#7C3AED"/><rect x="340" y="268" width="280" height="10" fill="#7C3AED"/>
+  <text x="480" y="260" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">企业 CI/CD 就绪</text>
+  <text x="360" y="300" font-size="13" font-weight="600" fill="#1E293B">自动化流水线</text>
+  <text x="360" y="322" font-size="14" fill="#475569">· Auto Mode 无需 opt-in</text>
+  <text x="360" y="342" font-size="14" fill="#475569">· /usage 分类成本分解</text>
+  <text x="360" y="362" font-size="14" fill="#475569">· /code-review --fix 闭环</text>
+  <text x="360" y="382" font-size="14" fill="#475569">· 提交→审查→修复→合并</text>
+  <!-- 方向3 -->
+  <rect x="640" y="230" width="280" height="170" rx="10" fill="#fff" filter="url(#p3sh)"/>
+  <rect x="640" y="230" width="280" height="48" rx="10" fill="#06B6D4"/><rect x="640" y="268" width="280" height="10" fill="#06B6D4"/>
+  <text x="780" y="260" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">跨平台一致</text>
+  <text x="660" y="300" font-size="13" font-weight="600" fill="#1E293B">一等跨平台支持</text>
+  <text x="660" y="322" font-size="14" fill="#475569">· PowerShell 安装器修复</text>
+  <text x="660" y="342" font-size="14" fill="#475569">· Windows 更新回滚</text>
+  <text x="660" y="362" font-size="14" fill="#475569">· macOS 后台代理保持</text>
+  <text x="660" y="382" font-size="14" fill="#475569">· CJK 文本支持改进</text>
+  <!-- 核心认知 -->
+  <rect x="40" y="420" width="880" height="65" rx="10" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1"/>
+  <text x="70" y="448" font-size="17" font-weight="700" fill="#92400E">最重要的认知：上下文窗口是你需要管理的最重要资源</text>
+  <text x="70" y="470" font-size="13" fill="#92400E">几乎所有最佳实践都围绕一个核心约束展开 —— 上下文窗口填充很快，且性能随其填充而下降</text>
+  <rect x="0" y="505" width="960" height="35" fill="#F1F5F9"/>
+  <text x="60" y="527" font-size="13" fill="#475569">1 / 10 · 引言与本周动态</text>
+</svg>
+</div>
+
+<!-- ==================== P04 本周版本动态 ==================== -->
+<div class="slide" id="slide-4">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p4sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#7C3AED"/>
+  <!-- 左侧装饰区 -->
+  <rect x="0" y="0" width="38" height="540" fill="#7C3AED" opacity=".04"/>
+  <rect x="38" y="0" width="3" height="540" fill="#7C3AED" opacity=".18"/>
+  <rect x="8" y="28" width="24" height="24" rx="12" fill="#7C3AED" opacity=".88"/>
+  <text x="20" y="45" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">6</text>
+   <text x="20" y="64" font-size="12" fill="#7C3AED" text-anchor="middle" font-weight="600">版本</text>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">本周版本动态  v2.1.147 → v2.1.153</text>
+  <text x="60" y="68" font-size="12" fill="#475569">6 个已发布版本（v2.1.151 未发布）· 5月21日—28日</text>
+  <!-- 表头 -->
+  <rect x="40" y="82" width="880" height="36" rx="6" fill="#4F46E5"/>
+  <text x="80" y="105" font-size="12" font-weight="700" fill="#fff">日期</text>
+  <text x="180" y="105" font-size="12" font-weight="700" fill="#fff">版本</text>
+  <text x="330" y="105" font-size="12" font-weight="700" fill="#fff">关键变化</text>
+  <!-- 行 -->
+  <rect x="40" y="120" width="880" height="34" fill="#fff" filter="url(#p4sh)"/>
+  <text x="80" y="142" font-size="14" fill="#475569">5/28</text><text x="170" y="142" font-size="12" font-weight="700" fill="#4F46E5">v2.1.153</text>
+  <text x="340" y="142" font-size="14" fill="#1E293B">skipLfs / COLUMNS,LINES / /model 默认保存 / Windows/macOS 修复</text>
+  <rect x="40" y="156" width="880" height="34" fill="#F8FAFC" filter="url(#p4sh)"/>
+  <text x="80" y="178" font-size="14" fill="#475569">5/27</text><text x="170" y="178" font-size="12" font-weight="700" fill="#4F46E5">v2.1.152</text>
+  <text x="340" y="178" font-size="14" fill="#1E293B">/code-review --fix / disallowed-tools / /reload-skills / MessageDisplay</text>
+  <rect x="40" y="192" width="880" height="34" fill="#fff" filter="url(#p4sh)"/>
+  <text x="80" y="214" font-size="14" fill="#475569">5/23</text><text x="170" y="214" font-size="12" font-weight="700" fill="#7C3AED">v2.1.150</text>
+  <text x="340" y="214" font-size="14" fill="#475569">内部基础设施改进（无用户可见变化）</text>
+  <rect x="40" y="228" width="880" height="34" fill="#F8FAFC" filter="url(#p4sh)"/>
+  <text x="80" y="250" font-size="14" fill="#475569">5/22</text><text x="170" y="250" font-size="12" font-weight="700" fill="#4F46E5">v2.1.149</text>
+  <text x="340" y="250" font-size="14" fill="#1E293B">/usage 分类 / /diff 键盘滚动 / GFM 任务列表 / 企业级功能</text>
+  <rect x="40" y="264" width="880" height="34" fill="#fff" filter="url(#p4sh)"/>
+  <text x="80" y="286" font-size="14" fill="#475569">5/22</text><text x="170" y="286" font-size="12" font-weight="700" fill="#4F46E5">v2.1.148</text>
+  <text x="340" y="286" font-size="14" fill="#1E293B">Bash 工具退出码 127 回归修复</text>
+  <rect x="40" y="300" width="880" height="34" fill="#F8FAFC" filter="url(#p4sh)"/>
+  <text x="80" y="322" font-size="14" fill="#475569">5/21</text><text x="170" y="322" font-size="12" font-weight="700" fill="#4F46E5">v2.1.147</text>
+  <text x="340" y="322" font-size="14" fill="#1E293B">固定后台会话 / /code-review 重命名 / 自动升级器 / Windows/macOS</text>
+  <!-- 社区热点 -->
+  <text x="60" y="378" font-size="15" font-weight="700" fill="#1E293B">HN 社区 TOP 3 热点</text>
+  <rect x="40" y="394" width="880" height="30" rx="5" fill="#FEF3C7"/>
+  <text x="60" y="414" font-size="12" fill="#92400E" font-weight="600">①</text>
+  <text x="85" y="414" font-size="12" fill="#1E293B">Microsoft 开始取消 Claude Code 许可证 — 490pt / 465 评论</text>
+  <rect x="40" y="430" width="880" height="30" rx="5" fill="#F0FDF4"/>
+  <text x="60" y="450" font-size="12" fill="#047857" font-weight="600">②</text>
+  <text x="85" y="450" font-size="12" fill="#1E293B">Claude Code as a Daily Driver 深度实践 — 410pt / 244 评论</text>
+  <rect x="40" y="466" width="880" height="30" rx="5" fill="#EFF6FF"/>
+  <text x="60" y="486" font-size="12" fill="#1E40AF" font-weight="600">③</text>
+  <text x="85" y="486" font-size="12" fill="#1E293B">WSL 下图片粘贴问题及修复 — 50pt / 65 评论</text>
+  <!-- 底部 -->
+  <rect x="0" y="510" width="960" height="30" fill="#F1F5F9"/>
+  <text x="60" y="530" font-size="12" fill="#475569">数据来源：Claude Code 官方 Changelog · HN Algolia 搜索 · 2026-05-28</text>
+</svg>
+</div>
+
+<!-- ==================== P05 上下文窗口管理 ==================== -->
+<div class="slide" id="slide-5">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p5sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".05"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#06B6D4"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">上下文窗口管理 — 最核心的约束</text>
+  <text x="60" y="68" font-size="12" fill="#475569">上下文窗口填充速度很快，性能随其填充而下降。它是最需要管理的稀缺资源。</text>
+  <!-- 左表 -->
+  <rect x="40" y="88" width="540" height="32" rx="5" fill="#EFF6FF"/>
+  <text x="55" y="109" font-size="13" font-weight="700" fill="#1E293B">上下文消耗来源分析</text>
+  <rect x="40" y="122" width="540" height="28" fill="#4F46E5" opacity=".85"/>
+  <text x="60" y="141" font-size="13" font-weight="700" fill="#fff">来源</text>
+  <text x="290" y="141" font-size="13" font-weight="700" fill="#fff">消耗量级</text>
+  <text x="460" y="141" font-size="13" font-weight="700" fill="#fff">可优化</text>
+  <rect x="40" y="150" width="540" height="26" fill="#fff" filter="url(#p5sh)"/><text x="60" y="168" font-size="13" fill="#1E293B">系统消息与工具描述</text><text x="290" y="168" font-size="13" fill="#475569">~数千 token</text><text x="460" y="168" font-size="13" fill="#B91C1C">低</text>
+  <rect x="40" y="176" width="540" height="26" fill="#F8FAFC" filter="url(#p5sh)"/><text x="60" y="194" font-size="13" fill="#1E293B">CLAUDE.md 文件</text><text x="290" y="194" font-size="13" fill="#475569">数十至数千 token</text><text x="460" y="194" font-size="13" fill="#047857" font-weight="700">高</text>
+  <rect x="40" y="202" width="540" height="26" fill="#fff" filter="url(#p5sh)"/><text x="60" y="220" font-size="13" fill="#1E293B">Skills 描述列表</text><text x="290" y="220" font-size="13" fill="#475569">每 Skill 数百 token</text><text x="460" y="220" font-size="13" fill="#047857" font-weight="700">高</text>
+  <rect x="40" y="228" width="540" height="26" fill="#F8FAFC" filter="url(#p5sh)"/><text x="60" y="246" font-size="13" fill="#1E293B">文件读写</text><text x="290" y="246" font-size="13" fill="#475569">每次数百至数万 token</text><text x="460" y="246" font-size="13" fill="#92400E">中</text>
+  <rect x="40" y="254" width="540" height="26" fill="#fff" filter="url(#p5sh)"/><text x="60" y="272" font-size="13" fill="#1E293B">MCP 工具描述</text><text x="290" y="272" font-size="13" fill="#475569">每工具数百至 2KB</text><text x="460" y="272" font-size="13" fill="#92400E">中</text>
+  <rect x="40" y="280" width="540" height="26" fill="#F8FAFC" filter="url(#p5sh)"/><text x="60" y="298" font-size="13" fill="#1E293B">对话历史</text><text x="290" y="298" font-size="13" fill="#475569">随会话线性累积</text><text x="460" y="298" font-size="13" fill="#047857" font-weight="700">高</text>
+  <rect x="40" y="306" width="540" height="26" fill="#fff" filter="url(#p5sh)"/><text x="60" y="324" font-size="13" fill="#1E293B">命令输出</text><text x="290" y="324" font-size="13" fill="#475569">每次数百至数万 token</text><text x="460" y="324" font-size="13" fill="#92400E">中</text>
+  <!-- 右侧卡片 -->
+  <rect x="600" y="88" width="320" height="32" rx="5" fill="#EEF2FF"/>
+  <text x="620" y="109" font-size="13" font-weight="700" fill="#4F46E5">核心工具与策略</text>
+  <rect x="600" y="128" width="320" height="72" rx="7" fill="#fff" filter="url(#p5sh)"/>
+  <rect x="600" y="128" width="5" height="72" rx="3" fill="#4F46E5"/>
+  <text x="618" y="150" font-size="13" font-weight="700" fill="#1E293B">/context — 可视化上下文分布</text>
+  <text x="618" y="172" font-size="13" fill="#475569">系统开销 / Skills token / MCP 描述</text>
+  <text x="618" y="192" font-size="13" fill="#475569">对话历史占比 / 总使用量与剩余空间</text>
+  <rect x="600" y="208" width="320" height="72" rx="7" fill="#fff" filter="url(#p5sh)"/>
+  <rect x="600" y="208" width="5" height="72" rx="3" fill="#7C3AED"/>
+  <text x="618" y="230" font-size="13" font-weight="700" fill="#1E293B">/usage — 分类成本分解</text>
+  <text x="618" y="248" font-size="13" fill="#475569">Skills、子代理、Plugins</text>
+  <text x="618" y="266" font-size="13" fill="#475569">每 MCP 服务器成本分别展示</text>
+  <rect x="600" y="286" width="320" height="48" rx="7" fill="#FEF3C7"/>
+  <text x="618" y="308" font-size="13" font-weight="700" fill="#92400E">关键经验法则</text>
+  <text x="618" y="326" font-size="13" fill="#92400E">纠正超过 2 次 → /clear → 精准提示重新开始</text>
+  <!-- 本周更新 -->
+  <rect x="40" y="350" width="880" height="160" rx="8" fill="#F0FDF4"/>
+  <text x="60" y="376" font-size="13" font-weight="700" fill="#047857">本周上下文管理相关更新</text>
+  <text x="60" y="400" font-size="14" fill="#047857">· v2.1.153：修复转录文件路径恢复会话时数 GB 内存占用问题</text>
+  <text x="60" y="422" font-size="14" fill="#047857">· v2.1.152：/usage 分解含大型会话文件，流式读取保持内存平稳</text>
+  <text x="60" y="444" font-size="14" fill="#047857">· v2.1.152：思维摘要至少保持 3 秒可读、Markdown 渲染、上限 10 行</text>
+  <text x="60" y="466" font-size="14" fill="#047857">· v2.1.152：disallowed-tools 技能前导元数据，激活时移除工具，减少上下文膨胀</text>
+  <text x="60" y="488" font-size="14" fill="#047857">· v2.1.149：/usage 按 Skills、子代理、Plugins 和 MCP 服务器分类成本展示</text>
+</svg>
+</div>
+
+<!-- ==================== P06 四大武器 ==================== -->
+<div class="slide" id="slide-6">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p6sh"><feDropShadow dx="0" dy="1.5" stdDeviation="3" flood-color="#4F46E5" flood-opacity=".08"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#4F46E5"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">主动管理上下文的四种武器</text>
+  <text x="60" y="68" font-size="12" fill="#475569">四种各有定位的工具，覆盖从重置、压缩、隔离到无痕问答的完整场景</text>
+  <!-- 武器1 -->
+  <rect x="40" y="90" width="430" height="200" rx="10" fill="#fff" filter="url(#p6sh)"/>
+  <rect x="40" y="90" width="430" height="52" rx="10" fill="#4F46E5"/><rect x="40" y="132" width="430" height="10" fill="#4F46E5"/>
+  <text x="60" y="104" font-size="13" fill="#fff" fill-opacity="0.75">武器一</text>
+  <text x="60" y="131" font-size="19" font-weight="700" fill="#fff">/clear — 重置上下文</text>
+  <text x="60" y="162" font-size="12" fill="#1E293B" font-weight="600">最直接、最有效的手段</text>
+  <text x="60" y="186" font-size="13" fill="#475569">每个无关任务独立会话，使用 /clear 重置</text>
+  <text x="60" y="208" font-size="13" fill="#475569">纠正超过 2 次 → /clear → 精准提示重新开始</text>
+  <text x="60" y="230" font-size="13" fill="#475569">错误的做法：一个会话中混入多个不相关任务</text>
+  <rect x="60" y="248" width="190" height="28" rx="5" fill="#EEF2FF"/>
+  <text x="75" y="267" font-size="13" fill="#4F46E5">关键经验法则：两次纠错即清</text>
+  <!-- 武器2 -->
+  <rect x="490" y="90" width="430" height="200" rx="10" fill="#fff" filter="url(#p6sh)"/>
+  <rect x="490" y="90" width="430" height="52" rx="10" fill="#7C3AED"/><rect x="490" y="132" width="430" height="10" fill="#7C3AED"/>
+  <text x="510" y="104" font-size="13" fill="#fff" fill-opacity="0.75">武器二</text>
+  <text x="510" y="131" font-size="19" font-weight="700" fill="#fff">/compact — 智能压缩</text>
+  <text x="510" y="162" font-size="12" fill="#1E293B" font-weight="600">压缩对话历史为摘要</text>
+  <text x="510" y="186" font-size="13" fill="#475569">/compact：默认压缩整个对话</text>
+  <text x="510" y="208" font-size="13" fill="#475569">/compact Focus on API changes：指导方向</text>
+  <text x="510" y="230" font-size="13" fill="#475569">/rewind → 选择部分压缩</text>
+  <rect x="510" y="248" width="240" height="28" rx="5" fill="#F3E8FF"/>
+  <text x="525" y="267" font-size="13" fill="#7C3AED">保留：代码模式、文件状态、关键决策</text>
+  <!-- 武器3 -->
+  <rect x="40" y="305" width="430" height="200" rx="10" fill="#fff" filter="url(#p6sh)"/>
+  <rect x="40" y="305" width="430" height="52" rx="10" fill="#06B6D4"/><rect x="40" y="347" width="430" height="10" fill="#06B6D4"/>
+  <text x="60" y="319" font-size="13" fill="#0F172A">武器三</text>
+  <text x="60" y="346" font-size="19" font-weight="700" fill="#fff">子代理 — 上下文隔离</text>
+  <text x="60" y="376" font-size="12" fill="#1E293B" font-weight="600">最强大的上下文管理工具</text>
+  <text x="60" y="400" font-size="13" fill="#475569">子代理运行在独立上下文窗口</text>
+  <text x="60" y="422" font-size="13" fill="#475569">只向主会话回报摘要，隔离大范围探索</text>
+  <text x="60" y="444" font-size="13" fill="#475569">调查/审查/验证 三大场景均适用</text>
+  <rect x="60" y="462" width="190" height="28" rx="5" fill="#ECFEFF"/>
+  <text x="75" y="481" font-size="13" fill="#0E7490">适用：探索、审查、验证</text>
+  <!-- 武器4 -->
+  <rect x="490" y="305" width="430" height="200" rx="10" fill="#fff" filter="url(#p6sh)"/>
+  <rect x="490" y="305" width="430" height="52" rx="10" fill="#F59E0B"/><rect x="490" y="347" width="430" height="10" fill="#F59E0B"/>
+  <text x="510" y="319" font-size="13" fill="#0F172A">武器四</text>
+  <text x="510" y="346" font-size="19" font-weight="700" fill="#fff">/btw — 无痕问答</text>
+  <text x="510" y="376" font-size="12" fill="#1E293B" font-weight="600">临时问题不占上下文</text>
+  <text x="510" y="400" font-size="13" fill="#475569">答案显示在可关闭浮层中</text>
+  <text x="510" y="422" font-size="13" fill="#475569">永远不会进入对话历史，不消耗上下文</text>
+  <text x="510" y="444" font-size="13" fill="#475569">适用：快速查询命令、语法、API 参考</text>
+  <rect x="510" y="462" width="190" height="28" rx="5" fill="#FFF7ED"/>
+  <text x="525" y="481" font-size="13" fill="#92400E">适用：临时问题、快速查询</text>
+</svg>
+</div>
+
+<!-- ==================== P07 Token 预算模型 ==================== -->
+<div class="slide" id="slide-7">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="p7sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#10B981"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">上下文经济性：Token 预算意识</text>
+  <text x="60" y="68" font-size="12" fill="#475569">建立"每次交互都有成本"的意识，将上下文窗口类比为 Token 预算</text>
+
+  <!-- 左侧：阶段占比 -->
+  <rect x="40" y="88" width="540" height="32" rx="5" fill="#F0FDF4"/>
+  <text x="55" y="109" font-size="13" font-weight="700" fill="#1E293B">典型会话 Token 消耗模型（五个阶段）</text>
+  <!-- 表头 -->
+  <rect x="40" y="124" width="540" height="28" fill="#10B981"/>
+  <text x="60" y="143" font-size="13" font-weight="700" fill="#fff">阶段</text>
+  <text x="310" y="143" font-size="13" font-weight="700" fill="#fff">Token 消耗</text>
+  <text x="470" y="143" font-size="13" font-weight="700" fill="#fff">占比</text>
+  <!-- 行 -->
+  <rect x="40" y="152" width="540" height="42" fill="#fff" filter="url(#p7sh)"/>
+  <text x="60" y="178" font-size="12" fill="#1E293B">启动（系统提示 + CLAUDE.md）</text>
+  <text x="310" y="178" font-size="13" fill="#475569">3,000-8,000</text>
+  <text x="470" y="178" font-size="13" font-weight="700" fill="#6B7280">~5%</text>
+  <!-- 进度条5% -->
+  <rect x="40" y="194" width="27" height="6" rx="3" fill="#D1FAE5"/>
+
+  <rect x="40" y="204" width="540" height="42" fill="#F8FAFC" filter="url(#p7sh)"/>
+  <text x="60" y="230" font-size="12" fill="#1E293B">任务描述与初步探索</text>
+  <text x="310" y="230" font-size="13" fill="#475569">5,000-15,000</text>
+  <text x="470" y="230" font-size="13" font-weight="700" fill="#6B7280">~10%</text>
+  <rect x="40" y="246" width="54" height="6" rx="3" fill="#A7F3D0"/>
+
+  <rect x="40" y="256" width="540" height="42" fill="#fff" filter="url(#p7sh)"/>
+  <text x="60" y="282" font-size="12" fill="#1E293B">代码读取与分析</text>
+  <text x="310" y="282" font-size="13" fill="#475569">10,000-50,000</text>
+  <text x="470" y="282" font-size="13" font-weight="700" fill="#92400E">~30%</text>
+  <rect x="40" y="298" width="162" height="6" rx="3" fill="#FCD34D"/>
+
+  <rect x="40" y="308" width="540" height="42" fill="#F8FAFC" filter="url(#p7sh)"/>
+  <text x="60" y="334" font-size="12" fill="#1E293B">实施与验证</text>
+  <text x="310" y="334" font-size="13" fill="#475569">20,000-80,000</text>
+  <text x="470" y="334" font-size="13" font-weight="700" fill="#B91C1C">~50%</text>
+  <rect x="40" y="350" width="270" height="6" rx="3" fill="#FCA5A5"/>
+
+  <rect x="40" y="360" width="540" height="42" fill="#fff" filter="url(#p7sh)"/>
+  <text x="60" y="386" font-size="12" fill="#1E293B">审查与提交</text>
+  <text x="310" y="386" font-size="13" fill="#475569">5,000-10,000</text>
+  <text x="470" y="386" font-size="13" font-weight="700" fill="#6B7280">~5%</text>
+  <rect x="40" y="402" width="27" height="6" rx="3" fill="#D1FAE5"/>
+
+  <!-- 右侧：优化清单 -->
+  <rect x="600" y="88" width="320" height="36" rx="5" fill="#FEF3C7"/>
+  <text x="620" y="111" font-size="13" font-weight="700" fill="#92400E">成本优化检查清单</text>
+  <rect x="600" y="134" width="320" height="38" rx="6" fill="#fff" filter="url(#p7sh)"/>
+  <text x="618" y="158" font-size="12" fill="#1E293B">□ CLAUDE.md 是否精简到 &lt; 100 行？</text>
+  <rect x="600" y="178" width="320" height="38" rx="6" fill="#fff" filter="url(#p7sh)"/>
+  <text x="618" y="202" font-size="12" fill="#1E293B">□ 无关任务间是否使用了 /clear？</text>
+  <rect x="600" y="222" width="320" height="38" rx="6" fill="#fff" filter="url(#p7sh)"/>
+  <text x="618" y="246" font-size="12" fill="#1E293B">□ 大范围探索是否委托给子代理？</text>
+  <rect x="600" y="266" width="320" height="38" rx="6" fill="#fff" filter="url(#p7sh)"/>
+  <text x="618" y="290" font-size="12" fill="#1E293B">□ 临时性问题是否通过 /btw 处理？</text>
+  <rect x="600" y="310" width="320" height="38" rx="6" fill="#fff" filter="url(#p7sh)"/>
+  <text x="618" y="334" font-size="12" fill="#1E293B">□ MCP 服务器是否只保留必要的？</text>
+
+  <!-- 底部提示 -->
+  <rect x="40" y="425" width="880" height="80" rx="8" fill="#EEF2FF"/>
+  <text x="70" y="453" font-size="14" font-weight="700" fill="#4F46E5">Token 预算核心认知</text>
+  <text x="70" y="475" font-size="12" fill="#4338CA">以上消耗数据为典型值估计，实际值因项目规模、模型版本和任务复杂度而异。</text>
+  <text x="70" y="495" font-size="12" fill="#4338CA">关键不是精确数字，而是建立"每次交互都有成本"的意识。</text>
+</svg>
+</div>
+
+<!-- ==================== P08 CLAUDE.md（视觉重构版） ==================== -->
+<div class="slide" id="slide-8">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 卡片主阴影 -->
+    <filter id="p8sh" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#8B5CF6" flood-opacity=".10"/>
+    </filter>
+    <!-- 轻阴影 -->
+    <filter id="p8sh2" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="1" stdDeviation="3" flood-color="#000" flood-opacity=".06"/>
+    </filter>
+    <!-- 架构卡片阴影 -->
+    <filter id="p8sh3" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".05"/>
+    </filter>
+    <!-- 右箭头标记 -->
+    <marker id="p8arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,1 L7,4 L0,7 Z" fill="#A78BFA"/>
+    </marker>
+    <!-- 黄金法则渐变 -->
+    <linearGradient id="p8goldGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F5F3FF"/>
+      <stop offset="50%" stop-color="#EDE9FE"/>
+      <stop offset="100%" stop-color="#F5F3FF"/>
+    </linearGradient>
+    <!-- 左侧装饰渐变 -->
+    <linearGradient id="p8decoGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity=".08"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect x="0" y="0" width="960" height="540" fill="#FAFBFF"/>
+
+  <!-- 顶部强色条 -->
+  <rect x="0" y="0" width="960" height="5" fill="#8B5CF6"/>
+
+  <!-- 左上角装饰竖条 -->
+  <rect x="0" y="5" width="4" height="65" fill="url(#p8decoGrad)"/>
+
+  <!-- 右上角装饰 — 淡色同心圆环 -->
+  <circle cx="890" cy="100" r="85" fill="none" stroke="#8B5CF6" stroke-width="1" stroke-opacity=".06"/>
+  <circle cx="890" cy="100" r="55" fill="none" stroke="#7C3AED" stroke-width=".8" stroke-opacity=".05"/>
+  <circle cx="890" cy="100" r="25" fill="none" stroke="#A78BFA" stroke-width=".6" stroke-opacity=".08"/>
+  <circle cx="855" cy="55" r="3" fill="#8B5CF6" opacity=".14"/>
+  <circle cx="905" cy="38" r="2" fill="#7C3AED" opacity=".1"/>
+  <circle cx="925" cy="70" r="2.5" fill="#A78BFA" opacity=".09"/>
+  <circle cx="840" cy="85" r="1.8" fill="#8B5CF6" opacity=".08"/>
+
+  <!-- ===== 标题区 ===== -->
+  <text x="60" y="44" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="800" fill="#1E293B" letter-spacing="1">CLAUDE.md — 最核心的配置文件</text>
+  <text x="60" y="66" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" fill="#64748B">提供持久化上下文，那些 Claude 无法仅通过阅读代码推断的信息</text>
+
+  <!-- ===== 黄金法则突出横幅 ===== -->
+  <rect x="40" y="84" width="880" height="64" rx="12" fill="url(#p8goldGrad)" stroke="#C4B5FD" stroke-width="1.2" filter="url(#p8sh2)"/>
+  <!-- 大引号装饰 -->
+  <text x="62" y="118" font-family="Georgia,'Times New Roman',serif" font-size="42" fill="#8B5CF6" opacity=".22">"</text>
+  <!-- 两行文字 -->
+  <text x="88" y="110" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#5B21B6">黄金法则：简洁即力量</text>
+  <text x="88" y="133" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" fill="#7C3AED">对每一行问自己——"删除这行会导致 Claude 犯错吗？"</text>
+
+  <!-- ===== 双栏区 ===== -->
+
+  <!-- ▸ 左卡片：应该包含 -->
+  <rect x="40" y="162" width="430" height="246" rx="10" fill="#FFFFFF" filter="url(#p8sh)"/>
+  <!-- 卡片头部 -->
+  <rect x="40" y="162" width="430" height="42" rx="10" fill="#10B981"/>
+  <rect x="40" y="194" width="430" height="10" fill="#10B981"/>
+  <text x="62" y="188" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#FFFFFF">✅  应该包含</text>
+
+  <!-- 内容行（深色高对比文字 + 绿色圆点） -->
+  <circle cx="57" cy="226" r="3.5" fill="#10B981"/>
+  <text x="70" y="230" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">Claude 无法猜到的 Bash 命令</text>
+
+  <circle cx="57" cy="252" r="3.5" fill="#10B981"/>
+  <text x="70" y="256" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">与默认风格不同的代码规范</text>
+
+  <circle cx="57" cy="278" r="3.5" fill="#10B981"/>
+  <text x="70" y="282" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">测试指令和首选测试运行器</text>
+
+  <circle cx="57" cy="304" r="3.5" fill="#10B981"/>
+  <text x="70" y="308" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">仓库礼仪（分支命名、PR 惯例）</text>
+
+  <circle cx="57" cy="330" r="3.5" fill="#10B981"/>
+  <text x="70" y="334" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">项目特定的架构决策</text>
+
+  <circle cx="57" cy="356" r="3.5" fill="#10B981"/>
+  <text x="70" y="360" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">开发环境怪癖（必需的环境变量）</text>
+
+  <circle cx="57" cy="382" r="3.5" fill="#10B981"/>
+  <text x="70" y="386" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">常见陷阱和非显而易见的行</text>
+
+  <!-- ▸ 右卡片：不应该包含 -->
+  <rect x="490" y="162" width="430" height="246" rx="10" fill="#FFFFFF" filter="url(#p8sh)"/>
+  <!-- 卡片头部 -->
+  <rect x="490" y="162" width="430" height="42" rx="10" fill="#EF4444"/>
+  <rect x="490" y="194" width="430" height="10" fill="#EF4444"/>
+  <text x="512" y="188" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" font-weight="700" fill="#FFFFFF">❌  不应该包含</text>
+
+  <!-- 内容行（深色高对比文字 + 红色圆点） -->
+  <circle cx="507" cy="226" r="3.5" fill="#EF4444"/>
+  <text x="520" y="230" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">Claude 通过阅读代码就能推断的内容</text>
+
+  <circle cx="507" cy="252" r="3.5" fill="#EF4444"/>
+  <text x="520" y="256" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">Claude 已知的标准语言惯例</text>
+
+  <circle cx="507" cy="278" r="3.5" fill="#EF4444"/>
+  <text x="520" y="282" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">详细的 API 文档（用链接代替）</text>
+
+  <circle cx="507" cy="304" r="3.5" fill="#EF4444"/>
+  <text x="520" y="308" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">频繁变化的信息</text>
+
+  <circle cx="507" cy="330" r="3.5" fill="#EF4444"/>
+  <text x="520" y="334" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">长段解释或教程</text>
+
+  <circle cx="507" cy="356" r="3.5" fill="#EF4444"/>
+  <text x="520" y="360" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">逐文件描述代码库</text>
+
+  <circle cx="507" cy="382" r="3.5" fill="#EF4444"/>
+  <text x="520" y="386" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12.5" fill="#1E293B">"写干净代码"等不言自明的做法</text>
+
+  <!-- ===== 多层架构区域 ===== -->
+  <rect x="40" y="422" width="880" height="106" rx="10" fill="#FFFFFF" filter="url(#p8sh3)"/>
+
+  <!-- 区标题 -->
+  <text x="62" y="446" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="13" font-weight="700" fill="#1E293B">多层 CLAUDE.md 架构</text>
+
+  <!-- 层级块 1：全局 -->
+  <rect x="70" y="460" width="235" height="36" rx="7" fill="#EEF2FF" stroke="#C7D2FE" stroke-width="1"/>
+  <text x="187" y="483" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#4338CA" text-anchor="middle">~/.claude/CLAUDE.md</text>
+
+  <!-- 箭头 1→2 -->
+  <polyline points="312,478 336,478" stroke="#A78BFA" stroke-width="1.8" marker-end="url(#p8arrow)"/>
+
+  <!-- 层级块 2：项目 -->
+  <rect x="348" y="460" width="235" height="36" rx="7" fill="#EDE9FE" stroke="#C4B5FD" stroke-width="1"/>
+  <text x="465" y="483" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#6D28D9" text-anchor="middle">./CLAUDE.md</text>
+
+  <!-- 箭头 2→3 -->
+  <polyline points="590,478 614,478" stroke="#A78BFA" stroke-width="1.8" marker-end="url(#p8arrow)"/>
+
+  <!-- 层级块 3：个人 -->
+  <rect x="626" y="460" width="235" height="36" rx="7" fill="#DBEAFE" stroke="#93C5FD" stroke-width="1"/>
+  <text x="743" y="483" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="600" fill="#1E40AF" text-anchor="middle">./CLAUDE.local.md</text>
+
+  <!-- 标签行 -->
+  <text x="187" y="510" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="11" fill="#6B7280" text-anchor="middle">全局偏好</text>
+  <text x="465" y="510" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="11" fill="#6B7280" text-anchor="middle">项目级（纳入 git）</text>
+  <text x="743" y="510" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="11" fill="#6B7280" text-anchor="middle">个人覆盖 (.gitignore)</text>
+
+  <!-- 底部附加说明 -->
+  <text x="60" y="534" font-family="'PingFang SC','Microsoft YaHei',sans-serif" font-size="11.5" fill="#94A3B8">支持 @path/to/file 语法导入外部文件 · 使用 IMPORTANT / YOU MUST 标记提升遵循度</text>
+</svg>
+</div>
+
+<!-- ==================== P09 Skills+Hooks+Plugins ==================== -->
+<div class="slide" id="slide-9">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p9sh"><feDropShadow dx="0" dy="1.5" stdDeviation="3" flood-color="#000" flood-opacity=".07"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#EC4899"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">Skills · Hooks · Plugins 能力三件套</text>
+  <text x="60" y="68" font-size="12" fill="#475569">三种互补的能力扩展机制，覆盖从领域知识、自动行为到即装即用的全场景</text>
+
+  <!-- 三列 -->
+  <!-- Skills -->
+  <rect x="30" y="90" width="290" height="410" rx="10" fill="#fff" filter="url(#p9sh)"/>
+  <rect x="30" y="90" width="290" height="52" rx="10" fill="#4F46E5"/><rect x="30" y="132" width="290" height="10" fill="#4F46E5"/>
+  <text x="175" y="122" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">🧩 Skills</text>
+  <text x="50" y="162" font-size="12" font-weight="700" fill="#1E293B">按需加载的领域知识</text>
+  <text x="50" y="186" font-size="13" fill="#475569">· 存储在 .claude/skills/ 目录</text>
+  <text x="50" y="208" font-size="13" fill="#475569">· Claude 自动识别何时激活</text>
+  <text x="50" y="230" font-size="13" fill="#475569">· 可定义工作流（/skill-name）</text>
+  <text x="50" y="252" font-size="13" fill="#475569">· disable-model-invocation</text>
+  <text x="50" y="274" font-size="13" fill="#475569">  防止自动调用（副作用）</text>
+  <text x="50" y="296" font-size="13" fill="#475569">· disallowed-tools 权限控制</text>
+  <rect x="50" y="318" width="250" height="52" rx="6" fill="#EEF2FF"/>
+  <text x="65" y="335" font-size="13" fill="#4F46E5" font-weight="600">本周更新：/reload-skills</text>
+  <text x="65" y="356" font-size="13" fill="#4F46E5">无需重启即可重新扫描</text>
+  <!-- 适用场景 -->
+  <rect x="50" y="388" width="250" height="28" rx="5" fill="#F0FDF4"/>
+  <text x="65" y="407" font-size="13" fill="#047857">适用：API约定、编码规范、工作流</text>
+  <rect x="50" y="424" width="250" height="28" rx="5" fill="#FEF3C7"/>
+  <text x="65" y="443" font-size="13" fill="#92400E">社区：skills-for-humanity (171个)</text>
+
+  <!-- Hooks -->
+  <rect x="335" y="90" width="290" height="410" rx="10" fill="#fff" filter="url(#p9sh)"/>
+  <rect x="335" y="90" width="290" height="52" rx="10" fill="#10B981"/><rect x="335" y="132" width="290" height="10" fill="#10B981"/>
+  <text x="480" y="122" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">🪝 Hooks</text>
+  <text x="355" y="162" font-size="12" font-weight="700" fill="#1E293B">确定性的自动行为</text>
+  <text x="355" y="186" font-size="13" fill="#475569">· SessionStart：启动/恢复时</text>
+  <text x="355" y="208" font-size="13" fill="#475569">· PreToolUse：工具调用前审核</text>
+  <text x="355" y="230" font-size="13" fill="#475569">· PostToolUse：自动格式化/Lint</text>
+  <text x="355" y="252" font-size="13" fill="#475569">· Stop：阻止不安全的操作</text>
+  <text x="355" y="274" font-size="13" fill="#475569">· PreCompact：压缩前注入指令</text>
+  <text x="355" y="296" font-size="13" fill="#475569">· MessageDisplay：转换消息文本</text>
+  <rect x="355" y="318" width="250" height="52" rx="6" fill="#F0FDF4"/>
+  <text x="370" y="335" font-size="13" fill="#047857">本周更新：MessageDisplay 钩子</text>
+  <text x="370" y="356" font-size="13" fill="#047857">SessionStart 支持设置会话标题</text>
+  <!-- 核心优势 -->
+  <rect x="355" y="388" width="250" height="28" rx="5" fill="#F0FDF4"/>
+  <text x="370" y="407" font-size="13" fill="#047857">核心：保证动作一定发生（确定性）</text>
+  <rect x="355" y="424" width="250" height="28" rx="5" fill="#FEF3C7"/>
+  <text x="370" y="443" font-size="13" fill="#92400E">让 Claude 自己写 Hook — 最高效</text>
+
+  <!-- Plugins -->
+  <rect x="640" y="90" width="290" height="410" rx="10" fill="#fff" filter="url(#p9sh)"/>
+  <rect x="640" y="90" width="290" height="52" rx="10" fill="#F59E0B"/><rect x="640" y="132" width="290" height="10" fill="#F59E0B"/>
+  <text x="785" y="122" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">📦 Plugins</text>
+  <text x="660" y="162" font-size="12" font-weight="700" fill="#1E293B">即装即用的能力扩展</text>
+  <text x="660" y="186" font-size="13" fill="#475569">· /plugin 浏览市场</text>
+  <text x="660" y="208" font-size="13" fill="#475569">· /plugin install &lt;name&gt; 安装</text>
+  <text x="660" y="230" font-size="13" fill="#475569">· 打包 Skills+Hooks+Subagents+MCP</text>
+  <text x="660" y="252" font-size="13" fill="#475569">· 代码智能插件：符号导航、错误检测</text>
+  <text x="660" y="274" font-size="13" fill="#475569">· 语言框架插件：最佳实践、工作流</text>
+  <text x="660" y="296" font-size="13" fill="#475569">· 工具集成：Docker、K8s、AWS</text>
+  <rect x="660" y="318" width="250" height="52" rx="6" fill="#FFF7ED"/>
+  <text x="675" y="335" font-size="13" fill="#92400E">本周更新：skipLfs 加速克隆</text>
+  <text x="675" y="356" font-size="13" fill="#92400E">pluginSuggestionMarketplaces 管理</text>
+  <rect x="660" y="388" width="250" height="28" rx="5" fill="#EFF6FF"/>
+  <text x="675" y="407" font-size="13" fill="#1E40AF">支持自定义市场 URL</text>
+  <rect x="660" y="424" width="250" height="28" rx="5" fill="#FEF3C7"/>
+  <text x="675" y="443" font-size="13" fill="#92400E">组织级白名单管理</text>
+</svg>
+</div>
+
+<!-- ==================== P10 四阶段工作流 ==================== -->
+<div class="slide" id="slide-10">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="p10sh"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#4F46E5" flood-opacity=".1"/></filter>
+    <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4F46E5"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#4F46E5"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">Prompt 工程：四阶段工作流</text>
+  <text x="60" y="68" font-size="12" fill="#475569">Anthropic 官方推荐，经过内部团队验证的核心工作流</text>
+
+  <!-- 流程箭头图 -->
+  <!-- 阶段1 -->
+  <rect x="40" y="100" width="200" height="190" rx="10" fill="#fff" filter="url(#p10sh)"/>
+  <rect x="40" y="100" width="200" height="46" rx="10" fill="#4F46E5"/><rect x="40" y="136" width="200" height="10" fill="#4F46E5"/>
+  <text x="140" y="128" font-size="17" font-weight="700" fill="#fff" text-anchor="middle">🔍 探索</text>
+  <text x="60" y="164" font-size="12" fill="#1E293B" font-weight="600">Plan Mode</text>
+  <text x="60" y="186" font-size="13" fill="#475569">读取文件，回答问题</text>
+  <text x="60" y="206" font-size="13" fill="#475569">不进行任何修改</text>
+  <text x="60" y="226" font-size="13" fill="#475569">了解代码库结构</text>
+  <text x="60" y="246" font-size="13" fill="#475569">理解现有设计决策</text>
+  <rect x="60" y="262" width="160" height="16" rx="3" fill="#EEF2FF"/>
+  <text x="140" y="274" font-size="12" fill="#4F46E5" text-anchor="middle">例：read /src/auth</text>
+
+  <!-- 箭头 -->
+  <polyline points="245,195 275,195" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrow1)"/>
+
+  <!-- 阶段2 -->
+  <rect x="280" y="100" width="200" height="190" rx="10" fill="#fff" filter="url(#p10sh)"/>
+  <rect x="280" y="100" width="200" height="46" rx="10" fill="#7C3AED"/><rect x="280" y="136" width="200" height="10" fill="#7C3AED"/>
+  <text x="380" y="128" font-size="17" font-weight="700" fill="#fff" text-anchor="middle">📋 规划</text>
+  <text x="300" y="164" font-size="12" fill="#1E293B" font-weight="600">Plan Mode</text>
+  <text x="300" y="186" font-size="13" fill="#475569">制定详细计划</text>
+  <text x="300" y="206" font-size="13" fill="#475569">列出需变更文件</text>
+  <text x="300" y="226" font-size="13" fill="#475569">Ctrl+G 打开计划文件</text>
+  <text x="300" y="246" font-size="13" fill="#475569">可直接编辑后执行</text>
+  <rect x="300" y="262" width="175" height="16" rx="3" fill="#F3E8FF"/>
+  <text x="380" y="274" font-size="12" fill="#7C3AED" text-anchor="middle">例：What files need to change?</text>
+
+  <polyline points="485,195 515,195" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrow1)"/>
+
+  <!-- 阶段3 -->
+  <rect x="520" y="100" width="200" height="190" rx="10" fill="#fff" filter="url(#p10sh)"/>
+  <rect x="520" y="100" width="200" height="46" rx="10" fill="#06B6D4"/><rect x="520" y="136" width="200" height="10" fill="#06B6D4"/>
+  <text x="620" y="128" font-size="17" font-weight="700" fill="#fff" text-anchor="middle">⚡ 实施</text>
+  <text x="540" y="164" font-size="12" fill="#1E293B" font-weight="600">默认模式</text>
+  <text x="540" y="186" font-size="13" fill="#475569">退出 Plan Mode</text>
+  <text x="540" y="206" font-size="13" fill="#475569">对照计划编写代码</text>
+  <text x="540" y="226" font-size="13" fill="#475569">运行测试套件</text>
+  <text x="540" y="246" font-size="13" fill="#475569">修复失败用例</text>
+  <rect x="540" y="262" width="175" height="16" rx="3" fill="#ECFEFF"/>
+  <text x="620" y="274" font-size="12" fill="#0E7490" text-anchor="middle">例：implement the OAuth flow</text>
+
+  <polyline points="725,195 755,195" stroke="#4F46E5" stroke-width="2" marker-end="url(#arrow1)"/>
+
+  <!-- 阶段4 -->
+  <rect x="760" y="100" width="170" height="190" rx="10" fill="#fff" filter="url(#p10sh)"/>
+  <rect x="760" y="100" width="170" height="46" rx="10" fill="#10B981"/><rect x="760" y="136" width="170" height="10" fill="#10B981"/>
+  <text x="845" y="128" font-size="17" font-weight="700" fill="#fff" text-anchor="middle">✅ 提交</text>
+  <text x="780" y="164" font-size="12" fill="#1E293B" font-weight="600">默认模式</text>
+  <text x="780" y="186" font-size="13" fill="#475569">描述性提交信息</text>
+  <text x="780" y="206" font-size="13" fill="#475569">创建 PR</text>
+  <text x="780" y="246" font-size="13" fill="#475569">/code-review --fix</text>
+  <rect x="780" y="262" width="145" height="16" rx="3" fill="#D1FAE5"/>
+  <text x="845" y="274" font-size="12" fill="#047857" text-anchor="middle">例：commit and open PR</text>
+
+  <!-- 底部注意事项 -->
+  <rect x="40" y="315" width="880" height="100" rx="8" fill="#FEF3C7"/>
+  <text x="70" y="342" font-size="14" font-weight="700" fill="#92400E">⚠️ 重要注意事项</text>
+  <text x="70" y="366" font-size="12" fill="#92400E">· Plan Mode 有用但增加开销。对于范围明确的小修改（修拼写错误、加日志行、重命名变量），直接让 Claude 执行即可</text>
+  <text x="70" y="390" font-size="12" fill="#92400E">· 如果你能用一句话描述 diff，就跳过规划阶段</text>
+  <text x="70" y="410" font-size="12" fill="#92400E">· 本周更新：/code-review --fix 可在审查后将修复建议应用到工作树中</text>
+
+  <!-- 底部 -->
+  <rect x="40" y="430" width="880" height="80" rx="8" fill="#EEF2FF"/>
+  <text x="70" y="458" font-size="14" font-weight="700" fill="#4F46E5">推荐衍生工作流</text>
+  <text x="70" y="482" font-size="12" fill="#4338CA">· Claude 访谈模式：让 Claude 用 AskUserQuestion 采访你 → 将完整规范写入 SPEC.md → 全新会话执行</text>
+  <text x="70" y="502" font-size="12" fill="#4338CA">· Writer/Reviewer 双会话：会话A编写 → 会话B审查 → 会话A根据反馈修复（避免近因偏见）</text>
+</svg>
+</div>
+
+<!-- ==================== P11 三段式提示+验证闭环 ==================== -->
+<div class="slide" id="slide-11">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p11sh"><feDropShadow dx="0" dy="1.5" stdDeviation="3" flood-color="#000" flood-opacity=".07"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#F59E0B"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">三段式提示结构 + 验证闭环</text>
+  <text x="60" y="68" font-size="12" fill="#475569">上下文说明 → 具体任务 → 验证方式，验证闭环是最高杠杆率的行为</text>
+
+  <!-- 三段式结构 -->
+  <rect x="40" y="90" width="880" height="180" rx="10" fill="#fff" filter="url(#p11sh)"/>
+  <text x="70" y="118" font-size="15" font-weight="700" fill="#4F46E5">📝 高效提示的三段式结构</text>
+
+  <!-- 段1 -->
+  <rect x="60" y="134" width="260" height="52" rx="8" fill="#EEF2FF"/>
+  <text x="190" y="156" font-size="13" font-weight="700" fill="#4F46E5" text-anchor="middle">📌 上下文说明</text>
+  <text x="190" y="176" font-size="12" fill="#475569" text-anchor="middle">文件位置、函数名、约束条件</text>
+
+  <polygon points="325,160 340,150 340,170" fill="#4F46E5" opacity=".5"/>
+
+  <rect x="345" y="134" width="260" height="52" rx="8" fill="#EDE9FE"/>
+  <text x="475" y="156" font-size="13" font-weight="700" fill="#7C3AED" text-anchor="middle">🎯 具体任务</text>
+  <text x="475" y="176" font-size="12" fill="#475569" text-anchor="middle">要做什么、覆盖哪些边缘情况</text>
+
+  <polygon points="610,160 625,150 625,170" fill="#7C3AED" opacity=".5"/>
+
+  <rect x="630" y="134" width="260" height="52" rx="8" fill="#F0FDF4"/>
+  <text x="760" y="156" font-size="13" font-weight="700" fill="#047857" text-anchor="middle">✅ 验证方式</text>
+  <text x="760" y="176" font-size="12" fill="#475569" text-anchor="middle">测试用例、运行命令、预期结果</text>
+
+  <!-- 对比 -->
+  <rect x="60" y="200" width="400" height="55" rx="6" fill="#FEF2F2"/>
+  <text x="80" y="220" font-size="13" font-weight="700" fill="#B91C1C">❌ 低效：add tests for foo.py</text>
+  <text x="80" y="240" font-size="12" fill="#991B1B">（上下文缺失、任务模糊、没有验证）</text>
+
+  <rect x="480" y="200" width="410" height="55" rx="6" fill="#F0FDF4"/>
+  <text x="500" y="220" font-size="13" font-weight="700" fill="#047857">✅ 高效：在 src/utils/foo.py 中为 validateEmail 编写测试</text>
+  <text x="500" y="240" font-size="12" fill="#047857">覆盖未登录边缘情况，避免 mock。运行测试，失败则修复。</text>
+
+  <!-- 验证闭环 -->
+  <text x="60" y="298" font-size="15" font-weight="700" fill="#1E293B">🔁 验证闭环 — 最高杠杆率的行为</text>
+
+  <rect x="40" y="316" width="430" height="105" rx="8" fill="#fff" filter="url(#p11sh)"/>
+  <rect x="40" y="316" width="430" height="34" rx="8" fill="#06B6D4"/>
+  <text x="255" y="338" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">提供验证标准</text>
+  <text x="60" y="362" font-size="13" fill="#1E293B">· "写 validateEmail 函数。测试：user@example.com → true"</text>
+  <text x="60" y="382" font-size="13" fill="#475569">· "invalid → false，user@.com → false。实现后运行测试"</text>
+  <text x="60" y="402" font-size="13" fill="#475569">· "分析根因不要抑制错误。修复并验证构建成功"</text>
+
+  <rect x="490" y="316" width="430" height="105" rx="8" fill="#fff" filter="url(#p11sh)"/>
+  <rect x="490" y="316" width="430" height="34" rx="8" fill="#10B981"/>
+  <text x="705" y="338" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">本周更新：/code-review --fix</text>
+  <text x="510" y="362" font-size="13" fill="#1E293B">· 审查后将修复建议应用到工作树</text>
+  <text x="510" y="382" font-size="13" fill="#475569">· 覆盖重用、简化和效率建议</text>
+  <text x="510" y="402" font-size="13" fill="#475569">· 内置验证闭环工具</text>
+
+  <!-- 底部丰富输入 -->
+  <rect x="40" y="435" width="880" height="75" rx="8" fill="#F1F5F9"/>
+  <text x="70" y="460" font-size="13" font-weight="700" fill="#1E293B">📎 善用丰富内容输入</text>
+  <text x="70" y="484" font-size="14" fill="#475569">@引用文件 | 粘贴截图/图片 | 粘贴 URL（文档、Issue）| 管道输入：cat error.log | claude | 让 Claude 自己拉取上下文</text>
+  <text x="70" y="502" font-size="13" fill="#475569">对于较大功能：不要写长提示 → 让 Claude 用 AskUserQuestion 采访你 → 规范写入 SPEC.md → 全新会话执行</text>
+</svg>
+</div>
+
+<!-- ==================== P12 会话管理与纠偏策略 ==================== -->
+<div class="slide" id="slide-12">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p12sh"><feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#10B981"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">会话管理与纠偏策略</text>
+  <text x="60" y="68" font-size="12" fill="#475569">将会话当作 Git 分支管理 — 每个工作流拥有自己的持久上下文</text>
+
+  <!-- 左上：纠偏三连击 -->
+  <rect x="40" y="88" width="540" height="130" rx="8" fill="#fff" filter="url(#p12sh)"/>
+  <rect x="40" y="88" width="540" height="34" rx="8" fill="#EF4444"/>
+  <text x="310" y="110" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">⚡ 纠偏三连击</text>
+  <text x="60" y="136" font-size="12" fill="#1E293B" font-weight="700">1. Esc — 立即中断 Claude，保留上下文，重新定向</text>
+  <text x="60" y="158" font-size="12" fill="#1E293B" font-weight="700">2. "Undo that" — 让 Claude 撤销修改</text>
+  <text x="60" y="180" font-size="12" fill="#1E293B" font-weight="700">3. Esc+Esc 或 /rewind — 回到之前的检查点</text>
+  <rect x="60" y="190" width="500" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="75" y="204" font-size="12" fill="#92400E">关键经验：同一问题纠正超过 2 次 → /clear → 用更精准的提示重新开始</text>
+
+  <!-- 右上：会话管理工具 -->
+  <rect x="600" y="88" width="320" height="130" rx="8" fill="#fff" filter="url(#p12sh)"/>
+  <rect x="600" y="88" width="320" height="34" rx="8" fill="#4F46E5"/>
+  <text x="760" y="110" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">📂 会话管理工具</text>
+  <text x="620" y="138" font-size="14" fill="#1E293B">· /rename oauth-migration 重命名</text>
+  <text x="620" y="158" font-size="14" fill="#1E293B">· /resume 恢复已命名会话</text>
+  <text x="620" y="178" font-size="14" fill="#1E293B">· /branch 从当前会话分支</text>
+  <text x="620" y="198" font-size="14" fill="#1E293B">· Esc+Esc / /rewind 检查点回退</text>
+
+  <!-- 下半部：检查点回退选项 -->
+  <text x="60" y="248" font-size="14" font-weight="700" fill="#1E293B">检查点回退选项（/rewind）</text>
+  <rect x="40" y="266" width="210" height="90" rx="7" fill="#EFF6FF" filter="url(#p12sh)"/>
+  <text x="145" y="294" font-size="12" font-weight="700" fill="#1E40AF" text-anchor="middle">仅恢复对话</text>
+  <text x="145" y="316" font-size="12" fill="#475569" text-anchor="middle">回退对话状态</text>
+  <text x="145" y="334" font-size="12" fill="#475569" text-anchor="middle">保留代码修改</text>
+
+  <rect x="265" y="266" width="210" height="90" rx="7" fill="#F0FDF4" filter="url(#p12sh)"/>
+  <text x="370" y="294" font-size="12" font-weight="700" fill="#047857" text-anchor="middle">仅恢复代码</text>
+  <text x="370" y="316" font-size="12" fill="#475569" text-anchor="middle">保留对话</text>
+  <text x="370" y="334" font-size="12" fill="#475569" text-anchor="middle">回退代码修改</text>
+
+  <rect x="490" y="266" width="210" height="90" rx="7" fill="#FEF3C7" filter="url(#p12sh)"/>
+  <text x="595" y="294" font-size="12" font-weight="700" fill="#92400E" text-anchor="middle">两者都恢复</text>
+  <text x="595" y="316" font-size="12" fill="#475569" text-anchor="middle">完全回退</text>
+  <text x="595" y="334" font-size="12" fill="#475569" text-anchor="middle">到之前状态</text>
+
+  <rect x="715" y="266" width="205" height="90" rx="7" fill="#EDE9FE" filter="url(#p12sh)"/>
+  <text x="817" y="294" font-size="12" font-weight="700" fill="#7C3AED" text-anchor="middle">从选定点总结</text>
+  <text x="817" y="316" font-size="12" fill="#475569" text-anchor="middle">压缩旧部分</text>
+  <text x="817" y="334" font-size="12" fill="#475569" text-anchor="middle">保留最近内容</text>
+
+  <!-- 底部：子代理三种用法 -->
+  <text x="60" y="390" font-size="14" font-weight="700" fill="#1E293B">子代理的三种正确用法</text>
+  <rect x="40" y="408" width="280" height="100" rx="7" fill="#fff" filter="url(#p12sh)"/>
+  <rect x="40" y="408" width="280" height="32" rx="7" fill="#06B6D4"/>
+  <text x="180" y="429" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">🔍 调查</text>
+  <text x="60" y="458" font-size="13" fill="#1E293B">隔离上下文消耗</text>
+  <text x="60" y="478" font-size="12" fill="#475569">"investigate how our auth handles token refresh"</text>
+
+  <rect x="335" y="408" width="280" height="100" rx="7" fill="#fff" filter="url(#p12sh)"/>
+  <rect x="335" y="408" width="280" height="32" rx="7" fill="#7C3AED"/>
+  <text x="475" y="429" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">📋 审查</text>
+  <text x="355" y="458" font-size="13" fill="#1E293B">独立评估，避免近因偏见</text>
+  <text x="355" y="478" font-size="12" fill="#475569">"review this code for edge cases"</text>
+
+  <rect x="630" y="408" width="290" height="100" rx="7" fill="#fff" filter="url(#p12sh)"/>
+  <rect x="630" y="408" width="290" height="32" rx="7" fill="#10B981"/>
+  <text x="775" y="429" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">✅ 验证</text>
+  <text x="650" y="458" font-size="13" fill="#1E293B">对照计划审查 diff</text>
+  <text x="650" y="478" font-size="12" fill="#475569">"review rate limiter diff against PLAN.md"</text>
+</svg>
+</div>
+
+<!-- ==================== P13 自动化与规模化 ==================== -->
+<div class="slide" id="slide-13">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p13sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#EF4444"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">自动化与规模化</text>
+  <text x="60" y="68" font-size="12" fill="#475569">从本地交互到 CI/CD 集成，Claude Code 在自动化场景中的完整能力</text>
+
+  <!-- 非交互模式 -->
+  <rect x="40" y="88" width="440" height="100" rx="8" fill="#fff" filter="url(#p13sh)"/>
+  <rect x="40" y="88" width="440" height="34" rx="8" fill="#4F46E5"/>
+  <text x="260" y="110" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">🖥️ 非交互模式 (claude -p)</text>
+  <text x="60" y="140" font-size="13" fill="#1E293B">· claude -p "Explain what this project does"</text>
+  <text x="60" y="158" font-size="13" fill="#1E293B">· --output-format json（脚本消费）</text>
+  <text x="60" y="176" font-size="13" fill="#1E293B">· --output-format stream-json --verbose（实时处理）</text>
+
+  <!-- Auto Mode -->
+  <rect x="500" y="88" width="420" height="100" rx="8" fill="#fff" filter="url(#p13sh)"/>
+  <rect x="500" y="88" width="420" height="34" rx="8" fill="#F59E0B"/>
+  <text x="710" y="110" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">🤖 Auto Mode (--permission-mode auto)</text>
+  <text x="520" y="140" font-size="13" fill="#1E293B">· 独立分类器审查命令，仅阻止高风险操作</text>
+  <text x="520" y="158" font-size="13" fill="#1E293B">· 权限升级 / 未知基础设施 / 恶意行为</text>
+  <text x="520" y="176" font-size="13" fill="#1E293B">· 本周更新：不再需要 opt-in，默认可用</text>
+
+  <!-- Writer/Reviewer 双会话 -->
+  <rect x="40" y="205" width="440" height="125" rx="8" fill="#fff" filter="url(#p13sh)"/>
+  <rect x="40" y="205" width="440" height="34" rx="8" fill="#7C3AED"/>
+  <text x="260" y="227" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">✍️ Writer/Reviewer 双会话模式</text>
+  <text x="60" y="258" font-size="13" fill="#1E293B">会话A (Writer)：编写代码实现</text>
+  <text x="60" y="276" font-size="13" fill="#1E293B">会话B (Reviewer)：审查 diff 和边缘情况</text>
+  <text x="60" y="294" font-size="13" fill="#1E293B">会话A：根据 B 的反馈修复</text>
+  <rect x="60" y="302" width="400" height="12" rx="3" fill="#F3E8FF"/>
+  <text x="70" y="311" font-size="12" fill="#7C3AED">核心价值：Reviewer 只看到 diff 和评估标准，不受实现推理过程影响</text>
+
+  <!-- 多会话并行 -->
+  <rect x="500" y="205" width="420" height="125" rx="8" fill="#fff" filter="url(#p13sh)"/>
+  <rect x="500" y="205" width="420" height="34" rx="8" fill="#06B6D4"/>
+  <text x="710" y="227" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">🔄 多会话并行 &amp; 文件扇出</text>
+  <text x="520" y="258" font-size="13" fill="#1E293B">· Worktrees：隔离 git checkout + 独立 CLI</text>
+  <text x="520" y="276" font-size="13" fill="#1E293B">· Desktop App：可视化多会话管理</text>
+  <text x="520" y="294" font-size="13" fill="#1E293B">· Agent Teams：自动协调，共享任务/消息</text>
+  <rect x="520" y="302" width="380" height="30" rx="3" fill="#ECFEFF"/>
+  <text x="530" y="313" font-size="12" fill="#0E7490">文件扇出：生成任务列表 → 循环 claude -p 并行处理 →</text>
+  <text x="530" y="329" font-size="12" fill="#0E7490">先测试 2-3 个优化提示再批量运行</text>
+
+  <!-- CI/CD 集成 -->
+  <rect x="40" y="348" width="880" height="160" rx="8" fill="#fff" filter="url(#p13sh)"/>
+  <rect x="40" y="348" width="880" height="36" rx="8" fill="#10B981"/>
+  <text x="480" y="371" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">🚀 CI/CD 实战集成</text>
+  <text x="60" y="404" font-size="12" fill="#1E293B" font-weight="600">GitHub Actions PR 自动审查示例：</text>
+  <text x="60" y="426" font-size="13" fill="#475569">· actions/checkout@v4 (fetch-depth: 0 完整 git 历史)</text>
+  <text x="60" y="446" font-size="13" fill="#475569">· curl -fsSL https://claude.ai/install.sh | bash（安装 Claude Code）</text>
+  <text x="60" y="466" font-size="13" fill="#475569">· claude --permission-mode auto -p "Review the diff for bugs, security issues, and code style violations"</text>
+  <rect x="60" y="480" width="840" height="28" rx="5" fill="#FEF3C7"/>
+  <text x="80" y="499" font-size="13" fill="#92400E">关键实践：先在非关键仓库测试 5-10 PR → 设置并发限制 → 初期设为建议性（非阻断）→ 保存 CI artifact 供审计</text>
+</svg>
+</div>
+
+<!-- ==================== P14 团队协作 ==================== -->
+<div class="slide" id="slide-14">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p14sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#EC4899"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">团队协作最佳实践</text>
+  <text x="60" y="68" font-size="12" fill="#475569">把 CLAUDE.md 当作代码来对待 — 在出错时审查它，定期修剪，测试修改</text>
+
+  <!-- KPI 表 -->
+  <rect x="40" y="88" width="540" height="300" rx="8" fill="#fff" filter="url(#p14sh)"/>
+  <rect x="40" y="88" width="540" height="34" rx="8" fill="#EC4899"/>
+  <text x="310" y="110" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">📊 团队 KPI 体系建设</text>
+  <rect x="40" y="122" width="540" height="26" fill="#FDF2F8"/>
+  <text x="60" y="140" font-size="13" font-weight="700" fill="#BE185D">指标</text>
+  <text x="280" y="140" font-size="13" font-weight="700" fill="#BE185D">说明</text>
+  <text x="480" y="140" font-size="13" font-weight="700" fill="#BE185D">目标</text>
+  <rect x="40" y="148" width="540" height="32" fill="#fff"/>
+  <text x="60" y="170" font-size="13" fill="#1E293B">PR 合并率</text><text x="280" y="170" font-size="13" fill="#475569">Claude 生成的 PR 直接合并比例</text><text x="480" y="170" font-size="13" fill="#047857" font-weight="700">&gt;60%</text>
+  <rect x="40" y="180" width="540" height="32" fill="#FDF2F8"/>
+  <text x="60" y="202" font-size="13" fill="#1E293B">修正轮次</text><text x="280" y="202" font-size="13" fill="#475569">平均每任务需要的纠偏次数</text><text x="480" y="202" font-size="13" fill="#047857" font-weight="700">&lt;2 次</text>
+  <rect x="40" y="212" width="540" height="32" fill="#fff"/>
+  <text x="60" y="234" font-size="13" fill="#1E293B">会话效率</text><text x="280" y="234" font-size="13" fill="#475569">每次 /clear 前完成的任务数</text><text x="480" y="234" font-size="13" fill="#047857" font-weight="700">&gt;3 个</text>
+  <rect x="40" y="244" width="540" height="32" fill="#FDF2F8"/>
+  <text x="60" y="266" font-size="13" fill="#1E293B">Skill 采纳率</text><text x="280" y="266" font-size="13" fill="#475569">团队中创建 Skill 的工程师占比</text><text x="480" y="266" font-size="13" fill="#047857" font-weight="700">&gt;50%</text>
+  <rect x="40" y="276" width="540" height="32" fill="#fff"/>
+  <text x="60" y="298" font-size="13" fill="#1E293B">CLAUDE.md 精炼度</text><text x="280" y="298" font-size="13" fill="#475569">文件行数的合理范围</text><text x="480" y="298" font-size="13" fill="#047857" font-weight="700">20-80 行</text>
+  <rect x="40" y="308" width="540" height="32" fill="#FDF2F8"/>
+  <text x="60" y="330" font-size="13" fill="#1E293B">验证闭环覆盖率</text><text x="280" y="330" font-size="13" fill="#475569">有测试/验证步骤的任务占比</text><text x="480" y="330" font-size="13" fill="#047857" font-weight="700">&gt;80%</text>
+  <!-- 底部提示 -->
+  <rect x="40" y="345" width="540" height="38" rx="5" fill="#F1F5F9"/>
+  <text x="60" y="368" font-size="13" fill="#475569">以上 KPI 为参考建议值，具体目标根据团队规模和项目复杂度调整</text>
+
+  <!-- 右：知识沉淀周期 -->
+  <rect x="600" y="88" width="320" height="300" rx="8" fill="#fff" filter="url(#p14sh)"/>
+  <rect x="600" y="88" width="320" height="34" rx="8" fill="#8B5CF6"/>
+  <text x="760" y="110" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">📅 知识沉淀周期</text>
+  <rect x="620" y="140" width="280" height="52" rx="6" fill="#EEF2FF"/>
+  <text x="640" y="162" font-size="12" font-weight="700" fill="#4F46E5">每日</text>
+  <text x="640" y="182" font-size="13" fill="#475569">在 CLAUDE.md 中添加非显而易见规则</text>
+  <rect x="620" y="200" width="280" height="52" rx="6" fill="#EDE9FE"/>
+  <text x="640" y="222" font-size="12" font-weight="700" fill="#7C3AED">每周</text>
+  <text x="640" y="242" font-size="13" fill="#475569">审查并精简 CLAUDE.md，移除已内化规则</text>
+  <rect x="620" y="260" width="280" height="52" rx="6" fill="#FCE7F3"/>
+  <text x="640" y="282" font-size="12" font-weight="700" fill="#BE185D">每月</text>
+  <text x="640" y="302" font-size="13" fill="#475569">将通用模式提取为 Skills，团队共享</text>
+  <rect x="620" y="320" width="280" height="52" rx="6" fill="#FEF3C7"/>
+  <text x="640" y="342" font-size="12" font-weight="700" fill="#92400E">每季度</text>
+  <text x="640" y="362" font-size="13" fill="#475569">评估并更新团队级 KPI 目标</text>
+
+  <!-- 底部横条 -->
+  <rect x="40" y="400" width="880" height="110" rx="8" fill="#EEF2FF"/>
+  <text x="70" y="428" font-size="13" font-weight="700" fill="#4F46E5">🛠️ /team-onboarding 团队入职工具</text>
+  <text x="70" y="454" font-size="14" fill="#4338CA">基于本地使用记录，生成新成员逐步入职指南：CLAUDE.md 解读 / 常用命令 / 代码风格 / 测试方式 / Git 工作流 / 常见陷阱</text>
+  <text x="70" y="478" font-size="14" fill="#4338CA">推荐架构：~/.claude/CLAUDE.md(全局) → ./CLAUDE.md(项目) → ./CLAUDE.local.md(个人) → 子目录按需</text>
+  <text x="70" y="498" font-size="13" fill="#475569">文件随时间的积累产生复利效应 · 对关键指令加 IMPORTANT 标记提升遵循度</text>
+</svg>
+</div>
+
+<!-- ==================== P15 六大失败模式速查 ==================== -->
+<div class="slide" id="slide-15">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p15sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".07"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#F97316"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">六大失败模式速查</text>
+  <text x="60" y="68" font-size="12" fill="#475569">识别常见陷阱，建立会话自查习惯 — 每次会话都应快速过一遍反模式清单</text>
+
+  <!-- 3x2 网格 -->
+  <!-- 模式1 -->
+  <rect x="40" y="90" width="280" height="145" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="40" y="90" width="280" height="34" rx="8" fill="#EF4444"/>
+  <text x="180" y="112" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">1. 厨房水槽会话</text>
+  <text x="55" y="144" font-size="12" fill="#475569">症状：一个会话混入多个不相关任务，上下文混乱</text>
+  <rect x="55" y="162" width="250" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="70" y="176" font-size="12" fill="#92400E">修复：/clear 隔离任务</text>
+
+  <!-- 模式2 -->
+  <rect x="340" y="90" width="280" height="145" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="340" y="90" width="280" height="34" rx="8" fill="#F97316"/>
+  <text x="480" y="112" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">2. 反复纠错</text>
+  <text x="355" y="144" font-size="12" fill="#475569">症状：纠正>2次仍不对，上下文被污染</text>
+  <rect x="355" y="162" width="250" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="370" y="176" font-size="12" fill="#92400E">修复：/clear + 更精准的提示</text>
+
+  <!-- 模式3 -->
+  <rect x="640" y="90" width="280" height="145" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="640" y="90" width="280" height="34" rx="8" fill="#F59E0B"/>
+  <text x="780" y="112" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">3. 过度膨胀的 CLAUDE.md</text>
+  <text x="655" y="144" font-size="12" fill="#475569">症状：文件太长，关键规则被噪声淹没</text>
+  <rect x="655" y="162" width="250" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="670" y="176" font-size="12" fill="#92400E">修复：无情精简，删除 Claude 已知内容</text>
+
+  <!-- 模式4 -->
+  <rect x="40" y="250" width="280" height="145" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="40" y="250" width="280" height="34" rx="8" fill="#06B6D4"/>
+  <text x="180" y="272" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">4. 信任-验证鸿沟</text>
+  <text x="55" y="304" font-size="12" fill="#475569">症状：看起来合理，但边缘情况未处理</text>
+  <rect x="55" y="322" width="250" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="70" y="336" font-size="12" fill="#92400E">修复：始终提供验证，测试+脚本+截图</text>
+
+  <!-- 模式5 -->
+  <rect x="340" y="250" width="280" height="145" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="340" y="250" width="280" height="34" rx="8" fill="#8B5CF6"/>
+  <text x="480" y="272" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">5. 无限探索</text>
+  <text x="355" y="304" font-size="12" fill="#475569">症状：investigate X 未限定范围，读取数百文件</text>
+  <rect x="355" y="322" width="250" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="370" y="336" font-size="12" fill="#92400E">修复：限定范围，或使用子代理隔离</text>
+
+  <!-- 模式6 -->
+  <rect x="640" y="250" width="280" height="145" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="640" y="250" width="280" height="34" rx="8" fill="#EC4899"/>
+  <text x="780" y="272" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">6. 跳过验证直接合并</text>
+  <text x="655" y="304" font-size="12" fill="#475569">症状：未经验证的代码进入主分支</text>
+  <rect x="655" y="322" width="250" height="20" rx="4" fill="#FEF3C7"/>
+  <text x="670" y="336" font-size="12" fill="#92400E">修复：建立强制验证步骤</text>
+
+  <!-- 反模式自查清单 -->
+  <rect x="40" y="412" width="880" height="100" rx="8" fill="#fff" filter="url(#p15sh)"/>
+  <rect x="40" y="412" width="880" height="34" rx="8" fill="#4F46E5"/>
+  <text x="480" y="434" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">🔍 反模式识别清单（每次会话自查）</text>
+  <text x="70" y="464" font-size="14" fill="#1E293B">□ 当前会话是否混合了不相关的任务？</text>
+  <text x="310" y="464" font-size="14" fill="#1E293B">□ 是否已经纠正 Claude 超过两次？</text>
+  <text x="580" y="464" font-size="14" fill="#1E293B">□ CLAUDE.md 中是否有冗余规则？</text>
+  <text x="70" y="488" font-size="14" fill="#1E293B">□ 最近一次修改是否通过了测试验证？</text>
+  <text x="310" y="488" font-size="14" fill="#1E293B">□ 大范围探索是否使用了子代理隔离？</text>
+  <text x="580" y="488" font-size="14" fill="#1E293B">□ 是否有自动化 Hook 可以减少手动干预？</text>
+</svg>
+</div>
+
+<!-- ==================== P16 国内使用注意事项 ==================== -->
+<div class="slide" id="slide-16">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p16sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#8B5CF6"/>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">国内使用特别注意事项</text>
+  <text x="60" y="68" font-size="12" fill="#475569">国内开发者使用 Claude Code 面临的首要问题是网络可达性</text>
+
+  <!-- 左列：网络配置 -->
+  <rect x="40" y="88" width="440" height="210" rx="8" fill="#fff" filter="url(#p16sh)"/>
+  <rect x="40" y="88" width="440" height="34" rx="8" fill="#4F46E5"/>
+  <text x="260" y="110" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">🌐 网络连接与代理配置</text>
+  <text x="60" y="138" font-size="13" fill="#1E293B" font-weight="600">方案一：环境变量代理</text>
+  <text x="60" y="156" font-size="13" fill="#475569">export HTTP_PROXY=http://127.0.0.1:7890</text>
+  <text x="60" y="174" font-size="13" fill="#475569">export HTTPS_PROXY=http://127.0.0.1:7890</text>
+  <text x="60" y="196" font-size="13" fill="#1E293B" font-weight="600">方案二：API Key 模式</text>
+  <text x="60" y="214" font-size="13" fill="#475569">export ANTHROPIC_API_KEY=sk-ant-xxxxx</text>
+  <text x="60" y="232" font-size="13" fill="#475569">claude</text>
+  <text x="60" y="254" font-size="13" fill="#1E293B" font-weight="600">方案三：第三方 API 网关</text>
+  <text x="60" y="272" font-size="13" fill="#475569">ANTHROPIC_BASE_URL + ANTHROPIC_API_KEY</text>
+  <rect x="60" y="280" width="400" height="12" rx="3" fill="#EEF2FF"/>
+  <text x="70" y="289" font-size="12" fill="#4F46E5">本周修复：自定义网关不再误用用户 OAuth 凭据</text>
+
+  <!-- 右列：常见报错 -->
+  <rect x="500" y="88" width="420" height="210" rx="8" fill="#fff" filter="url(#p16sh)"/>
+  <rect x="500" y="88" width="420" height="34" rx="8" fill="#EF4444"/>
+  <text x="710" y="110" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">⚠️ 常见报错速查</text>
+  <rect x="515" y="128" width="390" height="38" fill="#FEF2F2"/>
+  <text x="525" y="143" font-size="13" fill="#B91C1C" font-weight="600">api.anthropic.com unreachable</text>
+  <text x="525" y="163" font-size="12" fill="#991B1B">→ 网络不通，配置代理或使用 API 网关</text>
+  <rect x="515" y="172" width="390" height="38" fill="#FEF2F2"/>
+  <text x="525" y="187" font-size="13" fill="#B91C1C" font-weight="600">OAuth auth not supported</text>
+  <text x="525" y="207" font-size="12" fill="#991B1B">→ 区域限制，切换到 API Key 认证</text>
+  <rect x="515" y="216" width="390" height="38" fill="#FEF2F2"/>
+  <text x="525" y="231" font-size="13" fill="#B91C1C" font-weight="600">Stream idle timeout</text>
+  <text x="525" y="251" font-size="12" fill="#991B1B">→ 连接中断，检查代理稳定性</text>
+  <rect x="515" y="260" width="390" height="38" fill="#FEF2F2"/>
+  <text x="525" y="275" font-size="13" fill="#B91C1C" font-weight="600">ERR_CONNECTION_REFUSED</text>
+  <text x="525" y="295" font-size="12" fill="#991B1B">→ 代理未启动，确认代理服务运行正常</text>
+
+  <!-- 底部：进阶技巧 -->
+  <rect x="40" y="315" width="880" height="195" rx="8" fill="#fff" filter="url(#p16sh)"/>
+  <rect x="40" y="315" width="880" height="34" rx="8" fill="#06B6D4"/>
+  <text x="480" y="337" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">💡 国内使用进阶技巧</text>
+
+  <!-- 三列 -->
+  <rect x="55" y="360" width="270" height="130" rx="7" fill="#F0FDF4"/>
+  <text x="75" y="384" font-size="12" font-weight="700" fill="#047857">Token 成本优化</text>
+  <text x="75" y="406" font-size="13" fill="#047857">· 精简 CLAUDE.md（最直接手段）</text>
+  <text x="75" y="424" font-size="13" fill="#047857">· 500行→80行，每次节省~2500 token</text>
+  <text x="75" y="442" font-size="13" fill="#047857">· 合理使用 /compact，主动压缩</text>
+  <text x="75" y="460" font-size="13" fill="#047857">· 关闭不必要 MCP 服务器</text>
+  <text x="75" y="478" font-size="13" fill="#047857">· 探索任务切换 Haiku 模型</text>
+
+  <rect x="340" y="360" width="270" height="130" rx="7" fill="#EFF6FF"/>
+  <text x="360" y="384" font-size="12" font-weight="700" fill="#1E40AF">Windows 用户提示</text>
+  <text x="360" y="406" font-size="13" fill="#1E40AF">· 优先使用 PowerShell 7+</text>
+  <text x="360" y="424" font-size="13" fill="#1E40AF">· CLAUDE.md 声明路径差异</text>
+  <text x="360" y="442" font-size="13" fill="#1E40AF">· 安装 Git for Windows</text>
+  <text x="360" y="460" font-size="13" fill="#1E40AF">· 定期运行 claude doctor</text>
+  <text x="360" y="478" font-size="13" fill="#1E40AF">· 本周修复：PS 安装器、更新回滚</text>
+
+  <rect x="625" y="360" width="275" height="130" rx="7" fill="#FFF7ED"/>
+  <text x="645" y="384" font-size="12" font-weight="700" fill="#92400E">中文支持与离线</text>
+  <text x="645" y="406" font-size="13" fill="#92400E">· CJK 文本支持持续改进</text>
+  <text x="645" y="424" font-size="13" fill="#92400E">· IME 候选窗口修复</text>
+  <text x="645" y="442" font-size="13" fill="#92400E">· /init 生成项目配置</text>
+  <text x="645" y="460" font-size="13" fill="#92400E">· claude -p 处理离线查询</text>
+  <text x="645" y="478" font-size="13" fill="#92400E">· 使用 WebSocket 兼容代理</text>
+</svg>
+</div>
+
+<!-- ==================== P17 七条核心认知 ==================== -->
+<div class="slide" id="slide-17">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs><filter id="p17sh"><feDropShadow dx="0" dy="1.5" stdDeviation="3" flood-color="#4F46E5" flood-opacity=".08"/></filter></defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="#4F46E5"/>
+  <!-- 左侧装饰区 -->
+  <rect x="0" y="0" width="38" height="540" fill="#4F46E5" opacity=".04"/>
+  <rect x="38" y="0" width="3" height="540" fill="#4F46E5" opacity=".18"/>
+  <rect x="8" y="28" width="24" height="24" rx="12" fill="#4F46E5" opacity=".88"/>
+  <text x="20" y="45" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">7</text>
+   <text x="20" y="64" font-size="12" fill="#4F46E5" text-anchor="middle" font-weight="600">认知</text>
+  <text x="60" y="48" font-size="22" font-weight="700" fill="#1E293B">七条核心认知</text>
+  <text x="60" y="68" font-size="12" fill="#475569">本文最精炼的总结 — 理解这七条，等于掌握了 Claude Code 最佳实践的精髓</text>
+
+  <!-- 7条认知卡片 -->
+  <rect x="40" y="88" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="111" r="14" fill="#4F46E5"/>
+  <text x="70" y="116" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+  <text x="100" y="117" font-size="14" fill="#1E293B" font-weight="700">上下文窗口是最稀缺的资源 — 一切实践最终都围绕如何高效利用它</text>
+
+  <rect x="40" y="140" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="163" r="14" fill="#7C3AED"/>
+  <text x="70" y="168" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+  <text x="100" y="169" font-size="14" fill="#1E293B" font-weight="700">验证闭环是最高杠杆率的行为 — 让 Claude 自己验证自己的工作</text>
+
+  <rect x="40" y="192" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="215" r="14" fill="#06B6D4"/>
+  <text x="70" y="220" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+  <text x="100" y="221" font-size="14" fill="#1E293B" font-weight="700">探索 → 规划 → 实施 → 提交 — 不要跳过步骤，也不要对小任务过度使用</text>
+
+  <rect x="40" y="244" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="267" r="14" fill="#10B981"/>
+  <text x="70" y="272" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+  <text x="100" y="273" font-size="14" fill="#1E293B" font-weight="700">CLAUDE.md 越短越有效 — 只保留删除后会让 Claude 犯错的内容</text>
+
+  <rect x="40" y="296" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="319" r="14" fill="#F59E0B"/>
+  <text x="70" y="324" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">5</text>
+  <text x="100" y="325" font-size="14" fill="#1E293B" font-weight="700">会话隔离优于反复纠偏 — 两次修正不行就 /clear 重新来</text>
+
+  <rect x="40" y="348" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="371" r="14" fill="#EC4899"/>
+  <text x="70" y="376" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">6</text>
+  <text x="100" y="377" font-size="14" fill="#1E293B" font-weight="700">子代理是上下文管理的银弹 — 让探索在独立上下文进行</text>
+
+  <rect x="40" y="400" width="880" height="46" rx="8" fill="#fff" filter="url(#p17sh)"/>
+  <circle cx="70" cy="423" r="14" fill="#F97316"/>
+  <text x="70" y="428" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">7</text>
+  <text x="100" y="429" font-size="14" fill="#1E293B" font-weight="700">让 Claude 为自己写工具 — Hooks、Skills、子代理都可以让 Claude 生成</text>
+
+  <!-- 底部版本速览 -->
+  <rect x="40" y="462" width="880" height="55" rx="8" fill="#EEF2FF"/>
+  <text x="70" y="486" font-size="13" font-weight="700" fill="#4F46E5">本月最值得关注的版本变化</text>
+  <text x="70" y="506" font-size="13" fill="#4338CA">v2.1.153：/model 默认保存、状态行优化 · v2.1.152：/code-review --fix、disallowed-tools · v2.1.149：/usage 分类分解 · v2.1.147：固定后台会话</text>
+</svg>
+</div>
+
+<!-- ==================== P18 行动建议 + 结语 ==================== -->
+<div class="slide" id="slide-18">
+<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="p18g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4F46E5"/><stop offset="100%" stop-color="#7C3AED"/></linearGradient>
+    <filter id="p18sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="#000" flood-opacity=".06"/></filter>
+  </defs>
+  <rect x="0" y="0" width="960" height="540" fill="#F8FAFC"/>
+  <rect x="0" y="0" width="960" height="5" fill="url(#p18g1)"/>
+
+  <!-- 左：分时段行动 -->
+  <rect x="40" y="18" width="460" height="250" rx="8" fill="#fff" filter="url(#p18sh)"/>
+  <rect x="40" y="18" width="460" height="34" rx="8" fill="#EF4444"/>
+  <text x="270" y="40" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">🚀 立即行动（今日）</text>
+  <text x="60" y="70" font-size="13" fill="#1E293B">□ 运行 /init 生成或审查项目的 CLAUDE.md</text>
+  <text x="60" y="90" font-size="13" fill="#1E293B">□ 精简 CLAUDE.md：删除 Claude 已自动做对的指令</text>
+  <text x="60" y="110" font-size="13" fill="#1E293B">□ 为第一个高频任务创建 Skill</text>
+  <text x="60" y="130" font-size="13" fill="#1E293B">□ 配置至少一个验证闭环（测试 + Hook）</text>
+  <rect x="60" y="150" width="420" height="18" rx="4" fill="#FFF7ED"/>
+  <text x="75" y="163" font-size="12" fill="#92400E">核心：先完成最基础的环境配置和第一个验证闭环</text>
+  <rect x="40" y="178" width="460" height="78" rx="8" fill="#F8FAFC"/>
+  <text x="60" y="198" font-size="12" font-weight="700" fill="#C2410C">📅 本周内完成</text>
+  <text x="60" y="218" font-size="13" fill="#475569">□ 安装代码智能插件 · 配置 Auto Mode · 建立 MCP 服务器连接</text>
+  <text x="60" y="238" font-size="13" fill="#475569">□ 为团队项目编写分层 CLAUDE.md · 实践 Writer/Reviewer 双会话</text>
+
+  <!-- 右：决策矩阵 -->
+  <rect x="520" y="18" width="400" height="250" rx="8" fill="#fff" filter="url(#p18sh)"/>
+  <rect x="520" y="18" width="400" height="34" rx="8" fill="#4F46E5"/>
+  <text x="720" y="40" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">📋 决策速查矩阵</text>
+  <text x="540" y="70" font-size="13" fill="#1E293B" font-weight="700">场景：开始新任务</text>
+  <text x="540" y="88" font-size="13" fill="#047857">✅ /clear 后开始</text>
+  <text x="700" y="88" font-size="13" fill="#B91C1C">❌ 同一会话继续</text>
+  <text x="540" y="110" font-size="13" fill="#1E293B" font-weight="700">场景：纠正超过 2 次</text>
+  <text x="540" y="128" font-size="13" fill="#047857">✅ /clear + 重写提示</text>
+  <text x="700" y="128" font-size="13" fill="#B91C1C">❌ 继续纠正</text>
+  <text x="540" y="150" font-size="13" fill="#1E293B" font-weight="700">场景：探索不熟悉的模块</text>
+  <text x="540" y="168" font-size="13" fill="#047857">✅ 使用子代理</text>
+  <text x="700" y="168" font-size="13" fill="#B91C1C">❌ 直接读取所有文件</text>
+  <text x="540" y="190" font-size="13" fill="#1E293B" font-weight="700">场景：跨天大型任务</text>
+  <text x="540" y="208" font-size="13" fill="#047857">✅ claude --bg 后台固定</text>
+  <text x="700" y="208" font-size="13" fill="#B91C1C">❌ 保持终端打开</text>
+  <text x="540" y="230" font-size="13" fill="#1E293B" font-weight="700">场景：团队共享知识</text>
+  <text x="540" y="248" font-size="13" fill="#047857">✅ 创建 Skill</text>
+  <text x="700" y="248" font-size="13" fill="#B91C1C">❌ 各自写 CLAUDE.md</text>
+
+  <!-- 中：常见误区 -->
+  <rect x="40" y="280" width="880" height="158" rx="8" fill="#fff" filter="url(#p18sh)"/>
+  <rect x="40" y="280" width="880" height="34" rx="8" fill="#F59E0B"/>
+  <text x="480" y="302" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">⚠️ 常见误区澄清</text>
+  <text x="60" y="332" font-size="13" fill="#B91C1C" font-weight="600">❌ "CLAUDE.md 越长越好"</text>
+  <text x="60" y="354" font-size="12" fill="#475569">→ 越长越容易被忽略，精简到只保留关键规则。</text>
+  <text x="350" y="332" font-size="13" fill="#B91C1C" font-weight="600">❌ "Plan Mode 总是必要的"</text>
+  <text x="350" y="354" font-size="12" fill="#475569">→ 小修改（一句话能描述diff）应跳过规划。</text>
+  <text x="60" y="378" font-size="13" fill="#B91C1C" font-weight="600">❌ "Auto Mode 完全不需要人工审查"</text>
+  <text x="60" y="396" font-size="12" fill="#475569">→ 分类器只阻止高风险操作，业务逻辑仍需验证。</text>
+  <text x="350" y="378" font-size="13" fill="#B91C1C" font-weight="600">❌ "Claude 写的代码可以直接合并"</text>
+  <text x="350" y="396" font-size="12" fill="#475569">→ 始终需要验证，跨模块改动需通过测试。</text>
+  <text x="610" y="332" font-size="13" fill="#B91C1C" font-weight="600">❌ "一个会话搞定所有事"</text>
+  <text x="610" y="354" font-size="12" fill="#475569">→ 每个无关任务应在独立会话中进行。</text>
+  <text x="610" y="378" font-size="13" fill="#B91C1C" font-weight="600">❌ "子代理只是锦上添花"</text>
+  <text x="610" y="396" font-size="12" fill="#475569">→ 对于代码库探索，子代理是上下文管理的核心工具。</text>
+
+  <!-- 底：感谢页 -->
+  <rect x="40" y="452" width="880" height="68" rx="10" fill="url(#p18g1)" opacity=".9"/>
+  <text x="480" y="482" font-size="22" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="3">感谢阅读</text>
+  <text x="480" y="506" font-size="12" fill="#FFFFFF" text-anchor="middle">Claude Code 最佳实践深度总结 · 2026年5月 · 调研充分，实践导向</text>
+</svg>
+</div>
+</div><!-- end slide-container -->
+
+<!-- 翻页工具栏 -->
+<div class="toolbar" id="toolbar">
+  <button class="btn" id="btnPrev" title="上一页 (←)" onclick="goPrev()">◀</button>
+  <span class="page-info" id="pageInfo">1 / 18</span>
+  <button class="btn" id="btnNext" title="下一页 (→)" onclick="goNext()">▶</button>
+</div>
+
+<script>
+let currentPage=1;const totalPages=18;
+let toolbarTimer=null;
+
+function showPage(n){
+  if(n<1||n>totalPages)return;
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  const slide=document.getElementById('slide-'+n);
+  if(slide)slide.classList.add('active');
+  currentPage=n;
+  document.getElementById('pageInfo').textContent=n+' / '+totalPages;
+  document.getElementById('btnPrev').disabled=(n===1);
+  document.getElementById('btnNext').disabled=(n===totalPages);
+  showToolbar();
+}
+function goNext(){showPage(currentPage+1);}
+function goPrev(){showPage(currentPage-1);}
+function showToolbar(){
+  document.getElementById('toolbar').classList.add('visible');
+  clearTimeout(toolbarTimer);
+  toolbarTimer=setTimeout(()=>{document.getElementById('toolbar').classList.remove('visible');},2000);
+}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')goNext();else if(e.key==='ArrowLeft')goPrev();showToolbar();});
+document.addEventListener('mousemove',showToolbar);
+document.addEventListener('click',showToolbar);
+showToolbar();
+document.getElementById('btnPrev').disabled = true;
+</script>
+</body>
+</html>
