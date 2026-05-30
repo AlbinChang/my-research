@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调研探索 — 文档索引</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f8f9fb;
+            --card-bg: #ffffff;
+            --text: #1d1f27;
+            --text-secondary: #5f6377;
+            --accent: #3b6df0;
+            --accent-light: #e8f0ff;
+            --border: #e4e7f0;
+            --tag-html-bg: #fef3e2;
+            --tag-html-text: #b86e00;
+            --tag-md-bg: #e8f5e9;
+            --tag-md-text: #2e7d32;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+                         "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== 顶部横幅 ===== */
+        .hero {
+            background: linear-gradient(135deg, #1a1f3c 0%, #2a3568 40%, #3b6df0 100%);
+            color: #ffffff;
+            padding: 60px 32px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 4px solid rgba(255,255,255,0.1);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(59,109,240,0.25) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 20%, rgba(255,255,255,0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content { position: relative; z-index: 1; }
+
+        .hero h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.78);
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .hero .badge {
+            display: inline-block;
+            margin-top: 18px;
+            padding: 6px 18px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            background: rgba(255,255,255,0.13);
+            color: rgba(255,255,255,0.9);
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.03em;
+        }
+
+        /* ===== 统计栏 ===== */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 28px 32px 22px;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item .num {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.2;
+        }
+
+        .stat-item .label {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* ===== 主内容区 ===== */
+        .main {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 34px 24px 60px;
+        }
+
+        /* ===== 分类区块 ===== */
+        .section {
+            margin-bottom: 36px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .section-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* ===== 文件卡片列表 ===== */
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .file-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.18s ease;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .file-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 18px rgba(59,109,240,0.12);
+            transform: translateY(-1px);
+        }
+
+        .file-card .file-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .file-card .file-icon.html-icon { background: #fef3e2; color: #b86e00; }
+        .file-card .file-icon.md-icon { background: #e8f5e9; color: #2e7d32; }
+
+        .file-card .file-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .file-card .file-name {
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-card .file-meta {
+            font-size: 0.74rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            line-height: 1.4;
+        }
+
+        .tag-html { background: var(--tag-html-bg); color: var(--tag-html-text); }
+        .tag-md  { background: var(--tag-md-bg);  color: var(--tag-md-text); }
+
+        /* ===== 加载状态 ===== */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .loading .spinner {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .error-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .error-state .err-icon { font-size: 2.4rem; margin-bottom: 12px; }
+        .error-state .err-msg { font-size: 0.9rem; margin-bottom: 16px; }
+        .error-state .retry-btn {
+            display: inline-block;
+            padding: 8px 22px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .error-state .retry-btn:hover { opacity: 0.88; }
+
+        /* ===== 页脚 ===== */
+        .footer {
+            text-align: center;
+            padding: 28px 24px 36px;
+            color: var(--text-secondary);
+            font-size: 0.78rem;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer a:hover { text-decoration: underline; }
+
+        /* ===== 响应式微调 ===== */
+        @media (max-width: 640px) {
+            .hero { padding: 40px 20px 32px; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero p { font-size: 0.95rem; }
+            .stats-bar { gap: 24px; padding: 20px 16px 16px; }
+            .stat-item .num { font-size: 1.5rem; }
+            .file-list { grid-template-columns: 1fr; }
+            .main { padding: 24px 16px 40px; }
+        }
+
+        /* ===== 清单过期提示条 ===== */
+        .freshness-banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 24px;
+            margin: 0 24px 16px;
+            background: #fff8e1;
+            border: 1px solid #ffcc02;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #7a5900;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+        .freshness-banner .banner-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .freshness-banner .banner-btn {
+            display: inline-block;
+            padding: 4px 14px;
+            background: #ff9800;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .freshness-banner .banner-btn:hover { background: #f57c00; }
+        .freshness-banner .banner-dismiss {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            color: #b0a070;
+            padding: 0 4px;
+            line-height: 1;
+        }
+        .freshness-banner .banner-dismiss:hover { color: #7a5900; }
+    </style>
+</head>
+<body>
+
+<!-- ===== 顶部横幅 ===== -->
+<header class="hero">
+    <div class="hero-content">
+        <h1>调研探索 · 文档中心</h1>
+        <p>技术与行业深度调研报告、PPT 演示文稿及技术手册的完整索引</p>
+        <span class="badge">GitHub Pages</span>
+    </div>
+</header>
+
+<!-- ===== 统计栏 ===== -->
+<div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+        <div class="num" id="statDirs">-</div>
+        <div class="label">专题分类</div>
+    </div>
+    <div class="stat-item">
+        <div class="num" id="statTotal">-</div>
+        <div class="label">文档总数</div>
+    </div>
+    <div class="stat-item">
+        <div class="num" id="statMd">-</div>
+        <div class="label">Markdown</div>
+    </div>
+    <div class="stat-item">
+        <div class="num" id="statHtml">-</div>
+        <div class="label">HTML 演示</div>
+    </div>
+</div>
+
+<!-- ===== 主内容区 ===== -->
+<main class="main" id="mainContent">
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>正在发现文档…</p>
+    </div>
+</main>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+    <p>由 <a href="https://github.com/AlbinChang/my-research">GitHub Pages</a> 驱动 · <span id="footerDate">--</span></p>
+    <p style="margin-top:6px;font-size:0.74rem;">💡 新增文档后请在仓库根目录运行 <code>.\refresh-docs.ps1</code> 更新清单</p>
+</footer>
+
+<script>
+/* ================================================================
+   调研探索 · 文档索引 — 自动发现引擎
+   策略：files.json（本地预生成） → localStorage 缓存 → GitHub API（线上兜底）
+   缓存：localStorage，30 分钟 TTL；files.json generated 时间戳优先于缓存年龄
+   ================================================================ */
+
+// ---- 配置 ----
+var REPO_OWNER = 'AlbinChang';
+var REPO_NAME  = 'my-research';
+var REPO_BRANCH = 'master';
+var DOCS_PREFIX = 'docs/';
+var CACHE_KEY   = 'docs_index_cache';
+var CACHE_TTL   = 30 * 60 * 1000; // 30 分钟
+
+// ---- 分类元数据（已知目录的显示名称与图标） ----
+var SECTION_META = {
+    '电影':          { icon: '🎬', title: '电影',          subtitle: '2025 年美国高分电影推荐与深度分析' },
+    'agent':         { icon: '🤖', title: 'Agent',         subtitle: 'OpenAI Agent 技术调研、Skills 深度分析及培训材料' },
+    'claude-code':   { icon: '💻', title: 'Claude Code',   subtitle: 'Claude Code 最佳实践深度总结与 PPT 演示' },
+    'redis-manual':  { icon: '🔴', title: 'Redis 深度手册', subtitle: '从系统设计到生产实战的完整 Redis 技术手册（共 12 章）' }
+};
+
+// ---- 目录图标背景色（轮转使用） ----
+var ICON_COLORS = ['#fef3e2','#e8f0ff','#f3e8ff','#ffeaea','#e8f5e9','#fff3e0','#e3f2fd','#fce4ec'];
+
+// ---- 入口 ----
+var currentFiles = null;  // 当前渲染的文件列表（供后台对比与刷新使用）
+
+(function init() {
+    discoverFiles()
+        .then(function(files) {
+            currentFiles = files;
+            renderStats(files);
+            renderSections(files);
+            document.getElementById('footerDate').textContent =
+                new Date().toISOString().slice(0, 10);
+            // 后台异步验证 files.json 是否过期（对比 GitHub API）
+            checkFreshness(files);
+        })
+        .catch(function(err) {
+            console.error('文档发现失败:', err);
+            var msg = err.message || '未知错误';
+            var hint = '';
+            if (msg.indexOf('Failed to fetch') >= 0 || msg.indexOf('NetworkError') >= 0) {
+                hint = '（本地无网络且未生成文件清单？请在仓库根目录运行 .\\refresh-docs.ps1 生成 docs/files.json）';
+            } else if (msg.indexOf('files.json not available') >= 0 || msg.indexOf('GitHub API') >= 0) {
+                hint = '（请尝试在仓库根目录运行 .\\refresh-docs.ps1 生成本地文件清单）';
+            }
+            showError('无法加载文档列表：' + msg + hint);
+        });
+})();
+
+/* ================================================================
+   文件发现：files.json → localStorage cache → GitHub API
+   ================================================================ */
+function discoverFiles() {
+    // 1) 尝试 files.json（本地预生成清单），优先级最高
+    return fetch('files.json', { cache: 'no-cache' })
+        .then(function(resp) {
+            if (!resp.ok) throw new Error('files.json not available');
+            return resp.json();
+        })
+        .then(function(manifest) {
+            var files = normalizeManifest(manifest);
+            // 提取 files.json 的生成时间戳，与 localStorage 缓存比较
+            var manifestTs = manifest.generated ? new Date(manifest.generated).getTime() : 0;
+            var cached = tryLoadCache(manifestTs);
+            if (cached) {
+                // 缓存存在且不早于 files.json，直接用缓存（避免重复渲染）
+                return cached;
+            }
+            // files.json 更新或缓存不存在，使用 files.json 并刷新缓存
+            saveCache(files);
+            return files;
+        })
+        .catch(function() {
+            // 2) files.json 不可用，尝试 localStorage 缓存
+            var cached = tryLoadCache(0);
+            if (cached) {
+                return Promise.resolve(cached);
+            }
+            // 3) GitHub API 兜底
+            return fetchFromGitHub();
+        });
+}
+
+/* ---- files.json 格式标准化 ---- */
+function normalizeManifest(manifest) {
+    if (Array.isArray(manifest)) {
+        // 旧格式：纯数组
+        return manifest.map(normalizeFile);
+    }
+    if (manifest && Array.isArray(manifest.files)) {
+        var normalized = manifest.files.map(normalizeFile);
+        // 按目录排序
+        return normalized.sort(function(a, b) {
+            if (a.dir !== b.dir) return a.dir.localeCompare(b.dir, 'zh');
+            return a.name.localeCompare(b.name, 'zh');
+        });
+    }
+    throw new Error('files.json 格式不正确');
+}
+
+function normalizeFile(f) {
+    return {
+        name:  f.name  || '',
+        path:  f.path  || '',
+        type:  f.type  || (f.path && f.path.match(/\.html$/i) ? 'html' : 'md'),
+        dir:   f.dir   || (f.path ? f.path.split('/')[0] : ''),
+        title: f.title || ''
+    };
+}
+
+/* ---- 缓存 ---- */
+function tryLoadCache(manifestTs) {
+    try {
+        var raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        var data = JSON.parse(raw);
+        if (manifestTs > 0) {
+            // 有 files.json 时间戳：缓存时间戳必须 >= files.json 生成时间
+            if (data.ts >= manifestTs) return data.files;
+        } else {
+            // 无 files.json：按绝对年龄（30 分钟 TTL）判断
+            if (Date.now() - data.ts < CACHE_TTL) return data.files;
+        }
+    } catch (e) { /* ignore */ }
+    return null;
+}
+
+function saveCache(files) {
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), files: files }));
+    } catch (e) { /* quota exceeded, ignore */ }
+}
+
+/* ---- GitHub API：使用递归 Git Trees API，一次请求获取全部文件 ---- */
+function fetchFromGitHub() {
+    var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME +
+                 '/git/trees/' + REPO_BRANCH + '?recursive=1';
+
+    return fetch(apiUrl, { cache: 'no-cache' })
+        .then(function(resp) {
+            if (!resp.ok) {
+                if (resp.status === 403) throw new Error('GitHub API 速率限制，请稍后刷新');
+                throw new Error('GitHub API 返回 ' + resp.status);
+            }
+            return resp.json();
+        })
+        .then(function(data) {
+            if (!data.tree || !Array.isArray(data.tree)) {
+                throw new Error('GitHub API 返回数据异常');
+            }
+
+            var files = [];
+            var prefixLen = DOCS_PREFIX.length;
+
+            for (var i = 0; i < data.tree.length; i++) {
+                var item = data.tree[i];
+                var itemPath = item.path || '';
+
+                // 只取 docs/ 下的 .md / .html 文件，排除 index.html
+                if (itemPath.indexOf(DOCS_PREFIX) !== 0) continue;
+                if (item.type !== 'blob') continue;
+
+                var relPath = itemPath.slice(prefixLen);
+                if (relPath === 'index.html') continue;
+
+                var extMatch = relPath.match(/\.(md|html)$/i);
+                if (!extMatch) continue;
+
+                var slashIdx = relPath.indexOf('/');
+                var dir = slashIdx > 0 ? relPath.slice(0, slashIdx) : '';
+
+                files.push({
+                    name:  relPath.split('/').pop(),
+                    path:  relPath,
+                    type:  extMatch[1].toLowerCase(),
+                    dir:   dir,
+                    title: ''
+                });
+            }
+
+            if (files.length === 0) {
+                throw new Error('未在 docs/ 下找到任何 .md 或 .html 文件');
+            }
+
+            // 按目录排序
+            files.sort(function(a, b) {
+                if (a.dir !== b.dir) return a.dir.localeCompare(b.dir, 'zh');
+                return a.name.localeCompare(b.name, 'zh');
+            });
+
+            saveCache(files);
+            return files;
+        });
+}
+
+/* ================================================================
+   渲染
+   ================================================================ */
+
+/* ---- 统计栏 ---- */
+function renderStats(files) {
+    var total  = files.length;
+    var mdCount  = 0;
+    var htmlCount = 0;
+    var dirs = {};
+
+    for (var i = 0; i < files.length; i++) {
+        if (files[i].type === 'md')  mdCount++;
+        if (files[i].type === 'html') htmlCount++;
+        if (files[i].dir) dirs[files[i].dir] = true;
+    }
+
+    document.getElementById('statDirs').textContent  = Object.keys(dirs).length;
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statMd').textContent    = mdCount;
+    document.getElementById('statHtml').textContent  = htmlCount;
+}
+
+/* ---- 分区渲染 ---- */
+function renderSections(files) {
+    var main = document.getElementById('mainContent');
+    main.innerHTML = '';
+
+    // 按目录分组
+    var groups = groupByDir(files);
+
+    // 确定渲染顺序：已知目录按配置出现顺序，未知目录追加末尾
+    var knownOrder = Object.keys(SECTION_META);
+    var orderedDirs = [];
+
+    // 先放入已知目录（按 SECTION_META 顺序，仅保留 groups 中存在的）
+    for (var k = 0; k < knownOrder.length; k++) {
+        if (groups[knownOrder[k]]) orderedDirs.push(knownOrder[k]);
+    }
+    // 再追加未知目录（字母序）
+    var allDirs = Object.keys(groups).sort(function(a,b){ return a.localeCompare(b,'zh'); });
+    for (var d = 0; d < allDirs.length; d++) {
+        if (orderedDirs.indexOf(allDirs[d]) === -1) orderedDirs.push(allDirs[d]);
+    }
+
+    if (orderedDirs.length === 0) {
+        showEmpty();
+        return;
+    }
+
+    for (var i = 0; i < orderedDirs.length; i++) {
+        var dir  = orderedDirs[i];
+        var meta = SECTION_META[dir] || autoMeta(dir, groups[dir].length);
+        var section = buildSection(dir, meta, groups[dir]);
+        main.appendChild(section);
+    }
+}
+
+function groupByDir(files) {
+    var groups = {};
+    for (var i = 0; i < files.length; i++) {
+        var d = files[i].dir || '__root__';
+        if (!groups[d]) groups[d] = [];
+        groups[d].push(files[i]);
+    }
+    return groups;
+}
+
+function autoMeta(dir, count) {
+    return {
+        icon: '📁',
+        title: dir,
+        subtitle: '共 ' + count + ' 份文档'
+    };
+}
+
+/* ---- 构建一个 section ---- */
+function buildSection(dir, meta, files) {
+    var section = document.createElement('section');
+    section.className = 'section';
+
+    // 图标背景色（用 dir 的 hash 取色）
+    var colorIdx = hashStr(dir) % ICON_COLORS.length;
+
+    section.innerHTML =
+        '<div class="section-header">' +
+          '<div class="section-icon" style="background:' + ICON_COLORS[colorIdx] + '">' +
+            meta.icon +
+          '</div>' +
+          '<div>' +
+            '<div class="section-title">' + escHtml(meta.title) + '</div>' +
+            '<div class="section-subtitle">' + escHtml(meta.subtitle) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="file-list" id="fileList_' + dir.replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g, '_') + '"></div>';
+
+    var list = section.querySelector('.file-list');
+
+    for (var i = 0; i < files.length; i++) {
+        list.appendChild(buildCard(files[i]));
+    }
+
+    return section;
+}
+
+/* ---- 构建一张文件卡片 ---- */
+function buildCard(file) {
+    var a = document.createElement('a');
+    a.className = 'file-card';
+    a.href = file.path;
+    a.title = file.title || file.name;
+
+    var displayName = file.title || friendlyName(file.name);
+
+    var typeIcon  = file.type === 'html' ? '🌐' : '📝';
+    var typeClass = file.type === 'html' ? 'html-icon' : 'md-icon';
+    var tagText   = file.type === 'html' ? '幻灯片' : '文档';
+    var tagClass  = file.type === 'html' ? 'tag-html' : 'tag-md';
+
+    a.innerHTML =
+        '<div class="file-icon ' + typeClass + '">' + typeIcon + '</div>' +
+        '<div class="file-info">' +
+          '<div class="file-name">' + escHtml(displayName) + '</div>' +
+          '<div class="file-meta"><span class="tag ' + tagClass + '">' + tagText + '</span>' +
+            (file.type === 'html' ? ' HTML 交互演示' : ' Markdown 文档') +
+          '</div>' +
+        '</div>';
+
+    return a;
+}
+
+/* ---- 工具函数 ---- */
+function friendlyName(filename) {
+    return filename.replace(/\.(md|html)$/i, '').replace(/_/g, ' ');
+}
+
+function escHtml(s) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(s));
+    return div.innerHTML;
+}
+
+function hashStr(s) {
+    var h = 0;
+    for (var i = 0; i < s.length; i++) {
+        h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    }
+    return Math.abs(h);
+}
+
+/* ---- 错误/空状态 ---- */
+function showError(msg) {
+    var main = document.getElementById('mainContent');
+    main.innerHTML =
+        '<div class="error-state">' +
+          '<div class="err-icon">⚠️</div>' +
+          '<div class="err-msg">' + escHtml(msg) + '</div>' +
+          '<button class="retry-btn" onclick="location.reload()">重新加载</button>' +
+        '</div>';
+}
+
+function showEmpty() {
+    var main = document.getElementById('mainContent');
+    main.innerHTML =
+        '<div class="error-state">' +
+          '<div class="err-icon">📭</div>' +
+          '<div class="err-msg">docs/ 下暂未发现 .md 或 .html 文件</div>' +
+        '</div>';
+}
+
+/* ---- 清单过期检测（后台异步对比 GitHub API） ---- */
+function checkFreshness(files) {
+    // 异步调用 GitHub API，对比文件数量
+    var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME +
+                 '/git/trees/' + REPO_BRANCH + '?recursive=1';
+
+    fetch(apiUrl, { cache: 'no-cache' })
+        .then(function(resp) {
+            if (!resp.ok) throw new Error('API unavailable');
+            return resp.json();
+        })
+        .then(function(data) {
+            if (!data.tree || !Array.isArray(data.tree)) return;
+
+            var apiCount = 0;
+            var prefixLen = DOCS_PREFIX.length;
+
+            for (var i = 0; i < data.tree.length; i++) {
+                var item = data.tree[i];
+                var itemPath = item.path || '';
+                if (itemPath.indexOf(DOCS_PREFIX) !== 0) continue;
+                if (item.type !== 'blob') continue;
+                var relPath = itemPath.slice(prefixLen);
+                if (relPath === 'index.html') continue;
+                if (/\.(md|html)$/i.test(relPath)) apiCount++;
+            }
+
+            if (apiCount > files.length) {
+                showFreshnessWarning(apiCount, files.length);
+            }
+        })
+        .catch(function() {
+            // GitHub API 不可达（本地环境或网络限制），静默忽略
+        });
+}
+
+function switchToGitHubData() {
+    hideFreshnessWarning();
+    // 显示加载状态
+    var main = document.getElementById('mainContent');
+    main.innerHTML = '<div class="loading"><div class="spinner"></div><p>正在从 GitHub API 获取最新文档列表…</p></div>';
+
+    fetchFromGitHub()
+        .then(function(files) {
+            currentFiles = files;
+            renderStats(files);
+            renderSections(files);
+        })
+        .catch(function(err) {
+            console.error('GitHub API 刷新失败:', err);
+            // 回退到之前的 files.json 数据
+            if (currentFiles) {
+                renderStats(currentFiles);
+                renderSections(currentFiles);
+            }
+            showFreshnessWarning(-1, 0); // 显示失败提示
+        });
+}
+
+var freshnessBanner = null;
+
+function showFreshnessWarning(apiCount, jsonCount) {
+    if (freshnessBanner) freshnessBanner.remove();
+
+    var banner = document.createElement('div');
+    banner.className = 'freshness-banner';
+    banner.id = 'freshnessBanner';
+
+    if (apiCount < 0) {
+        // GitHub API 刷新失败
+        banner.innerHTML =
+            '<span class="banner-icon">⚠️</span>' +
+            'GitHub API 刷新失败，请检查网络连接或稍后重试。' +
+            '<button class="banner-dismiss" onclick="hideFreshnessWarning()" title="关闭">✕</button>';
+    } else {
+        banner.innerHTML =
+            '<span class="banner-icon">🔔</span>' +
+            '检测到 GitHub 仓库中有 <strong>' + apiCount + '</strong> 个文档，' +
+            '但当前清单仅包含 <strong>' + jsonCount + '</strong> 个（files.json 可能已过期）。' +
+            '<button class="banner-btn" onclick="switchToGitHubData()">从 GitHub API 刷新</button>' +
+            '<button class="banner-dismiss" onclick="hideFreshnessWarning()" title="关闭">✕</button>';
+    }
+
+    var statsBar = document.getElementById('statsBar');
+    statsBar.parentNode.insertBefore(banner, statsBar.nextSibling);
+    freshnessBanner = banner;
+}
+
+function hideFreshnessWarning() {
+    if (freshnessBanner) {
+        freshnessBanner.remove();
+        freshnessBanner = null;
+    }
+}
+</script>
+
+</body>
+</html>
