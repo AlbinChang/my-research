@@ -171,6 +171,7 @@
             transition: all 0.18s ease;
             box-shadow: var(--shadow);
             position: relative;
+            cursor: pointer;
         }
 
         .file-card:hover {
@@ -290,17 +291,6 @@
 
         .footer a:hover { text-decoration: underline; }
 
-        /* ===== 响应式微调 ===== */
-        @media (max-width: 640px) {
-            .hero { padding: 40px 20px 32px; }
-            .hero h1 { font-size: 1.8rem; }
-            .hero p { font-size: 0.95rem; }
-            .stats-bar { gap: 24px; padding: 20px 16px 16px; }
-            .stat-item .num { font-size: 1.5rem; }
-            .file-list { grid-template-columns: 1fr; }
-            .main { padding: 24px 16px 40px; }
-        }
-
         /* ===== 清单过期提示条 ===== */
         .freshness-banner {
             display: flex;
@@ -344,7 +334,240 @@
             line-height: 1;
         }
         .freshness-banner .banner-dismiss:hover { color: #7a5900; }
+
+        /* ============================================================
+           查看器动画
+           ============================================================ */
+        @keyframes viewerFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes viewerSlideUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* ============================================================
+           Markdown 查看器
+           ============================================================ */
+        .md-viewer-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            animation: viewerFadeIn 0.22s ease;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .md-viewer-overlay.active {
+            display: block;
+        }
+
+        .md-viewer-container {
+            max-width: 920px;
+            margin: 28px auto 60px;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+            animation: viewerSlideUp 0.28s ease;
+        }
+
+        .md-viewer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 24px;
+            background: #f8f9fb;
+            border-bottom: 1px solid #e4e7f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .md-viewer-header .viewer-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #1d1f27;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .md-viewer-header .viewer-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            color: #5f6377;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, color 0.15s;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .md-viewer-header .viewer-close:hover {
+            background: #e4e7f0;
+            color: #1d1f27;
+        }
+
+        /* ---- 查看器内容区 ---- */
+        .md-viewer-body {
+            padding: 40px 52px 56px;
+            color: #1d1f27;
+            line-height: 1.75;
+            font-size: 0.94rem;
+        }
+
+        .md-viewer-loading,
+        .md-viewer-error {
+            text-align: center;
+            padding: 80px 20px;
+            color: #5f6377;
+        }
+
+        .md-viewer-error .err-icon {
+            font-size: 2.4rem;
+            margin-bottom: 12px;
+        }
+
+        /* ---- 查看器内 Markdown 渲染样式 ---- */
+        .md-viewer-body h1,
+        .md-viewer-body h2,
+        .md-viewer-body h3,
+        .md-viewer-body h4 {
+            color: #1d1f27;
+            font-weight: 700;
+            line-height: 1.3;
+            margin: 0 0 12px;
+        }
+
+        .md-viewer-body h1 { font-size: 1.9rem; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #e4e7f0; }
+        .md-viewer-body h2 { font-size: 1.45rem; margin-top: 36px; margin-bottom: 14px; }
+        .md-viewer-body h3 { font-size: 1.18rem; margin-top: 28px; margin-bottom: 10px; }
+        .md-viewer-body h4 { font-size: 1.04rem; margin-top: 22px; margin-bottom: 8px; }
+
+        .md-viewer-body p { margin: 0 0 16px; }
+
+        .md-viewer-body ul,
+        .md-viewer-body ol {
+            margin: 0 0 16px 20px;
+            padding: 0;
+        }
+        .md-viewer-body li { margin-bottom: 6px; }
+
+        .md-viewer-body a {
+            color: #3b6df0;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(59, 109, 240, 0.25);
+            transition: border-color 0.15s;
+        }
+        .md-viewer-body a:hover { border-bottom-color: #3b6df0; }
+
+        .md-viewer-body blockquote {
+            margin: 0 0 16px;
+            padding: 10px 18px;
+            border-left: 4px solid #3b6df0;
+            background: #f5f8ff;
+            color: #3a5077;
+            border-radius: 0 6px 6px 0;
+        }
+        .md-viewer-body blockquote p { margin-bottom: 6px; }
+        .md-viewer-body blockquote p:last-child { margin-bottom: 0; }
+
+        .md-viewer-body code {
+            font-family: "SF Mono", "Cascadia Code", "Fira Code", Consolas, "Source Code Pro", monospace;
+            font-size: 0.85em;
+            background: #f0f2f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c7254e;
+        }
+
+        .md-viewer-body pre {
+            margin: 0 0 18px;
+            padding: 18px 20px;
+            background: #1e1e2e;
+            border-radius: 8px;
+            overflow-x: auto;
+            line-height: 1.55;
+        }
+        .md-viewer-body pre code {
+            background: none;
+            color: #cdd6f4;
+            padding: 0;
+            font-size: 0.84rem;
+        }
+
+        .md-viewer-body table {
+            width: 100%;
+            margin: 0 0 18px;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .md-viewer-body th,
+        .md-viewer-body td {
+            padding: 10px 14px;
+            border: 1px solid #e4e7f0;
+            text-align: left;
+        }
+        .md-viewer-body th {
+            background: #f8f9fb;
+            font-weight: 700;
+            color: #1d1f27;
+        }
+        .md-viewer-body tr:nth-child(even) td {
+            background: #fafbfc;
+        }
+
+        .md-viewer-body hr {
+            margin: 28px 0;
+            border: none;
+            border-top: 1px solid #e4e7f0;
+        }
+
+        .md-viewer-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin: 12px 0;
+        }
+
+        /* 任务列表样式 */
+        .md-viewer-body input[type="checkbox"] {
+            margin-right: 6px;
+            accent-color: #3b6df0;
+        }
+
+        /* ===== 响应式微调 ===== */
+        @media (max-width: 640px) {
+            .hero { padding: 40px 20px 32px; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero p { font-size: 0.95rem; }
+            .stats-bar { gap: 24px; padding: 20px 16px 16px; }
+            .stat-item .num { font-size: 1.5rem; }
+            .file-list { grid-template-columns: 1fr; }
+            .main { padding: 24px 16px 40px; }
+
+            /* 查看器响应式 */
+            .md-viewer-container {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            .md-viewer-body {
+                padding: 28px 20px 48px;
+            }
+            .md-viewer-body h1 { font-size: 1.5rem; }
+            .md-viewer-body h2 { font-size: 1.22rem; }
+            .md-viewer-body h3 { font-size: 1.05rem; }
+        }
     </style>
+    <!-- highlight.js 代码高亮主题（明亮风格） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/styles/github.min.css">
 </head>
 <body>
 
@@ -391,9 +614,29 @@
     <p style="margin-top:6px;font-size:0.74rem;">💡 新增文档后请在仓库根目录运行 <code>.\refresh-docs.ps1</code> 更新清单</p>
 </footer>
 
+<!-- ===== Markdown 查看器（模态窗口） ===== -->
+<div class="md-viewer-overlay" id="mdViewerOverlay">
+    <div class="md-viewer-container">
+        <div class="md-viewer-header">
+            <span class="viewer-title" id="mdViewerTitle">文档预览</span>
+            <button class="viewer-close" id="mdViewerClose" title="关闭 (Esc)">✕</button>
+        </div>
+        <div class="md-viewer-body" id="mdViewerBody">
+            <div class="md-viewer-loading">
+                <div class="spinner"></div>
+                <p>加载中…</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CDN 依赖（marked.js + highlight.js） ===== -->
+<script src="https://cdn.jsdelivr.net/npm/marked@4/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11/build/highlight.min.js"></script>
+
 <script>
 /* ================================================================
-   调研探索 · 文档索引 — 自动发现引擎
+   调研探索 · 文档索引 — 自动发现引擎 + Markdown 查看器
    策略：files.json（本地预生成） → localStorage 缓存 → GitHub API（线上兜底）
    缓存：localStorage，30 分钟 TTL；files.json generated 时间戳优先于缓存年龄
    ================================================================ */
@@ -418,9 +661,29 @@ var SECTION_META = {
 var ICON_COLORS = ['#fef3e2','#e8f0ff','#f3e8ff','#ffeaea','#e8f5e9','#fff3e0','#e3f2fd','#fce4ec'];
 
 // ---- 入口 ----
-var currentFiles = null;  // 当前渲染的文件列表（供后台对比与刷新使用）
+var currentFiles = null;   // 当前渲染的文件列表
+var currentViewerPath = '';// 当前查看器中打开的文档路径
 
 (function init() {
+    // 配置 Marked.js（代码高亮）
+    configureMarked();
+
+    // 监听 hash 变化（支持浏览器前进/后退）
+    window.addEventListener('hashchange', handleHash);
+
+    // 监听关闭按钮
+    document.getElementById('mdViewerClose').addEventListener('click', closeViewer);
+
+    // 监听点击覆盖层空白区域关闭
+    document.getElementById('mdViewerOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeViewer();
+    });
+
+    // 监听 Esc 键关闭
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeViewer();
+    });
+
     discoverFiles()
         .then(function(files) {
             currentFiles = files;
@@ -428,8 +691,10 @@ var currentFiles = null;  // 当前渲染的文件列表（供后台对比与刷
             renderSections(files);
             document.getElementById('footerDate').textContent =
                 new Date().toISOString().slice(0, 10);
-            // 后台异步验证 files.json 是否过期（对比 GitHub API）
+            // 后台异步验证 files.json 是否过期
             checkFreshness(files);
+            // 初始 hash 路由检查
+            handleHash();
         })
         .catch(function(err) {
             console.error('文档发现失败:', err);
@@ -444,11 +709,28 @@ var currentFiles = null;  // 当前渲染的文件列表（供后台对比与刷
         });
 })();
 
+/* ---- 配置 marked.js 代码高亮 ---- */
+function configureMarked() {
+    if (typeof marked === 'undefined') return;
+    marked.setOptions({
+        highlight: function(code, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return hljs.highlight(code, { language: lang }).value;
+                } catch (e) { /* fall through */ }
+            }
+            try {
+                return hljs.highlightAuto(code).value;
+            } catch (e) { /* fall through */ }
+            return code;
+        }
+    });
+}
+
 /* ================================================================
    文件发现：files.json → localStorage cache → GitHub API
    ================================================================ */
 function discoverFiles() {
-    // 1) 尝试 files.json（本地预生成清单），优先级最高
     return fetch('files.json', { cache: 'no-cache' })
         .then(function(resp) {
             if (!resp.ok) throw new Error('files.json not available');
@@ -456,37 +738,25 @@ function discoverFiles() {
         })
         .then(function(manifest) {
             var files = normalizeManifest(manifest);
-            // 提取 files.json 的生成时间戳，与 localStorage 缓存比较
             var manifestTs = manifest.generated ? new Date(manifest.generated).getTime() : 0;
             var cached = tryLoadCache(manifestTs);
-            if (cached) {
-                // 缓存存在且不早于 files.json，直接用缓存（避免重复渲染）
-                return cached;
-            }
-            // files.json 更新或缓存不存在，使用 files.json 并刷新缓存
+            if (cached) return cached;
             saveCache(files);
             return files;
         })
         .catch(function() {
-            // 2) files.json 不可用，尝试 localStorage 缓存
             var cached = tryLoadCache(0);
-            if (cached) {
-                return Promise.resolve(cached);
-            }
-            // 3) GitHub API 兜底
+            if (cached) return Promise.resolve(cached);
             return fetchFromGitHub();
         });
 }
 
-/* ---- files.json 格式标准化 ---- */
 function normalizeManifest(manifest) {
     if (Array.isArray(manifest)) {
-        // 旧格式：纯数组
         return manifest.map(normalizeFile);
     }
     if (manifest && Array.isArray(manifest.files)) {
         var normalized = manifest.files.map(normalizeFile);
-        // 按目录排序
         return normalized.sort(function(a, b) {
             if (a.dir !== b.dir) return a.dir.localeCompare(b.dir, 'zh');
             return a.name.localeCompare(b.name, 'zh');
@@ -505,17 +775,14 @@ function normalizeFile(f) {
     };
 }
 
-/* ---- 缓存 ---- */
 function tryLoadCache(manifestTs) {
     try {
         var raw = localStorage.getItem(CACHE_KEY);
         if (!raw) return null;
         var data = JSON.parse(raw);
         if (manifestTs > 0) {
-            // 有 files.json 时间戳：缓存时间戳必须 >= files.json 生成时间
             if (data.ts >= manifestTs) return data.files;
         } else {
-            // 无 files.json：按绝对年龄（30 分钟 TTL）判断
             if (Date.now() - data.ts < CACHE_TTL) return data.files;
         }
     } catch (e) { /* ignore */ }
@@ -528,7 +795,6 @@ function saveCache(files) {
     } catch (e) { /* quota exceeded, ignore */ }
 }
 
-/* ---- GitHub API：使用递归 Git Trees API，一次请求获取全部文件 ---- */
 function fetchFromGitHub() {
     var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME +
                  '/git/trees/' + REPO_BRANCH + '?recursive=1';
@@ -545,27 +811,19 @@ function fetchFromGitHub() {
             if (!data.tree || !Array.isArray(data.tree)) {
                 throw new Error('GitHub API 返回数据异常');
             }
-
             var files = [];
             var prefixLen = DOCS_PREFIX.length;
-
             for (var i = 0; i < data.tree.length; i++) {
                 var item = data.tree[i];
                 var itemPath = item.path || '';
-
-                // 只取 docs/ 下的 .md / .html 文件，排除 index.html
                 if (itemPath.indexOf(DOCS_PREFIX) !== 0) continue;
                 if (item.type !== 'blob') continue;
-
                 var relPath = itemPath.slice(prefixLen);
                 if (relPath === 'index.html') continue;
-
                 var extMatch = relPath.match(/\.(md|html)$/i);
                 if (!extMatch) continue;
-
                 var slashIdx = relPath.indexOf('/');
                 var dir = slashIdx > 0 ? relPath.slice(0, slashIdx) : '';
-
                 files.push({
                     name:  relPath.split('/').pop(),
                     path:  relPath,
@@ -574,17 +832,13 @@ function fetchFromGitHub() {
                     title: ''
                 });
             }
-
             if (files.length === 0) {
                 throw new Error('未在 docs/ 下找到任何 .md 或 .html 文件');
             }
-
-            // 按目录排序
             files.sort(function(a, b) {
                 if (a.dir !== b.dir) return a.dir.localeCompare(b.dir, 'zh');
                 return a.name.localeCompare(b.name, 'zh');
             });
-
             saveCache(files);
             return files;
         });
@@ -594,7 +848,6 @@ function fetchFromGitHub() {
    渲染
    ================================================================ */
 
-/* ---- 统计栏 ---- */
 function renderStats(files) {
     var total  = files.length;
     var mdCount  = 0;
@@ -613,23 +866,18 @@ function renderStats(files) {
     document.getElementById('statHtml').textContent  = htmlCount;
 }
 
-/* ---- 分区渲染 ---- */
 function renderSections(files) {
     var main = document.getElementById('mainContent');
     main.innerHTML = '';
 
-    // 按目录分组
     var groups = groupByDir(files);
 
-    // 确定渲染顺序：已知目录按配置出现顺序，未知目录追加末尾
     var knownOrder = Object.keys(SECTION_META);
     var orderedDirs = [];
 
-    // 先放入已知目录（按 SECTION_META 顺序，仅保留 groups 中存在的）
     for (var k = 0; k < knownOrder.length; k++) {
         if (groups[knownOrder[k]]) orderedDirs.push(knownOrder[k]);
     }
-    // 再追加未知目录（字母序）
     var allDirs = Object.keys(groups).sort(function(a,b){ return a.localeCompare(b,'zh'); });
     for (var d = 0; d < allDirs.length; d++) {
         if (orderedDirs.indexOf(allDirs[d]) === -1) orderedDirs.push(allDirs[d]);
@@ -666,12 +914,10 @@ function autoMeta(dir, count) {
     };
 }
 
-/* ---- 构建一个 section ---- */
 function buildSection(dir, meta, files) {
     var section = document.createElement('section');
     section.className = 'section';
 
-    // 图标背景色（用 dir 的 hash 取色）
     var colorIdx = hashStr(dir) % ICON_COLORS.length;
 
     section.innerHTML =
@@ -687,7 +933,6 @@ function buildSection(dir, meta, files) {
         '<div class="file-list" id="fileList_' + dir.replace(/[^a-zA-Z0-9\u4e00-\u9fff]/g, '_') + '"></div>';
 
     var list = section.querySelector('.file-list');
-
     for (var i = 0; i < files.length; i++) {
         list.appendChild(buildCard(files[i]));
     }
@@ -699,15 +944,21 @@ function buildSection(dir, meta, files) {
 function buildCard(file) {
     var a = document.createElement('a');
     a.className = 'file-card';
-    a.href = file.path;
     a.title = file.title || file.name;
 
     var displayName = file.title || friendlyName(file.name);
-
     var typeIcon  = file.type === 'html' ? '🌐' : '📝';
     var typeClass = file.type === 'html' ? 'html-icon' : 'md-icon';
     var tagText   = file.type === 'html' ? '幻灯片' : '文档';
     var tagClass  = file.type === 'html' ? 'tag-html' : 'tag-md';
+
+    if (file.type === 'md') {
+        // Markdown 文件：点击在查看器中渲染
+        a.href = '#/view/' + encodeURIComponent(file.path);
+    } else {
+        // HTML 文件：直接打开
+        a.href = file.path;
+    }
 
     a.innerHTML =
         '<div class="file-icon ' + typeClass + '">' + typeIcon + '</div>' +
@@ -760,9 +1011,90 @@ function showEmpty() {
         '</div>';
 }
 
-/* ---- 清单过期检测（后台异步对比 GitHub API） ---- */
+/* ================================================================
+   Markdown 查看器
+   ================================================================ */
+
+/* ---- Hash 路由处理 ---- */
+function handleHash() {
+    var hash = location.hash;
+    if (hash.indexOf('#/view/') === 0) {
+        var path = decodeURIComponent(hash.slice(7));
+        if (path !== currentViewerPath) {
+            openViewer(path);
+        }
+    } else if (hash === '' || hash === '#') {
+        // hash 已清除，关闭查看器（静默，不触发 hash 操作）
+        hideViewerSilent();
+    }
+}
+
+/* ---- 打开查看器 ---- */
+function openViewer(path) {
+    var overlay = document.getElementById('mdViewerOverlay');
+    var body    = document.getElementById('mdViewerBody');
+    var titleEl = document.getElementById('mdViewerTitle');
+
+    if (currentViewerPath === path && overlay.classList.contains('active')) {
+        return; // 同一个文件，已打开
+    }
+
+    currentViewerPath = path;
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    titleEl.textContent = path.split('/').pop();
+    body.innerHTML =
+        '<div class="md-viewer-loading">' +
+          '<div class="spinner"></div>' +
+          '<p>加载中…</p>' +
+        '</div>';
+
+    fetch(path, { cache: 'no-cache' })
+        .then(function(resp) {
+            if (!resp.ok) throw new Error('文件加载失败（' + resp.status + '）');
+            return resp.text();
+        })
+        .then(function(text) {
+            if (typeof marked === 'undefined') {
+                throw new Error('Markdown 渲染引擎未加载，请刷新页面后重试');
+            }
+            var html = marked.parse(text);
+            body.innerHTML = html;
+            // 滚动到顶部
+            overlay.scrollTop = 0;
+        })
+        .catch(function(err) {
+            body.innerHTML =
+                '<div class="md-viewer-error">' +
+                  '<div class="err-icon">⚠️</div>' +
+                  '<p>' + escHtml(err.message) + '</p>' +
+                '</div>';
+        });
+}
+
+/* ---- 关闭查看器 ---- */
+function closeViewer() {
+    hideViewerSilent();
+    // 清除 URL hash（不触发 hashchange 重复关闭）
+    if (location.hash.indexOf('#/view/') === 0) {
+        history.replaceState(null, '', location.pathname + location.search);
+    }
+    currentViewerPath = '';
+}
+
+/* ---- 静默隐藏（不清除 hash，由 handleHash 调用） ---- */
+function hideViewerSilent() {
+    var overlay = document.getElementById('mdViewerOverlay');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    currentViewerPath = '';
+}
+
+/* ================================================================
+   清单过期检测（后台异步对比 GitHub API）
+   ================================================================ */
 function checkFreshness(files) {
-    // 异步调用 GitHub API，对比文件数量
     var apiUrl = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME +
                  '/git/trees/' + REPO_BRANCH + '?recursive=1';
 
@@ -792,13 +1124,12 @@ function checkFreshness(files) {
             }
         })
         .catch(function() {
-            // GitHub API 不可达（本地环境或网络限制），静默忽略
+            // GitHub API 不可达，静默忽略
         });
 }
 
 function switchToGitHubData() {
     hideFreshnessWarning();
-    // 显示加载状态
     var main = document.getElementById('mainContent');
     main.innerHTML = '<div class="loading"><div class="spinner"></div><p>正在从 GitHub API 获取最新文档列表…</p></div>';
 
@@ -810,12 +1141,11 @@ function switchToGitHubData() {
         })
         .catch(function(err) {
             console.error('GitHub API 刷新失败:', err);
-            // 回退到之前的 files.json 数据
             if (currentFiles) {
                 renderStats(currentFiles);
                 renderSections(currentFiles);
             }
-            showFreshnessWarning(-1, 0); // 显示失败提示
+            showFreshnessWarning(-1, 0);
         });
 }
 
@@ -829,7 +1159,6 @@ function showFreshnessWarning(apiCount, jsonCount) {
     banner.id = 'freshnessBanner';
 
     if (apiCount < 0) {
-        // GitHub API 刷新失败
         banner.innerHTML =
             '<span class="banner-icon">⚠️</span>' +
             'GitHub API 刷新失败，请检查网络连接或稍后重试。' +
